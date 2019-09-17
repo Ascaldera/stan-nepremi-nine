@@ -1,8 +1,8 @@
 {
-    'name': 'Model Extension',
-    'summary': 'Extension of Inventory and Contacts',
+    'name': 'Extend Model',
+    'summary': 'Extend Model - Inventory, Contacts',
     'version': '12',
-    'category': 'Project',
+    'category': 'Contacts',
     'author': 'Luka Sekulic',
     'license': 'AGPL-3',
     'depends': [
@@ -10,7 +10,7 @@
         'product'
     ],
     'data': [
-        'views/expand_models.xml'
+        'views/extend_models.xml'
     ],
     'installable': True,
 }
