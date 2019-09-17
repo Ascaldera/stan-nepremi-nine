@@ -1,0 +1,1 @@
+from . import expand_contacts_inventory
