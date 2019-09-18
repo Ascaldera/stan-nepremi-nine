@@ -5,24 +5,35 @@
         <field name="model">res.partner</field> 
         <field name="inherit_id" ref="base.view_partner_form"/> 
         <field name="arch" type="xml"> 
-            <field name="category_id" position="after"> 
-                <field name="tip_stranke"/>
-                <field name="product_id" string='Kaj Prodaja'/>
-                <field name="product_kraj" string='Kje Prodaja'/>
-                <field name="product_cena" string='Cena'/>
+            <xpath expr="//page[@name='sales_purchases']" position='after'>
+                <page string='Nepremičnine' attrs ="{'invisible':[('tip_stranke','!=', 'prodajalec')]}">
+                    <group string='Podatki o prodajalcu'>
+                        <field name="pridobitev"/>
+                    </group>
+                    <group string='Seznam vseh nepremičnin'>   
+                        <field name="nepremicnine" nolabel="1">
+                            <tree editable="bottom">
+                                <field name='name'/>
+                            </tree>
+                        </field>  
+                    </group>
+                </page>
+            </xpath>
+            <field name="category_id" position="after">
+                <field name="tip_stranke"/> 
             </field>
         </field>
     </record>
-    <!--
+    
     <record id="res_product_form_inherited" model="ir.ui.view"> 
         <field name="name">Inherited Product Template</field> 
         <field name="model">product.template</field> 
         <field name="inherit_id" ref="product.product_template_form_view"/> 
         <field name="arch" type="xml"> 
             <field name="categ_id" position="after"> 
-                <field name="test" string="Test"/>
+                <field name="contact" string="Contact"/>
             </field>
         </field>
     </record>
--->
+
 </odoo>
