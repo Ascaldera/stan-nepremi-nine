@@ -3,15 +3,20 @@
 
 from odoo import fields, api, models, tools
 
-
 class ExtendContacts(models.Model):
-    _inherit = 'res.partner'
+    _inherit = ['res.partner']
     
-    test = fields.Char(string = 'Test')
-    tip_stranke = fields.Char(string = 'Tip Stranke')
+    product_id = fields.Many2one('product.product', string='Kaj Prodaja')
+    product_kraj = fields.One2many('product.product', 'product_id', string='Kdo Prodaja')
+    product_cena = fields.One2many('product.product', 'product_id', string='Cena')
+    
+    tip_stranke = fields.Selection(string='Tip Stranke', selection=[('prodajalec', 'Prodajalec'), , 
+                                                                    ('kupec', 'Kupec'), 
+                                                                    ('najemodajalec', 'Najemodajalec'), 
+                                                                    ('najemnik', 'Najemnik')])
     
     
-class ExtendInventory(models.Model):
+"""class ExtendInventory(models.Model):
     _inherit = 'product.template'
     
-    test = fields.Char(string="Test")
+    test = fields.Char(string="Test")"""
