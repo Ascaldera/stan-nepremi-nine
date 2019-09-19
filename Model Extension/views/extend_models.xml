@@ -58,12 +58,16 @@
             <!-- Contact TAB: Kupci-->
             <xpath expr="//page[@name='nepremicnine']" position='after'>
                 <page name='kupec' string="Kupec" attrs="{'invisible': [('tip_stranke','!=','kupec')]}">
-                    <group string='Podatki o oglasu'>
-                        <field name="objava_kje"/>
-                        <field name="objava_kje_datum" attrs ="{'invisible':[('objava_kje', '=', False)]}"/>
-                        <field name="objava_odziv"/>
-                        <field name="objava_spremembe"/>
-                        <field name="objava_stevilo_ogledov"/>
+                    <group string='Iskalni podatki'>
+                        <field name="poizvedba_nepremicnina"/>
+                        <field name="poizvedba_kraj"/>
+                        <field name="poizvedba_cena"/>
+                        <field name="poizvedba_namen"/>
+                        <field name="poizvedba_kontakt_dan"/>
+                        <field name="poizvedba_zgodovina"/>
+                        <field name="poizvedba_ok"/>
+                        <field name="poizvedba_nok"/>
+                        <field name="poizvedba_kontaktiran"/>
                     </group>
                     <group string='Kupec'>
                         <field name="kupec_naronik"/>
@@ -78,17 +82,6 @@
             <!-- Contact TAB: Najemodajalec-->
             <xpath expr="//page[@name='nepremicnine']" position='after'>
                 <page name='najemodajalec' string="Najemodajalec" attrs="{'invisible': [('tip_stranke','!=','najemodajalec')]}">
-                    <group string='Iskalni podatki'>
-                        <field name="poizvedba_nepremicnina"/>
-                        <field name="objava_kje"/>
-                        <field name="poizvedba_cena"/>
-                        <field name="poizvedba_namen"/>
-                        <field name="poizvedba_kontakt_dan"/>
-                        <field name="poizvedba_zgodovina"/>
-                        <field name="poizvedba_ok"/>
-                        <field name="poizvedba_nok"/>
-                        <field name="poizvedba_kontaktiran"/>
-                    </group>
                     <group string='Podatki o oglasu'>
                         <field name="objava_kje"/>
                         <field name="objava_kje_datum" attrs ="{'invisible':[('objava_kje', '=', False)]}"/>
@@ -121,13 +114,6 @@
                         <field name="poizvedba_nok"/>
                         <field name="poizvedba_kontaktiran"/>
                     </group>
-                    <group string='Podatki o oglasu'>
-                        <field name="objava_kje"/>
-                        <field name="objava_kje_datum" attrs ="{'invisible':[('objava_kje', '=', False)]}"/>
-                        <field name="objava_odziv"/>
-                        <field name="objava_spremembe"/>
-                        <field name="objava_stevilo_ogledov"/>
-                    </group>
                     <group string='Najemnik'>
                         <field name="najemnik_osebe"/>
                         <field name="najemnik_dolzina"/>
@@ -156,6 +142,10 @@
                         <field name="prodajalec_procent"/>
                         <field name="prodajalec_datum_pogodbe"/>
                         <field name="prodajalec_komunikacija"/>
+                        <field name="kupec_naronik"/>
+                        <field name="kupec_aktiven"/>
+                        <field name="kupec_znizana_cena"/>
+                        <field name="kupec_obvescanje"/>
                     </group>
                 </page>
             </xpath>
