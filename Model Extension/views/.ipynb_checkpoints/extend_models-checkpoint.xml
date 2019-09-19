@@ -1,14 +1,28 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
+    <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  CONTACTS: dodaja polj  \\\\\\\\\\\\\\\\\\-->
     <record id="res_partner_form_inherited" model="ir.ui.view"> 
         <field name="name">Inherited Res Partner</field> 
         <field name="model">res.partner</field> 
-        <field name="inherit_id" ref="base.view_partner_form"/> 
+        <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml"> 
+            
+            <!-- Contacts main: dodaja polj -->
+            <field name="vat" position="after">
+                <field name="tip_stranke"/>
+                <field name="tretja_oseba"/>
+                <field name="spol" attrs="{'invisible': [('tretja_oseba','=',False)]}"/> 
+                <field name="osebnostne_lastnosti" attrs="{'invisible': [('tretja_oseba','=',False)]}"/>           
+            </field>
+            
+            <!-- Contact TAB: Info o nepremičninah -->
             <xpath expr="//page[@name='sales_purchases']" position='after'>
-                <page string='Nepremičnine' attrs ="{'invisible':[('tip_stranke','!=', 'prodajalec')]}">
-                    <group string='Podatki o prodajalcu'>
-                        <field name="pridobitev"/>
+                <page name='nepremicnine' string='Nepremičnine' attrs="{'invisible':[('tretja_oseba','=',False),('tip_stranke','not in',['prodajalec', 'najemodajalec'])]}">
+                    <group string='Podatki o nepremičninah'>
+                        <field name="pridobitev" attrs="{'invisible': [('tip_stranke','!=','prodajalec')]}"/>
+                        <field name="stranka_odziv"/>
+                        <field name="povprasevanje"/>
+                        <field name="mnenje"/>
                     </group>
                     <group string='Seznam vseh nepremičnin'>   
                         <field name="nepremicnine" nolabel="1">
@@ -19,12 +33,112 @@
                     </group>
                 </page>
             </xpath>
-            <field name="category_id" position="after">
-                <field name="tip_stranke"/> 
-            </field>
+            
+            <!-- Contact TAB: Prodajalec-->
+            <xpath expr="//page[@name='nepremicnine']" position='after'>
+                <page name='prodajalec' string="Prodajalec" attrs="{'invisible': [('tip_stranke','!=','prodajalec')]}">
+                    <group string='Podatki o oglasu'>
+                        <field name="objava_kje"/>
+                        <field name="objava_kje_datum" attrs ="{'invisible':[('objava_kje', '=', False)]}"/>
+                        <field name="objava_odziv"/>
+                        <field name="objava_spremembe"/>
+                    </group>
+                    <group string='Prodajalec'>
+                        <field name="prodajalec_koliko"/>
+                        <field name="prodajalec_ponudbe"/>
+                        <field name="prodajalec_ponudbe_info" attrs ="{'invisible':[('prodajalec_ponudbe','=', False)]}"/>
+                        <field name="prodajalec_procent"/>
+                        <field name="prodajalec_datum_pogodbe"/>
+                        <field name="prodajalec_komunikacija"/>
+                    </group>
+                </page>
+            </xpath>
+            
+            <!-- Contact TAB: Kupci-->
+            <xpath expr="//page[@name='nepremicnine']" position='after'>
+                <page name='kupec' string="Kupec" attrs="{'invisible': [('tip_stranke','!=','kupec')]}">
+                    <group string='Podatki o oglasu'>
+                        <field name="objava_kje"/>
+                        <field name="objava_kje_datum" attrs ="{'invisible':[('objava_kje', '=', False)]}"/>
+                        <field name="objava_odziv"/>
+                        <field name="objava_spremembe"/>
+                    </group>
+                    <group string='Kupec'>
+                        <field name="prodajalec_koliko"/>
+                        <field name="prodajalec_ponudbe"/>
+                        <field name="prodajalec_ponudbe_info" attrs ="{'invisible':[('prodajalec_ponudbe','=', False)]}"/>
+                        <field name="prodajalec_procent"/>
+                        <field name="prodajalec_datum_pogodbe"/>
+                        <field name="prodajalec_komunikacija"/>
+                    </group>
+                </page>
+            </xpath>
+            
+            <!-- Contact TAB: Najemodajalec-->
+            <xpath expr="//page[@name='nepremicnine']" position='after'>
+                <page name='najemodajalec' string="Najemodajalec" attrs="{'invisible': [('tip_stranke','!=','najemodajalec')]}">
+                    <group string='Podatki o oglasu'>
+                        <field name="objava_kje"/>
+                        <field name="objava_kje_datum" attrs ="{'invisible':[('objava_kje', '=', False)]}"/>
+                        <field name="objava_odziv"/>
+                        <field name="objava_spremembe"/>
+                    </group>
+                    <group string='Najemodajalec'>
+                        <field name="prodajalec_koliko"/>
+                        <field name="prodajalec_ponudbe"/>
+                        <field name="prodajalec_ponudbe_info" attrs ="{'invisible':[('prodajalec_ponudbe','=', False)]}"/>
+                        <field name="prodajalec_procent"/>
+                        <field name="prodajalec_datum_pogodbe"/>
+                        <field name="prodajalec_komunikacija"/>
+                    </group>
+                </page>
+            </xpath>
+            
+            <!-- Contact TAB: Najemnik-->
+            <xpath expr="//page[@name='nepremicnine']" position='after'>
+                <page name='najemnik' string="Najemnik" attrs="{'invisible': [('tip_stranke','!=','najemnik')]}">
+                    <group string='Podatki o oglasu'>
+                        <field name="objava_kje"/>
+                        <field name="objava_kje_datum" attrs ="{'invisible':[('objava_kje', '=', False)]}"/>
+                        <field name="objava_odziv"/>
+                        <field name="objava_spremembe"/>
+                    </group>
+                    <group string='najemnik'>
+                        <field name="prodajalec_koliko"/>
+                        <field name="prodajalec_ponudbe"/>
+                        <field name="prodajalec_ponudbe_info" attrs ="{'invisible':[('prodajalec_ponudbe','=', False)]}"/>
+                        <field name="prodajalec_procent"/>
+                        <field name="prodajalec_datum_pogodbe"/>
+                        <field name="prodajalec_komunikacija"/>
+                    </group>
+                </page>
+            </xpath>
+            
+            <!-- Contact TAB: Tretja Oseba-->
+            <xpath expr="//page[@name='nepremicnine']" position='after'>
+                <page name='tretjaoseba' string="Tretja oseba" attrs="{'invisible': ['|',('tretja_oseba','=', False),('tip_stranke', 'in', ['prodajalec','kupec','najemodajalec','najemnik'])]}">
+                    <group string='Podatki o oglasu'>
+                        <field name="objava_kje"/>
+                        <field name="objava_kje_datum" attrs ="{'invisible':[('objava_kje', '=', False)]}"/>
+                        <field name="objava_odziv"/>
+                        <field name="objava_spremembe"/>
+                    </group>
+                    <group string='najemnik'>
+                        <field name="prodajalec_koliko"/>
+                        <field name="prodajalec_ponudbe"/>
+                        <field name="prodajalec_ponudbe_info" attrs ="{'invisible':[('prodajalec_ponudbe','=', False)]}"/>
+                        <field name="prodajalec_procent"/>
+                        <field name="prodajalec_datum_pogodbe"/>
+                        <field name="prodajalec_komunikacija"/>
+                    </group>
+                </page>
+            </xpath>
+            
         </field>
     </record>
+
     
+    <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  INVENTORY: dodaja polj  \\\\\\\\\\\\\\\\\\-->
     <record id="res_product_form_inherited" model="ir.ui.view"> 
         <field name="name">Inherited Product Template</field> 
         <field name="model">product.template</field> 
