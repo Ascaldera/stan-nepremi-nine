@@ -25,21 +25,19 @@ class ExtendContacts(models.Model):
     objava_spremembe = fields.Char(string = 'Oglas / spremembe')
     objava_stevilo_ogledov = fields.Float(string = 'Oglas / število ogledov')
     stranka_odziv = fields.Char(string = 'Ogled / odziv stranke')
-    povprasevanje = fields.Char(string = 'Povpraševanja')
+    povprasevanje = fields.Char(string = 'Zadnji klici, povpraševanja')
     mnenje = fields.Char(string = 'Naše mnenje')
     
     #PODATKI O ISKANJU
-    #kasneje tag
-    isce_kaj = fields.Char(string = 'Kaj išče')
-    isce_kje = fields.Char(string = 'Kje išče')
-    isce_cena = fields.Float(string = 'Cena')
-    isce_namen = fields.Char(string = 'Namen')
-    isce_kontakt_dan = fields.Date(string = 'Nazadnje kontaktiral')
-    isce_zgodovina = fields.Char(string = 'Že ogledano')
-    isce_ok = fields.Char(string = 'Kaj jim je bilo všeč')
-    isce_nok = fields.Char(string = 'Kaj jim ni bilo všeč')
-    isce_kontaktiran = fields.Date(string = 'Nazadnje kontaktiran')
-    isce_zivali = fields.Boolean(string = 'Živali')
+    poizvedba_nepremicnina = fields.Char(string = 'Kaj išče') #kasneje tag
+    poizvedba_kraj = fields.Char(string = 'Kje išče')
+    poizvedba_cena = fields.Float(string = 'Cena')
+    poizvedba_namen = fields.Char(string = 'Namen')
+    poizvedba_kontakt_dan = fields.Date(string = 'Nazadnje kontaktiral')
+    poizvedba_zgodovina = fields.Char(string = 'Že ogledano')
+    poizvedba_ok = fields.Char(string = 'Kaj jim je bilo všeč')
+    poizvedba_nok = fields.Char(string = 'Kaj jim ni bilo všeč')
+    poizvedba_kontaktiran = fields.Date(string = 'Nazadnje kontaktiran')
     
     #PODATKI O PRODAJALCIH
     #create_uid - kdo je vnesel prodajalca
@@ -58,20 +56,21 @@ class ExtendContacts(models.Model):
     
     
     #PODATKI O NAJEMODAJALCIH
-    kasneje tag
-    najemodajalec_komu = fields.Char(string = 'Komu oddajajo')   
+    najemodajalec_komu = fields.Char(string = 'Komu oddajajo')
     najemodajalec_od = fields.Date(string = 'Od kdaj oddaja')
     najemodajalec_do = fields.Date(string = 'Do kdaj oddaja')
     najemodajalec_otroci = fields.Boolean(string = 'Otroci')
     najemodajalec_studenti = fields.Boolean(string = 'Študenti')
+    najemodajalec_zivali = fields.Boolean(string = 'Živali')
     
     
     #PODATKI O NAJEMNIKIH
-    najemnik_koliko = fields.Integer(string = 'Koliko oseb')
+    najemnik_osebe = fields.Integer(string = 'Koliko oseb')
     najemnik_dolzina = fields.Integer(string = 'Dolžina najema v mesecih')
     najemnik_zgodovina = fields.Char(string = 'Kje so živeli')
     najemnik_zaposlitev = fields.Char(string = 'Zaposlitev')
     najemnik_studenti = fields.Boolean(string = 'Študent')
+    najemnik_zivali = fields.Boolean(string = 'Živali')
         
     
 class ExtendInventory(models.Model):
