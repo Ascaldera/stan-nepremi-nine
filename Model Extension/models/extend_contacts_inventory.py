@@ -27,9 +27,24 @@ class ExtendContacts(models.Model):
     mnenje = fields.Char(string = 'Naše mnenje')
     
     #PODATKI O ISKANJU
-    #poizvedba_nepremicnina = fields.Char(string = 'Kaj išče')
-    #poizvedba_kraj = fields.Char(string = 'Kje išče')
-    #poizvedba_namen = fields.Char(string = 'Namen')
+    poizvedba_nepremicnina=fields.Many2many(string="Kaj išče",
+                              comodel_name="res.partner.category",
+                              relation="contact_tag_nepremicnina_rel",
+                              domain="[('tag_type','=','nepremicnina')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')
+    poizvedba_kraj = fields.Many2many(string="Kje išče",
+                              comodel_name="res.partner.category",
+                              relation="contact_tag_kraj_rel",
+                              domain="[('tag_type','=','lokacija')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')
+    poizvedba_namen = fields.Many2many(string="Namen",
+                              comodel_name="res.partner.category",
+                              relation="contact_tag_namen_rel",
+                              domain="[('tag_type','=','namen')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')
     poizvedba_cena = fields.Float(string = 'Cena')
     poizvedba_kontakt_dan = fields.Date(string = 'Nazadnje kontaktiral')
     poizvedba_zgodovina = fields.Char(string = 'Že ogledano')
@@ -50,13 +65,23 @@ class ExtendContacts(models.Model):
     prodajalec_komunikacija = fields.Char(string = 'Način komunikacije')
     
     #PODATKI O KUPCIH
-    #kupec_obvescanje = fields.Char(string = 'Obveščanje za ponudbe')
+    kupec_obvescanje = fields.Many2many(string="Obveščanje za ponudbe",
+                              comodel_name="res.partner.category",
+                              relation="contact_tag_ponudba_rel",
+                              domain="[('tag_type','=','ponudba')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')
     kupec_naronik = fields.Boolean(string = 'Naročnik')
     kupec_aktiven = fields.Boolean(string = 'Aktivni kupec')
     kupec_znizana_cena = fields.Boolean(string = 'Znižana cena po oddani ponudbi') 
     
     #PODATKI O NAJEMODAJALCIH
-    #najemodajalec_komu = fields.Char(string = 'Komu oddajajo')
+    najemodajalec_komu = fields.Many2many(string="Komu oddajajo",
+                              comodel_name="res.partner.category",
+                              relation="contact_tag_stranka_rel",
+                              domain="[('tag_type','=','stranka')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')
     najemodajalec_od = fields.Date(string = 'Od kdaj oddaja')
     najemodajalec_do = fields.Date(string = 'Do kdaj oddaja')
     najemodajalec_otroci = fields.Boolean(string = 'Otroci')
@@ -72,7 +97,20 @@ class ExtendContacts(models.Model):
     najemnik_studenti = fields.Boolean(string = 'Študent')
     najemnik_zivali = fields.Boolean(string = 'Živali')
     
-    contact_tags = fields.Many2many('res.partner.category','res_partner_res_partner_category_rel','category_id','partner_id','Contact Tags')
+    #PODATKI O TRETJI OSEBI
+    tretja_oseba_osebnost = fields.Many2many(string="Osebnostne lastnosti",
+                              comodel_name="res.partner.category",
+                              relation="contact_tag_osebnost_rel",
+                              domain="[('tag_type','=','lastnosti')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')
+    tretja_oseba_namen = fields.Many2many(string="Namen",
+                              comodel_name="res.partner.category",
+                              relation="contact_tag_namen_rel",
+                              domain="[('tag_type','=','namen')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')
+    
         
     
 class ExtendInventory(models.Model):
@@ -118,7 +156,7 @@ class ExtendContactTags(models.Model):
     
     tag_type = fields.Selection(string='Type', selection=[('nepremicnina','Nepremičnina'), 
                                                           ('lokacija','Lokacija'),
-                                                          ('namen', 'Namen')
+                                                          ('namen', 'Namen'),
                                                           ('ponudba','Ponudba'), 
                                                           ('stranka', 'Stranka'), 
                                                           ('lastnosti','Osebnostne lastnosti')])
