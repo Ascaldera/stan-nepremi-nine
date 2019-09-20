@@ -10,9 +10,7 @@
             <!-- Contacts main: dodaja polj -->
             <field name="vat" position="after">
                 <field name="tip_stranke"/>
-                <field name="tretja_oseba"/>
-                <field name="spol" attrs="{'invisible': [('tretja_oseba','=',False)]}"/> 
-                <field name="osebnostne_lastnosti" attrs="{'invisible': [('tretja_oseba','=',False)]}"/>           
+                <field name="tretja_oseba"/>         
             </field>
             
             <!-- Contact TAB: Info o nepremičninah -->
@@ -45,6 +43,7 @@
                         <field name="objava_stevilo_ogledov"/>
                     </group>
                     <group string='Prodajalec'>
+                        <field name="create_uid" string = 'Osebo vnesla'/>
                         <field name="prodajalec_koliko"/>
                         <field name="prodajalec_ponudbe"/>
                         <field name="prodajalec_ponudbe_info" attrs ="{'invisible':[('prodajalec_ponudbe','=', False)]}"/>
@@ -59,10 +58,10 @@
             <xpath expr="//page[@name='nepremicnine']" position='after'>
                 <page name='kupec' string="Kupec" attrs="{'invisible': [('tip_stranke','!=','kupec')]}">
                     <group string='Iskalni podatki'>
-                        <field name="poizvedba_nepremicnina"/>
-                        <field name="poizvedba_kraj"/>
+                        <field name="contact_tags" string='Kaj išče' widget="many2many_tags" options="{'color_field': 'color'}" domain="[('tag_type','in',['nepremicnina'])]"/>
+                        <field name="contact_tags" string='Kje išče' widget="many2many_tags" options="{'color_field': 'color'}" domain="[('tag_type','in',['lokacija'])]"/>
                         <field name="poizvedba_cena"/>
-                        <field name="poizvedba_namen"/>
+                        <field name="contact_tags" string='S kakšnim namenom' widget="many2many_tags" options="{'color_field': 'color'}" domain="[('tag_type','in',['namen'])]"/>
                         <field name="poizvedba_kontakt_dan"/>
                         <field name="poizvedba_zgodovina"/>
                         <field name="poizvedba_ok"/>
@@ -70,10 +69,11 @@
                         <field name="poizvedba_kontaktiran"/>
                     </group>
                     <group string='Kupec'>
+                        <field name="create_uid" string = 'Osebo vnesla'/>
                         <field name="kupec_naronik"/>
                         <field name="kupec_aktiven"/>
                         <field name="kupec_znizana_cena"/>
-                        <field name="kupec_obvescanje"/>
+                        <field name="contact_tags" string='O kakšnih ponudbah ga obveščamo' widget="many2many_tags" options="{'color_field': 'color'}" domain="[('tag_type','in',['ponudba'])]"/>
                     </group>
                 </page>
             </xpath>
@@ -90,7 +90,8 @@
                         <field name="objava_stevilo_ogledov"/>
                     </group>
                     <group string='Najemodajalec'>
-                        <field name="najemodajalec_komu"/>
+                        <field name="create_uid" string = 'Osebo vnesla'/>
+                        <field name="contact_tags" string='Komu oddajajo' widget="many2many_tags" options="{'color_field': 'color'}" domain="[('tag_type','in',['stranka'])]"/>
                         <field name="najemodajalec_od"/>
                         <field name="najemodajalec_do"/>
                         <field name="najemodajalec_otroci"/>
@@ -104,10 +105,10 @@
             <xpath expr="//page[@name='nepremicnine']" position='after'>
                 <page name='najemnik' string="Najemnik" attrs="{'invisible': [('tip_stranke','!=','najemnik')]}">
                     <group string='Iskalni podatki'>
-                        <field name="poizvedba_nepremicnina"/>
-                        <field name="objava_kje"/>
+                        <field name="contact_tags" string='Kaj išče' widget="many2many_tags" options="{'color_field': 'color'}" domain="[('tag_type','in',['nepremicnina'])]"/>
+                        <field name="contact_tags" string='Kje išče' widget="many2many_tags" options="{'color_field': 'color'}" domain="[('tag_type','in',['lokacija'])]"/>
                         <field name="poizvedba_cena"/>
-                        <field name="poizvedba_namen"/>
+                        <field name="contact_tags" string='S kakšnim namenom' widget="many2many_tags" options="{'color_field': 'color'}" domain="[('tag_type','in',['namen'])]"/>
                         <field name="poizvedba_kontakt_dan"/>
                         <field name="poizvedba_zgodovina"/>
                         <field name="poizvedba_ok"/>
@@ -115,12 +116,16 @@
                         <field name="poizvedba_kontaktiran"/>
                     </group>
                     <group string='Najemnik'>
+                        <field name="create_uid" string = 'Osebo vnesla'/>
                         <field name="najemnik_osebe"/>
                         <field name="najemnik_dolzina"/>
                         <field name="najemnik_zgodovina"/>
                         <field name="najemnik_zaposlitev"/>
                         <field name="najemnik_studenti"/>
                         <field name="najemnik_zivali"/>
+                        <field name="poizvedba_balkon"/>
+                        <field name="poizvedba_dvigalo"/>
+                        <field name="poizvedba_vrt"/>
                     </group>
                 </page>
             </xpath>
@@ -136,6 +141,9 @@
                         <field name="objava_stevilo_ogledov"/>
                     </group>
                     <group string='Tretja Oseba'>
+                        <field name="create_uid" string = 'Osebo vnesla'/>
+                        <field name="spol"/> 
+                        <field name="contact_tags" string='S kakšnim namenom' widget="many2many_tags" options="{'color_field': 'color'}" domain="[('tag_type','in',['lastnosti'])]"/> 
                         <field name="prodajalec_koliko"/>
                         <field name="prodajalec_ponudbe"/>
                         <field name="prodajalec_ponudbe_info" attrs ="{'invisible':[('prodajalec_ponudbe','=', False)]}"/>
@@ -145,7 +153,7 @@
                         <field name="kupec_naronik"/>
                         <field name="kupec_aktiven"/>
                         <field name="kupec_znizana_cena"/>
-                        <field name="kupec_obvescanje"/>
+                        <field name="contact_tags" string='O kakšnih ponudbah ga obveščamo' widget="many2many_tags" options="{'color_field': 'color'}" domain="[('tag_type','in',['ponudba'])]"/>
                     </group>
                 </page>
             </xpath>
@@ -162,6 +170,20 @@
         <field name="arch" type="xml"> 
             <field name="categ_id" position="after"> 
                 <field name="contact" string="Contact"/>
+            </field>
+        </field>
+    </record>
+    
+    
+    <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  Contact TAGS: dodaja polj  \\\\\\\\\\\\\\\\\\-->
+    <record id="res_product_form_inherited" model="ir.ui.view"> 
+        <field name="name">Inherited Contact Tags</field> 
+        <field name="model">res.partner.category</field> 
+        <field name="inherit_id" ref="base.view_partner_category_form"/> 
+        <field name="arch" type="xml"> 
+            <field name="name" position="after"> 
+                <field name="tag_type"/>
+                <field name="color"/>
             </field>
         </field>
     </record>
