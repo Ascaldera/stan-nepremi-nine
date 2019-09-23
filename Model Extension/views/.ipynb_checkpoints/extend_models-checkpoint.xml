@@ -25,9 +25,10 @@
                     <group string='Seznam vseh nepremičnin'>   
                         <field name="nepremicnine" nolabel="1">
                             <tree editable="bottom">
+                                <field name="currency_id" invisible="1"/>
                                 <field name='name'/>
                                 <field name='type'/>
-                                <field name='list_price'/>
+                                <field name='list_price' widget='monetary' options="{'currency_field': 'currency_id'}"/>
                             </tree>
                         </field>  
                     </group>
@@ -45,8 +46,9 @@
                         <field name="objava_stevilo_ogledov"/>
                     </group>
                     <group string='Prodajalec'>
+                        <field name="custom_currency_id" invisible="1"/>
                         <field name="create_uid" string = 'Osebo vnesla'/>
-                        <field name="prodajalec_koliko"/>
+                        <field name="prodajalec_koliko" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
                         <field name="prodajalec_ponudbe"/>
                         <field name="prodajalec_ponudbe_info" attrs ="{'invisible':[('prodajalec_ponudbe','=', False)]}"/>
                         <field name="prodajalec_procent"/>
@@ -61,10 +63,10 @@
                 <page name='kupec' string="Kupec" attrs="{'invisible': [('tip_stranke','!=','kupec')]}">
                     <group string='Iskalni podatki'>
                         <field name="custom_currency_id" invisible="1"/>
-                        <field name="poizvedba_nepremicnina" widget="many2many_tags"/>
-                        <field name="poizvedba_kraj" string='Kje išče' widget="many2many_tags"/>
+                        <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <field name="poizvedba_kraj" string='Kje išče' widget="many2many_tags" options="{'color_field': 'color'}"/>
                         <field name="poizvedba_cena" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
-                        <field name="poizvedba_namen" string='S kakšnim namenom' widget="many2many_tags"/>
+                        <field name="poizvedba_namen" string='S kakšnim namenom' widget="many2many_tags" options="{'color_field': 'color'}"/>
                         <field name="poizvedba_kontakt_dan"/>
                         <field name="poizvedba_zgodovina"/>
                         <field name="poizvedba_ok"/>
@@ -73,10 +75,10 @@
                     </group>
                     <group string='Kupec'>
                         <field name="create_uid" string = 'Osebo vnesla'/>
-                        <field name="kupec_naronik"/>
+                        <field name="kupec_narocnik"/>
                         <field name="kupec_aktiven"/>
                         <field name="kupec_znizana_cena"/>
-                        <field name="kupec_obvescanje" string='O kakšnih ponudbah ga obveščamo' widget="many2many_tags"/>
+                        <field name="kupec_obvescanje" string='O kakšnih ponudbah ga obveščamo' widget="many2many_tags" options="{'color_field': 'color'}"/>
                     </group>
                 </page>
             </xpath>
@@ -94,7 +96,7 @@
                     </group>
                     <group string='Najemodajalec'>
                         <field name="create_uid" string = 'Osebo vnesla'/>
-                        <field name="najemodajalec_komu" string='Komu oddajajo' widget="many2many_tags"/>
+                        <field name="najemodajalec_komu" string='Komu oddajajo' widget="many2many_tags" options="{'color_field': 'color'}"/>
                         <field name="najemodajalec_od"/>
                         <field name="najemodajalec_do"/>
                         <field name="najemodajalec_otroci"/>
@@ -109,10 +111,10 @@
                 <page name='najemnik' string="Najemnik" attrs="{'invisible': [('tip_stranke','!=','najemnik')]}">
                     <group string='Iskalni podatki'>
                         <field name="custom_currency_id" invisible="1"/>
-                        <field name="poizvedba_nepremicnina" widget="many2many_tags"/>
-                        <field name="poizvedba_kraj" string='Kje išče' widget="many2many_tags"/>
+                        <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <field name="poizvedba_kraj" string='Kje išče' widget="many2many_tags" options="{'color_field': 'color'}"/>
                         <field name="poizvedba_cena" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
-                        <field name="poizvedba_namen" string='S kakšnim namenom' widget="many2many_tags"/>
+                        <field name="poizvedba_namen" string='S kakšnim namenom' widget="many2many_tags" options="{'color_field': 'color'}"/>
                         <field name="poizvedba_kontakt_dan"/>
                         <field name="poizvedba_zgodovina"/>
                         <field name="poizvedba_ok"/>
@@ -147,21 +149,34 @@
                     <group string='Tretja Oseba'>
                         <field name="create_uid" string = 'Osebo vnesla'/>
                         <field name="spol"/> 
-                        <field name="tretja_oseba_namen" string='S kakšnim namenom' widget="many2many_tags"/> 
+                        <field name="tretja_oseba_namen" string='S kakšnim namenom' widget="many2many_tags" options="{'color_field': 'color'}"/> 
                         <field name="prodajalec_koliko"/>
                         <field name="prodajalec_ponudbe"/>
                         <field name="prodajalec_ponudbe_info" attrs ="{'invisible':[('prodajalec_ponudbe','=', False)]}"/>
                         <field name="prodajalec_procent"/>
                         <field name="prodajalec_datum_pogodbe"/>
                         <field name="prodajalec_komunikacija"/>
-                        <field name="kupec_naronik"/>
+                        <field name="kupec_narocnik"/>
                         <field name="kupec_aktiven"/>
                         <field name="kupec_znizana_cena"/>
-                        <field name="tretja_oseba_osebnost" string='O kakšnih ponudbah ga obveščamo' widget="many2many_tags"/>
+                        <field name="tretja_oseba_osebnost" string='Osebnost' widget="many2many_tags" options="{'color_field': 'color'}"/>
                     </group>
                 </page>
             </xpath>
             
+        </field>
+    </record>
+    
+    <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  INVENTORY: TAG CONFIG  \\\\\\\\\\\\\\\\\\-->
+    <record id="res_partner_category_inherited" model="ir.ui.view"> 
+        <field name="name">Inherited Config Tags Form</field> 
+        <field name="model">res.partner.category</field> 
+        <field name="inherit_id" ref="base.view_partner_category_form"/> 
+        <field name="arch" type="xml"> 
+            <field name='name' position='after'>
+                <field name="tag_type"/>
+                <field name="color"/>
+            </field> 
         </field>
     </record>
 
@@ -170,32 +185,223 @@
     <record id="res_product_form_inherited" model="ir.ui.view"> 
         <field name="name">Inherited Product Template</field> 
         <field name="model">product.template</field> 
-        <field name="inherit_id" ref="product.product_template_only_form_view"/> 
+        <field name="inherit_id" ref="product.product_template_form_view"/> 
         <field name="arch" type="xml"> 
             <!-- CUSTOM TAB -->
             <xpath expr="//page[@name='general_information']" position='after'>
-                <page name='custom_tab' string="CUSTOM TAB">
-                    <group string='Info'>
+                <page name='nepremicnina' string="Nepremičnina">
+                    <group string='Osnovne informacije'>
+                        <field name="currency_id" invisible="1"/>
                         <field name="create_uid" string = 'Nepremičnino vnesla'/>
-                        <field name="contact" string = 'Contact'/>
-                    </group>
+                        
+                        <label for='nepremicnina_povrsina'/>
+                        <div class="o_row" name="volume">
+                            <field name="nepremicnina_povrsina" string="Volume"/>
+                                <span>m²</span>
+                        </div>
+                        
+                        <label for='nepremicnina_zemljisce_pod'/>
+                        <div class="o_row" name="volume">
+                            <field name="nepremicnina_zemljisce_pod" string="Volume"/>
+                                <span>m²</span>
+                        </div>
+                        
+                        <label for='nepremicnina_velikost'/>
+                        <div class="o_row" name="volume">
+                            <field name="nepremicnina_velikost" string="Volume"/>
+                                <span>m²</span>
+                        </div>
+                        
+                        <field name="nepremicnina_cena_min" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                        <field name="nepremicnina_cena_dolgorocno" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                        
+                        <field name="nepremicnina_vrsta"/>
+                        <field name="nepremicnina_vrsta_tip_drugo" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'drugo')]}"/>
+                        <field name="nepremicnina_tip"/>
+                    </group> 
                 </page>
             </xpath>
         </field>
     </record>
     
+    <!--
+    #OSNOVNI PODATKI
+    nepremicnina_vrsta = fields.Selection(string = 'Tip nepremičnine', selection = [('apartma','Apartma'),('soba','Soba'), 
+                                                                                    ('garsonjera', 'Garsonjera'), 
+                                                                                    ('soba1','1-sobno'), 
+                                                                                    ('soba1_5', '1,5-sobno'), 
+                                                                                    ('soba2','2-sobno'), 
+                                                                                    ('soba2_5','2,5-sobno'), 
+                                                                                    ('soba3','3-sobno'), 
+                                                                                    ('soba3_5','3,5-sobno'), 
+                                                                                    ('soba4','4-sobno'), 
+                                                                                    ('soba4_5','4,5-sobno'), 
+                                                                                    ('soba5','5 in večsobno'), 
+                                                                                    ('drugo','Drugo')])
+    #PODATKI O LOKACIJI
+    nepremicnina_drzava = fields.Char(string = 'Država')
+    nepremicnina_regija = fields.Char(string = 'Regija')
+    nepremicnina_obcina = fields.Char(string = 'Občina')
+    nepremicnina_soseska = fields.Char(string = 'Soseska')
+    nepremicnina_lokacija = fields.Char(string = 'Točna Lokacija')
+    nepremicnina_lokacija_opombe = fields.Char(string = 'Lokacija/opombe')
     
-    <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  Contact TAGS: dodaja polj  \\\\\\\\\\\\\\\\\\-->
-    <record id="res_product_form_inherited" model="ir.ui.view"> 
-        <field name="name">Inherited Contact Tags</field> 
-        <field name="model">res.partner.category</field> 
-        <field name="inherit_id" ref="base.view_partner_category_form"/> 
-        <field name="arch" type="xml"> 
-            <field name="name" position="after"> 
-                <field name="tag_type"/>
-                <field name="color"/>
-            </field>
-        </field>
-    </record>
-
+    #PODATKI O NADSTROPJIH
+    nepremicnina_nadstropje = fields.Integer(string = 'Nadstropje')
+    nepremicnina_st_nadstropij = fields.Integer(string = 'Št. nadstropij')
+    nepremicnina_razlog_prodaje = fields.Char(string = 'Razlog za prodajo')
+    nepremicnina_razlog_oddala = fields.Char(string = 'Razlog zakaj se ni oddala')
+    nepremicnina_razlog_oddala = fields.Char(string = 'Opis nepremičnine')
+    
+    #OPIS NEPREMIČNINE
+    nepremicnina_leto_izgradnje = fields.Char(string = 'Leto izgradnje')
+    nepremicnina_leto_adaptacija = fields.Char(string = 'Leto adaptacije')
+    nepremicnina_adaptacija_info = fields.Many2many(string="Kaj je bilo obnovljeno",
+                              comodel_name="res.partner.category",
+                              relation="contact_tag_obnova_rel",
+                              domain="[('tag_type','=','obnova')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')
+    nepremicnina_streha = fields.Char(string = 'Vrsta kritine')
+    nepremicnina_streha_obnova = fields.Char(string = 'Leto obnove strehe')
+    nepremicnina_izolacija = fields.Char(string = 'Fasada/izolacija')
+    nepremicnina_izolacija_obnova = fields.Char(string = 'Leto obnove fasade')
+    nepremicnina_okna = fields.Selection(string = 'Tip oken', selection=[('lesena','Lesena'), 
+                                                                         ('plasticna','Plastična'),
+                                                                         ('pol','Pol-pol')])
+    nepremicnina_okna_obnova = fields.Char(string = 'Leto obnove/inštalacije oken')
+    nepremicnina_materiali = fields.Char(string = 'Materiali')
+    nepremicnina_stroski = fields.Float(string = 'Stroški vzdrževanja') #EUR
+    nepremicnina_stroski = fields.Float(string = 'Stroški rezervnega sklada') #EUR
+    nepremicnina_upravnik = fields.Char(string = 'Upravnik') #mogoče: many2one na contacts?
+    nepremicnina_energetska_izkaznica = fields.Char(string = 'Energetska izkaznica')
+    nepremicnina_energetski_razred = fields.Char(string = 'Energijski razred')
+    
+    #DODATKI
+    nepremicnina_balkon = fields.Boolean(string = 'Balkon')
+    nepremicnina_balkon_velikost = fields.Float(string = 'Velikost Balkona') #hide if balkon False
+    
+    nepremicnina_atrij = fields.Boolean(string = 'Atrij')
+    
+    nepremicnina_klet = fields.Boolean(string = 'Klet') #hide if Klet False
+    nepremicnina_klet_velikost = fields.Float(string = 'Velikost kleti')
+    
+    nepremicnina_dvigalo = fields.Boolean(string = 'Dvigalo')
+    nepremicnina_vrsta_ogrevanja = fields.Selection(string = 'Vrsta ogrevanja', selection=[('plinovod','Plinovod'),
+                                                                                           ('toplovod','Toplovod'),
+                                                                                           ('crpalka','Toplotna Črpalka'), 
+                                                                                           ('biomasa','Biomasa')])
+    nepremicnina_lega = fields.Char(string = 'Lega')
+    
+    nepremicnina_sanitarije = fields.Boolean(string = 'Sanitarije')
+    nepremicnina_sanitarije_info = fields.Char(string = 'Več o sanitarijah')
+    
+    nepremicnina_dnevna = fields.Char(string = 'Dnevne sobe')
+    nepremicnina_spalnice = fields.Char(string = 'Spalnice')
+    nepremicnina_bazen = fields.Boolean(string = 'Bazen')
+    nepremicnina_kamin = fields.Boolean(string = 'Kamin') 
+    
+    nepremicnina_vrt = fields.Boolean(string = 'Vrt')
+    nepremicnina_vrt_info = fields.Char(string = 'Več o vrtu')
+    
+    nepremicnina_razgled = fields.Char(string = 'Razgled')
+    nepremicnina_penthouse = fields.Boolean(string = 'Penthouse')
+    nepremicnina_ljubljencki = fields.Boolean(string = 'Hišni ljubljenčki')
+    nepremicnina_shramba = fields.Boolean(string = 'Shramba')
+    nepremicnina_opremljeno = fields.Boolean(string = 'Opremljeno')
+    nepremicnina_invalidi = fields.Boolean(string = 'Dostop za invalide')
+    nepremicnina_pogled = fields.Selection(string = 'Pogled na', selection=[('morje','Morje'),
+                                                                            ('hribi','Hribi')])
+    nepremicnina_student = fields.Boolean(string = 'Primerno za študente')
+    nepremicnina_parkiranje = fields.Char(string = 'Parkiranje')
+    nepremicnina_garaza = fields.Char(string = 'Garaža')
+    nepremicnina_parkiranje_mesto = fields.Char(string = 'Parkirno mesto')
+    nepremicnina_parkiranje_hisa = fields.Char(string = 'Parkirna hiša')
+    nepremicnina_klima = fields.Char(string = 'Klima')
+    nepremicnina_alarm = fields.Char(string = 'Alarm')
+    nepremicnina_varovanje = fields.Char(string = 'Varovan objekt')
+    nepremicnina_video_nadzor = fields.Char(string = 'Video Nadzor')
+    nepremicnina_domofon = fields.Char(string = 'Domofon')
+    nepremicnina_360_id = fields.Char(string = '360 View ID')
+   
+    #INFRASTRUKTURA
+    infrastruktura_vrtec = fields.Boolean(string = 'Vrtec')
+    infrastruktura_vrtec_info = fields.Char(string = 'Več o vrtcih')
+  
+    infrastruktura_sola = fields.Boolean(string = 'Šola')
+    infrastruktura_sola_info = fields.Char(string = 'Več o šolah')
+    
+    infrastruktura_fakultete = fields.Boolean(string = 'Fakulteta')
+    infrastruktura_vrtec_info = fields.Char(string = 'Več o fakultetah')
+    
+    infrastruktura_posta = fields.Boolean(string = 'Pošta')
+    infrastruktura_posta_info = fields.Char(string = 'Več o poštah')
+    
+    infrastruktura_trgovina = fields.Boolean(string = 'Trgovina')
+    infrastruktura_trgovina_info = fields.Char(string = 'Več o trgovinah')
+    
+    infrastruktura_banka = fields.Boolean(string = 'Banka')
+    infrastruktura_banka_info = fields.Char(string = 'Več o bankah')
+    
+    infrastruktura_avtocesta = fields.Boolean(string = 'Avtocesta')
+    infrastruktura_avtocesta_info = fields.Char(string = 'Več o avtocestah')
+    
+    infrastruktura_avtobus = fields.Boolean(string = 'Avtobus')
+    infrastruktura_avtobus_info = fields.Char(string = 'Več o avtobusih')
+    
+    infrastruktura_vlak = fields.Boolean(string = 'Vlak')
+    infrastruktura_vlak_info = fields.Char(string = 'Več o vlakih')
+    
+    infrastruktura_igrisce = fields.Boolean(string = 'Igrišče')
+    infrastruktura_igrisce_info = fields.Char(string = 'Več o igriščih')
+    
+    infrastruktura_park = fields.Boolean(string = 'Park')
+    infrastruktura_park_info = fields.Char(string = 'Več o parkih')
+    
+    infrastruktura_zd = fields.Boolean(string = 'Zdravstveni dom')
+    infrastruktura_zd_info = fields.Char(string = 'Več o zdravstvenih domovih')
+    
+    #KOMUNIKACIJSKI PRIKLJUČKI
+    komunikacija_telefon = fields.Boolean(string = 'Telefon')
+    komunikacija_telefon_info = fields.Char(string = 'Informacije o ponudniku telefonije')
+    
+    komunikacija_kabel = fields.Boolean(string = 'Kabel')
+    komunikacija_kabel_info = fields.Char(string = 'Informacije o kabelskem ponudniku')
+    
+    komunikacija_optika = fields.Boolean(string = 'Optika')
+    komunikacija_optika_info = fields.Char(string = 'Informacije o ponudniku optike')
+    
+    komunikacija_internet = fields.Boolean(string = 'Internet')
+    komunikacija_internet_info = fields.Char(string = 'Informacije o ponudniku interneta')
+    
+    #LASTNIŠTVO
+    lastnistvo_podlaga = fields.Char(string = 'Lastništvo pridobljeno na podlagi')
+    lastnistvo_dan = fields.Char(string = 'Dne:')
+    lastnistvo_plombe = fields.Char(string = 'Plombe:')
+    lastnistvo_hipoteke = fields.Char(string = 'Hipoteke:')
+    lastnistvo_solastnina = fields.Char(string = 'Solastnina')
+    lastnistvo_prepoved = fields.Char(string = 'Prepoved odtujitve/obremenitve')
+    lastnistvo_predkupna_pravica = fields.Char(string = 'Predkupna pravica')
+    lastnistvo_parcelne_st = fields.Char(string = 'Parcelne številke')
+    lastnistvo_omejitve = fields.Char(string = 'Omejitve po ZKZ')
+    
+    #PREDKUPNE PRAVICE
+    lastnistvo_potrdilo = fields.Char(string = 'Potrdilo o namenski rabi/lokacijska info')
+    lastnistvo_pravica = fields.Char(string = 'Predkupna pravica občine ali drugega upravičenca')
+    lastnistvo_soglasje = fields.Char(string = 'ARSO soglasje')
+    lastnistvo_varstvo = fields.Char(string = 'Varstvo naravne ali kulturne dediščine')
+    lastnistvo_prikljucek = fields.Char(string = 'Mestni priključek')
+    lastnistvo_vrednost = fields.Char(string = 'GURS vrednost')
+    
+    #SEZNAM OPREME
+    #kuhinja, dnevna soba, spalnica, otroška soba, hodnik, kopalnica
+    oprema_seznam = fields.Many2many(string="Seznam opreme, ki je vključena v ceno",
+                              comodel_name="res.partner.category",
+                              relation="contact_tag_oprema_rel",
+                              domain="[('tag_type','=','oprema')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')
+    
+    -->
+    
 </odoo>

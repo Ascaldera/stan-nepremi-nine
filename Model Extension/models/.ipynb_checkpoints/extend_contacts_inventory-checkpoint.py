@@ -61,7 +61,7 @@ class ExtendContacts(models.Model):
     
     #PODATKI O PRODAJALCIH
     #create_uid - kdo je vnesel prodajalca
-    prodajalec_koliko = fields.Float(string = 'Minimalna ponudba')
+    prodajalec_koliko = fields.Float(string = 'Minimalna ponudba') #EUR
     prodajalec_ponudbe = fields.Boolean(string = 'Ponudbe')
     prodajalec_ponudbe_info = fields.Char(string = 'Kakšne ponudbe')
     prodajalec_procent = fields.Float(string = 'Procent od prodaje')
@@ -75,7 +75,7 @@ class ExtendContacts(models.Model):
                               domain="[('tag_type','=','ponudba')]",
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
-    kupec_naronik = fields.Boolean(string = 'Naročnik')
+    kupec_narocnik = fields.Boolean(string = 'Naročnik')
     kupec_aktiven = fields.Boolean(string = 'Aktivni kupec')
     kupec_znizana_cena = fields.Boolean(string = 'Znižana cena po oddani ponudbi') 
     
@@ -104,22 +104,23 @@ class ExtendContacts(models.Model):
     #PODATKI O TRETJI OSEBI
     tretja_oseba_osebnost = fields.Many2many(string="Osebnostne lastnosti",
                               comodel_name="res.partner.category",
-                              relation="contact_tag_osebnost_rel",
+                              relation="contact_tretja_oseba_tag_osebnost_rel",
                               domain="[('tag_type','=','lastnosti')]",
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
     tretja_oseba_namen = fields.Many2many(string="Namen",
                               comodel_name="res.partner.category",
-                              relation="contact_tag_namen_rel",
+                              relation="contact_tretja_osbeba_tag_namen_rel",
                               domain="[('tag_type','=','namen')]",
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
     
-        
+                
     
 class ExtendInventory(models.Model):
     _inherit = 'product.template'
     
+    #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name="res.partner", string="Kdo prodaja")
     nepremicnina_povrsina = fields.Float(string='Neto površina') #m2
     nepremicnina_zemljisce_pod = fields.Float(string = 'Zemljišče pod stavbo') #m2
@@ -132,7 +133,7 @@ class ExtendInventory(models.Model):
                                                                                       ('garaza', 'Garaža'), 
                                                                                       ('drugo', 'Drugo')])
     nepremicnina_vrsta_tip_drugo = fields.Char(string = 'Drugo')
-    nepremicnina_vrsta = fields.Selection(string = 'Tip nepremičnine', selection = [('apartma','Apartma'),('soba','Soba'), 
+    nepremicnina_tip = fields.Selection(string = 'Tip nepremičnine', selection = [('apartma','Apartma'),('soba','Soba'), 
                                                                                     ('garsonjera', 'Garsonjera'), 
                                                                                     ('soba1','1-sobno'), 
                                                                                     ('soba1_5', '1,5-sobno'), 
@@ -144,28 +145,170 @@ class ExtendInventory(models.Model):
                                                                                     ('soba4_5','4,5-sobno'), 
                                                                                     ('soba5','5 in večsobno'), 
                                                                                     ('drugo','Drugo')])
+    #PODATKI O LOKACIJI
     nepremicnina_drzava = fields.Char(string = 'Država')
     nepremicnina_regija = fields.Char(string = 'Regija')
     nepremicnina_obcina = fields.Char(string = 'Občina')
     nepremicnina_soseska = fields.Char(string = 'Soseska')
     nepremicnina_lokacija = fields.Char(string = 'Točna Lokacija')
     nepremicnina_lokacija_opombe = fields.Char(string = 'Lokacija/opombe')
+    
+    #PODATKI O NADSTROPJIH
     nepremicnina_nadstropje = fields.Integer(string = 'Nadstropje')
     nepremicnina_st_nadstropij = fields.Integer(string = 'Št. nadstropij')
     nepremicnina_razlog_prodaje = fields.Char(string = 'Razlog za prodajo')
     nepremicnina_razlog_oddala = fields.Char(string = 'Razlog zakaj se ni oddala')
     nepremicnina_razlog_oddala = fields.Char(string = 'Opis nepremičnine')
+    
+    #OPIS NEPREMIČNINE
     nepremicnina_leto_izgradnje = fields.Char(string = 'Leto izgradnje')
     nepremicnina_leto_adaptacija = fields.Char(string = 'Leto adaptacije')
-    nepremicnina_adaptacija_info = fields.Char(string = 'Kaj je bilo obnovljeno')
+    nepremicnina_adaptacija_info = fields.Many2many(string="Kaj je bilo obnovljeno",
+                              comodel_name="res.partner.category",
+                              relation="contact_tag_obnova_rel",
+                              domain="[('tag_type','=','obnova')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')
     nepremicnina_streha = fields.Char(string = 'Vrsta kritine')
     nepremicnina_streha_obnova = fields.Char(string = 'Leto obnove strehe')
     nepremicnina_izolacija = fields.Char(string = 'Fasada/izolacija')
     nepremicnina_izolacija_obnova = fields.Char(string = 'Leto obnove fasade')
-    nepremicnina_okna = fields.Char(string = 'Tip oken')
+    nepremicnina_okna = fields.Selection(string = 'Tip oken', selection=[('lesena','Lesena'), 
+                                                                         ('plasticna','Plastična'),
+                                                                         ('pol','Pol-pol')])
     nepremicnina_okna_obnova = fields.Char(string = 'Leto obnove/inštalacije oken')
     nepremicnina_materiali = fields.Char(string = 'Materiali')
     nepremicnina_stroski = fields.Float(string = 'Stroški vzdrževanja') #EUR
+    nepremicnina_stroski = fields.Float(string = 'Stroški rezervnega sklada') #EUR
+    nepremicnina_upravnik = fields.Char(string = 'Upravnik') #mogoče: many2one na contacts?
+    nepremicnina_energetska_izkaznica = fields.Char(string = 'Energetska izkaznica')
+    nepremicnina_energetski_razred = fields.Char(string = 'Energijski razred')
+    
+    #DODATKI
+    nepremicnina_balkon = fields.Boolean(string = 'Balkon')
+    nepremicnina_balkon_velikost = fields.Float(string = 'Velikost Balkona') #hide if balkon False
+    
+    nepremicnina_atrij = fields.Boolean(string = 'Atrij')
+    
+    nepremicnina_klet = fields.Boolean(string = 'Klet') #hide if Klet False
+    nepremicnina_klet_velikost = fields.Float(string = 'Velikost kleti')
+    
+    nepremicnina_dvigalo = fields.Boolean(string = 'Dvigalo')
+    nepremicnina_vrsta_ogrevanja = fields.Selection(string = 'Vrsta ogrevanja', selection=[('plinovod','Plinovod'),
+                                                                                           ('toplovod','Toplovod'),
+                                                                                           ('crpalka','Toplotna Črpalka'), 
+                                                                                           ('biomasa','Biomasa')])
+    nepremicnina_lega = fields.Char(string = 'Lega')
+    
+    nepremicnina_sanitarije = fields.Boolean(string = 'Sanitarije')
+    nepremicnina_sanitarije_info = fields.Char(string = 'Več o sanitarijah')
+    
+    nepremicnina_dnevna = fields.Char(string = 'Dnevne sobe')
+    nepremicnina_spalnice = fields.Char(string = 'Spalnice')
+    nepremicnina_bazen = fields.Boolean(string = 'Bazen')
+    nepremicnina_kamin = fields.Boolean(string = 'Kamin') 
+    
+    nepremicnina_vrt = fields.Boolean(string = 'Vrt')
+    nepremicnina_vrt_info = fields.Char(string = 'Več o vrtu')
+    
+    nepremicnina_razgled = fields.Char(string = 'Razgled')
+    nepremicnina_penthouse = fields.Boolean(string = 'Penthouse')
+    nepremicnina_ljubljencki = fields.Boolean(string = 'Hišni ljubljenčki')
+    nepremicnina_shramba = fields.Boolean(string = 'Shramba')
+    nepremicnina_opremljeno = fields.Boolean(string = 'Opremljeno')
+    nepremicnina_invalidi = fields.Boolean(string = 'Dostop za invalide')
+    nepremicnina_pogled = fields.Selection(string = 'Pogled na', selection=[('morje','Morje'),
+                                                                            ('hribi','Hribi')])
+    nepremicnina_student = fields.Boolean(string = 'Primerno za študente')
+    nepremicnina_parkiranje = fields.Char(string = 'Parkiranje')
+    nepremicnina_garaza = fields.Char(string = 'Garaža')
+    nepremicnina_parkiranje_mesto = fields.Char(string = 'Parkirno mesto')
+    nepremicnina_parkiranje_hisa = fields.Char(string = 'Parkirna hiša')
+    nepremicnina_klima = fields.Char(string = 'Klima')
+    nepremicnina_alarm = fields.Char(string = 'Alarm')
+    nepremicnina_varovanje = fields.Char(string = 'Varovan objekt')
+    nepremicnina_video_nadzor = fields.Char(string = 'Video Nadzor')
+    nepremicnina_domofon = fields.Char(string = 'Domofon')
+    nepremicnina_360_id = fields.Char(string = '360 View ID')
+   
+    #INFRASTRUKTURA
+    infrastruktura_vrtec = fields.Boolean(string = 'Vrtec')
+    infrastruktura_vrtec_info = fields.Char(string = 'Več o vrtcih')
+  
+    infrastruktura_sola = fields.Boolean(string = 'Šola')
+    infrastruktura_sola_info = fields.Char(string = 'Več o šolah')
+    
+    infrastruktura_fakultete = fields.Boolean(string = 'Fakulteta')
+    infrastruktura_vrtec_info = fields.Char(string = 'Več o fakultetah')
+    
+    infrastruktura_posta = fields.Boolean(string = 'Pošta')
+    infrastruktura_posta_info = fields.Char(string = 'Več o poštah')
+    
+    infrastruktura_trgovina = fields.Boolean(string = 'Trgovina')
+    infrastruktura_trgovina_info = fields.Char(string = 'Več o trgovinah')
+    
+    infrastruktura_banka = fields.Boolean(string = 'Banka')
+    infrastruktura_banka_info = fields.Char(string = 'Več o bankah')
+    
+    infrastruktura_avtocesta = fields.Boolean(string = 'Avtocesta')
+    infrastruktura_avtocesta_info = fields.Char(string = 'Več o avtocestah')
+    
+    infrastruktura_avtobus = fields.Boolean(string = 'Avtobus')
+    infrastruktura_avtobus_info = fields.Char(string = 'Več o avtobusih')
+    
+    infrastruktura_vlak = fields.Boolean(string = 'Vlak')
+    infrastruktura_vlak_info = fields.Char(string = 'Več o vlakih')
+    
+    infrastruktura_igrisce = fields.Boolean(string = 'Igrišče')
+    infrastruktura_igrisce_info = fields.Char(string = 'Več o igriščih')
+    
+    infrastruktura_park = fields.Boolean(string = 'Park')
+    infrastruktura_park_info = fields.Char(string = 'Več o parkih')
+    
+    infrastruktura_zd = fields.Boolean(string = 'Zdravstveni dom')
+    infrastruktura_zd_info = fields.Char(string = 'Več o zdravstvenih domovih')
+    
+    #KOMUNIKACIJSKI PRIKLJUČKI
+    komunikacija_telefon = fields.Boolean(string = 'Telefon')
+    komunikacija_telefon_info = fields.Char(string = 'Informacije o ponudniku telefonije')
+    
+    komunikacija_kabel = fields.Boolean(string = 'Kabel')
+    komunikacija_kabel_info = fields.Char(string = 'Informacije o kabelskem ponudniku')
+    
+    komunikacija_optika = fields.Boolean(string = 'Optika')
+    komunikacija_optika_info = fields.Char(string = 'Informacije o ponudniku optike')
+    
+    komunikacija_internet = fields.Boolean(string = 'Internet')
+    komunikacija_internet_info = fields.Char(string = 'Informacije o ponudniku interneta')
+    
+    #LASTNIŠTVO
+    lastnistvo_podlaga = fields.Char(string = 'Lastništvo pridobljeno na podlagi')
+    lastnistvo_dan = fields.Char(string = 'Dne:')
+    lastnistvo_plombe = fields.Char(string = 'Plombe:')
+    lastnistvo_hipoteke = fields.Char(string = 'Hipoteke:')
+    lastnistvo_solastnina = fields.Char(string = 'Solastnina')
+    lastnistvo_prepoved = fields.Char(string = 'Prepoved odtujitve/obremenitve')
+    lastnistvo_predkupna_pravica = fields.Char(string = 'Predkupna pravica')
+    lastnistvo_parcelne_st = fields.Char(string = 'Parcelne številke')
+    lastnistvo_omejitve = fields.Char(string = 'Omejitve po ZKZ')
+    
+    #PREDKUPNE PRAVICE
+    lastnistvo_potrdilo = fields.Char(string = 'Potrdilo o namenski rabi/lokacijska info')
+    lastnistvo_pravica = fields.Char(string = 'Predkupna pravica občine ali drugega upravičenca')
+    lastnistvo_soglasje = fields.Char(string = 'ARSO soglasje')
+    lastnistvo_varstvo = fields.Char(string = 'Varstvo naravne ali kulturne dediščine')
+    lastnistvo_prikljucek = fields.Char(string = 'Mestni priključek')
+    lastnistvo_vrednost = fields.Char(string = 'GURS vrednost')
+    
+    #SEZNAM OPREME
+    #kuhinja, dnevna soba, spalnica, otroška soba, hodnik, kopalnica
+    oprema_seznam = fields.Many2many(string="Seznam opreme, ki je vključena v ceno",
+                              comodel_name="res.partner.category",
+                              relation="contact_tag_oprema_rel",
+                              domain="[('tag_type','=','oprema')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')
+    
     
 class ExtendContactTags(models.Model):   
     _inherit = 'res.partner.category'
@@ -175,94 +318,26 @@ class ExtendContactTags(models.Model):
                                                           ('namen', 'Namen'),
                                                           ('ponudba','Ponudba'), 
                                                           ('stranka', 'Stranka'), 
-                                                          ('lastnosti','Osebnostne lastnosti')])
-    color = fields.Integer(string='Color Index')
-     
-
-
-"""
-stroški rezervega sklada
-upravnik
-energetska izkaznica
-energijski razred
-Vrsta ogrevanja:
-plinovod
-toplovod
-toplotna črpalka
-biomasa
-Dodatki:
-balkon velikost
-atrij
-klet
-dvigalo
-ogrevanje
-višina stroškov
-lega
-sanitarije
-dnevne sobe
-spalnice
-bazen
-kamin
-vrt
-razgled
-penthouse
-hišni ljubljenčki
-shramba
-klet
-opremljeno
-dostop za invalide
-pogled na
-primerno za študente
-Parkiranje
-garaža
-parkino mesto
-parkirna hiša
-klima
-alarm
-varovan objekt
-video nadzor
-domofon
-360 view ID
-infrastruktura 
-vrtec
-osnovna šola
-fakultete
-pošta 
-trgovina
-banka
-avtocesta
-avtobus
-vlak
-igrišče
-park
-zdravstveni dom
-Komunikacijski priključki
-telefon
-kabel
-optika
-internet
-Lastništvo
-lastništvo pridobljeno na podlagi:
-Dne:
-Plombe:
-Hipoteke:
-solastnina
-prepoved odtujitve/obremenitve
-predkupna pravica
-parcelne številke:
-omejitev po ZKZ
-Predkupne pravice:
-potrdilo o namenski rabi/lokacijska info
-predkupna pravica občine oz drugega upra Vičenca
-ARSO soglasje
-Varstvo naravne ali kulturne dediščine
-Mestni priključek
-GURS vrednost
-Seznam opreme, ki je vključena v ceno
-kuhinja
-dnevna soba
-spalnica
-otroška soba
-hodnik
-kopalnica
-"""
+                                                          ('lastnosti','Osebnostne lastnosti'),
+                                                          ('obnova', 'Obnova')])
+    color = fields.Integer(compute='_compute_first',string='Color Index', store=True, readonly=True)
+    
+    @api.depends('tag_type')
+    def _compute_first (self):
+        for record in self:
+            if record.tag_type == 'nepremicnina':
+                record.color = 1
+            elif record.tag_type == 'lokacija':
+                record.color = 2
+            elif record.tag_type == 'namen':
+                record.color = 3
+            elif record.tag_type == 'ponudba':
+                record.color = 4
+            elif record.tag_type == 'stranka':
+                record.color = 5
+            elif record.tag_type == 'lastnosti':
+                record.color = 6
+            elif record.tag_type == 'obnova':
+                record.color = 7
+            else:
+                record.color = 0

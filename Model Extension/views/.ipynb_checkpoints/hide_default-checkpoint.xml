@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="" model="ir.ui.view"> 
+        <field name="name"></field> 
+        <field name="model"></field> 
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml"> 
+            <xpath expr="//field[@name='qty_avaliable']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='virtual_avaliable']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='weight']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='volume']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='property_stock_inventory']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='nbr_reordering_rules']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        
+        </field>
+    </record>
+    
+</odoo>
