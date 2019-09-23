@@ -6,6 +6,9 @@ from odoo import fields, api, models, tools
 class ExtendContacts(models.Model):
     _inherit = ['res.partner']
     
+    def _get_default_currency_id(self):
+        return self.env.user.company_id.currency_id.id
+    
     #OSNOVNI REQUIRED PODATKI
     tip_stranke = fields.Selection(selection=[('prodajalec', 'Prodajalec'),
                                               ('kupec', 'Kupec'),
@@ -13,6 +16,7 @@ class ExtendContacts(models.Model):
                                               ('najemnik', 'Najemnik')])
     spol = fields.Selection(selection=[('moski', 'Moški'),('ženski', 'Ženski')])
     tretja_oseba = fields.Boolean(string = 'Tretja Oseba')
+    custom_currency_id = fields.Many2one('res.currency', 'Currency', default=_get_default_currency_id, required=True)
     
     #PODATKI O NEPREMIČNINAH
     nepremicnine = fields.One2many(comodel_name='product.template', inverse_name="contact", string='Product ID')
@@ -45,7 +49,7 @@ class ExtendContacts(models.Model):
                               domain="[('tag_type','=','namen')]",
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
-    poizvedba_cena = fields.Float(string = 'Cena')
+    poizvedba_cena = fields.Float(string = 'Cena') #EUR
     poizvedba_kontakt_dan = fields.Date(string = 'Nazadnje kontaktiral')
     poizvedba_zgodovina = fields.Char(string = 'Že ogledano')
     poizvedba_ok = fields.Char(string = 'Kaj jim je bilo všeč')
@@ -117,11 +121,11 @@ class ExtendInventory(models.Model):
     _inherit = 'product.template'
     
     contact = fields.Many2one(comodel_name="res.partner", string="Kdo prodaja")
-    nepremicnina_povrsina = fields.Float(string='Neto površina')
-    nepremicnina_zemljisce_pod = fields.Float(string = 'Zemljišče pod stavbo')
-    nepremicnina_velikost = fields.Float(string = 'Velikost skupaj')
-    nepremicnina_cena_min = fields.Float(string = 'Minimalna cena')
-    nepremicnina_cena_dolgorocno = fields.Float(string = 'Cena / dolgoročni najem')
+    nepremicnina_povrsina = fields.Float(string='Neto površina') #m2
+    nepremicnina_zemljisce_pod = fields.Float(string = 'Zemljišče pod stavbo') #m2
+    nepremicnina_velikost = fields.Float(string = 'Velikost skupaj') #m2
+    nepremicnina_cena_min = fields.Float(string = 'Minimalna cena') #EUR
+    nepremicnina_cena_dolgorocno = fields.Float(string = 'Cena / dolgoročni najem') #EUR
     nepremicnina_vrsta = fields.Selection(string = 'Vrsta nepremičnine', selection = [('stanovanje', 'Stanovanje'), 
                                                                                       ('hisa', 'Hiša'), 
                                                                                       ('poslovni', 'Poslovni prostor'), 
@@ -150,6 +154,18 @@ class ExtendInventory(models.Model):
     nepremicnina_st_nadstropij = fields.Integer(string = 'Št. nadstropij')
     nepremicnina_razlog_prodaje = fields.Char(string = 'Razlog za prodajo')
     nepremicnina_razlog_oddala = fields.Char(string = 'Razlog zakaj se ni oddala')
+    nepremicnina_razlog_oddala = fields.Char(string = 'Opis nepremičnine')
+    nepremicnina_leto_izgradnje = fields.Char(string = 'Leto izgradnje')
+    nepremicnina_leto_adaptacija = fields.Char(string = 'Leto adaptacije')
+    nepremicnina_adaptacija_info = fields.Char(string = 'Kaj je bilo obnovljeno')
+    nepremicnina_streha = fields.Char(string = 'Vrsta kritine')
+    nepremicnina_streha_obnova = fields.Char(string = 'Leto obnove strehe')
+    nepremicnina_izolacija = fields.Char(string = 'Fasada/izolacija')
+    nepremicnina_izolacija_obnova = fields.Char(string = 'Leto obnove fasade')
+    nepremicnina_okna = fields.Char(string = 'Tip oken')
+    nepremicnina_okna_obnova = fields.Char(string = 'Leto obnove/inštalacije oken')
+    nepremicnina_materiali = fields.Char(string = 'Materiali')
+    nepremicnina_stroski = fields.Float(string = 'Stroški vzdrževanja') #EUR
     
 class ExtendContactTags(models.Model):   
     _inherit = 'res.partner.category'
@@ -165,19 +181,6 @@ class ExtendContactTags(models.Model):
 
 
 """
-Zakaj se ni oddala
-opis nepremičnine
-leto izgradnje
-leto adaptacije
-kaj je bilo obnovljeno
-streha vrsta kritine
-streha leto obnove/kritja
-fasada/izolacija
-leto obnove fasade
-okna tip
-leto obnove/inštalacije oken
-materiali
-stroški vzdrževanja
 stroški rezervega sklada
 upravnik
 energetska izkaznica

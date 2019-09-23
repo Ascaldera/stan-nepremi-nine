@@ -8,7 +8,8 @@
     'depends': [
         'contacts',
         'product',
-        'base'
+        'base',
+        'stock'
     ],
     'data': [
         'views/extend_models.xml'
