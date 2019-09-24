@@ -8,8 +8,8 @@
         <field name="arch" type="xml"> 
             
             <xpath expr="/form/sheet/div[2]/div[1]" position="after">
-                <group>
-                    <field name="tip_stranke" style="width:40%"/>
+                <group col='2'>
+                    <field name="tip_stranke"/>
                     <field name="tretja_oseba"/>
                 </group>
             </xpath>
@@ -19,68 +19,86 @@
             <xpath expr="//page[@name='sales_purchases']" position='after'>
                 <page name='nepremicnine' string='Nepremičnine' attrs="{'invisible':[('tretja_oseba','=',False),('tip_stranke','not in',['prodajalec', 'najemodajalec'])]}">
                     <group string='Podatki o nepremičninah'>
-                        <field name="pridobitev" attrs="{'invisible': [('tip_stranke','!=','prodajalec')]}"/>
-                        <field name="stranka_odziv"/>
-                        <field name="povprasevanje"/>
-                        <field name="mnenje"/>
+                        <group col='4' colspan='2'>
+                            <field name="pridobitev" attrs="{'invisible': [('tip_stranke','!=','prodajalec')]}"/>
+                            <span colspan='2'/>
+                            <field name="stranka_odziv"/>
+                            <span colspan='2'/>
+                            <field name="povprasevanje" colspan='4'/>
+                            <field name="mnenje" colspan='4'/>
+                        </group>
                     </group>
                     <group string='Seznam vseh nepremičnin'>   
                         <field name="nepremicnine" nolabel="1">
                             <tree editable="bottom">
                                 <field name="currency_id" invisible="1"/>
-                                <field name='name'/>
-                                <field name='type'/>
-                                <field name='list_price' widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name='name' string='Nepremičnina'/>
+                                <field name='type' string='Tip'/>
+                                <field name='list_price' string = 'Cena' widget='monetary' options="{'currency_field': 'currency_id'}"/>
                             </tree>
                         </field>  
                     </group>
                 </page>
             </xpath>
             
-            <!-- Contact TAB: Prodajalec-->
+            <!-- Contact TAB: Prodajalec -->
             <xpath expr="//page[@name='nepremicnine']" position='after'>
                 <page name='prodajalec' string="Prodajalec" attrs="{'invisible': [('tip_stranke','!=','prodajalec')]}">
                     <group string='Podatki o oglasu'>
-                        <field name="objava_kje"/>
-                        <field name="objava_kje_datum" attrs ="{'invisible':[('objava_kje', '=', False)]}"/>
-                        <field name="objava_odziv"/>
-                        <field name="objava_spremembe"/>
-                        <field name="objava_stevilo_ogledov"/>
+                        <group col='4' colspan='2'>
+                            <field name="objava_kje"/>
+                            <field name="objava_odziv"/>
+                            <field name="objava_kje_datum" attrs="{'readonly':[('objava_kje','=', False)]}"/>
+                            <field name="objava_spremembe"/>
+                            <field name="objava_stevilo_ogledov"/>
+                        </group>
                     </group>
-                    <group string='Prodajalec'>
-                        <field name="custom_currency_id" invisible="1"/>
-                        <field name="create_uid" string = 'Osebo vnesla'/>
-                        <field name="prodajalec_koliko" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
-                        <field name="prodajalec_ponudbe"/>
-                        <field name="prodajalec_ponudbe_info" attrs ="{'invisible':[('prodajalec_ponudbe','=', False)]}"/>
-                        <field name="prodajalec_procent"/>
-                        <field name="prodajalec_datum_pogodbe"/>
-                        <field name="prodajalec_komunikacija"/>
+                    <group string='Prodajalec'>        
+                        <group col='4' colspan='2'>
+                            <field name="create_uid" string='Osebo vnesla'/>
+                            <field name="custom_currency_id" invisible="1"/>
+                            <field name="prodajalec_koliko" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
+                            <field name="prodajalec_ponudbe"/>
+                            
+                            <label for='prodajalec_procent'/>
+                            <div class="o_row" name="procent">
+                                <field name="prodajalec_procent"/>
+                                    <span>%</span>
+                            </div>                        
+                            
+                            <field name="prodajalec_ponudbe_info" attrs ="{'readonly':[('prodajalec_ponudbe','=', False)]}"/>
+                            <field name="prodajalec_datum_pogodbe"/>
+                            <field name="prodajalec_komunikacija"/>
+                        </group>
                     </group>
                 </page>
             </xpath>
             
             <!-- Contact TAB: Kupci-->
             <xpath expr="//page[@name='nepremicnine']" position='after'>
-                <page name='kupec' string="Kupec" attrs="{'invisible': [('tip_stranke','!=','kupec')]}">
+                <page name='kupec' string="Kupec" attrs="{'invisible': [('tip_stranke','!=','kupec')]}">     
                     <group string='Iskalni podatki'>
-                        <field name="custom_currency_id" invisible="1"/>
-                        <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                        <field name="poizvedba_kraj" string='Kje išče' widget="many2many_tags" options="{'color_field': 'color'}"/>
-                        <field name="poizvedba_cena" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
-                        <field name="poizvedba_namen" string='S kakšnim namenom' widget="many2many_tags" options="{'color_field': 'color'}"/>
-                        <field name="poizvedba_kontakt_dan"/>
-                        <field name="poizvedba_zgodovina"/>
-                        <field name="poizvedba_ok"/>
-                        <field name="poizvedba_nok"/>
-                        <field name="poizvedba_kontaktiran"/>
-                    </group>
+                        <group col='4' colspan='2'>
+                            <field name="poizvedba_cena" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
+                            <field name="custom_currency_id" invisible="1"/>
+                            <field name="poizvedba_kontakt_dan"/>
+                            <field name="poizvedba_kontaktiran"/>
+                            <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color'}" colspan='4'/>
+                            <field name="poizvedba_kraj" string='Kje išče' widget="many2many_tags" options="{'color_field': 'color'}" colspan='4'/>
+                            <field name="poizvedba_namen" string='S kakšnim namenom' widget="many2many_tags" options="{'color_field': 'color'}" colspan='4'/>
+                            <field name="poizvedba_zgodovina" colspan='4'/>
+                            <field name="poizvedba_ok" colspan='4'/>
+                            <field name="poizvedba_nok" colspan='4'/>
+                        </group>
+                    </group> 
                     <group string='Kupec'>
-                        <field name="create_uid" string = 'Osebo vnesla'/>
-                        <field name="kupec_narocnik"/>
-                        <field name="kupec_aktiven"/>
-                        <field name="kupec_znizana_cena"/>
-                        <field name="kupec_obvescanje" string='O kakšnih ponudbah ga obveščamo' widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <group col='8' colspan='2'>
+                            <field name="create_uid" string = 'Osebo vnesla'/> <span colspan='6'/>
+                            <field name="kupec_narocnik"/>
+                            <field name="kupec_aktiven"/> <span colspan='4'/>
+                            <field name="kupec_znizana_cena" colspan='4'/> <span colspan='4'/>
+                            <field name="kupec_obvescanje" string='O kakšnih ponudbah ga obveščamo' widget="many2many_tags" options="{'color_field': 'color'}" colspan='8'/>
+                        </group>
                     </group>
                 </page>
             </xpath>
@@ -90,11 +108,13 @@
             <xpath expr="//page[@name='nepremicnine']" position='after'>
                 <page name='najemodajalec' string="Najemodajalec" attrs="{'invisible': [('tip_stranke','!=','najemodajalec')]}">
                     <group string='Podatki o oglasu'>
-                        <field name="objava_kje"/>
-                        <field name="objava_kje_datum" attrs ="{'invisible':[('objava_kje', '=', False)]}"/>
-                        <field name="objava_odziv"/>
-                        <field name="objava_spremembe"/>
-                        <field name="objava_stevilo_ogledov"/>
+                        <group col='4' colspan='2'>
+                            <field name="objava_kje"/>
+                            <field name="objava_odziv"/>
+                            <field name="objava_kje_datum" attrs="{'readonly':[('objava_kje','=', False)]}"/>
+                            <field name="objava_spremembe"/>
+                            <field name="objava_stevilo_ogledov"/>
+                        </group>
                     </group>
                     <group string='Najemodajalec'>
                         <field name="create_uid" string = 'Osebo vnesla'/>
@@ -112,28 +132,39 @@
             <xpath expr="//page[@name='nepremicnine']" position='after'>
                 <page name='najemnik' string="Najemnik" attrs="{'invisible': [('tip_stranke','!=','najemnik')]}">
                     <group string='Iskalni podatki'>
-                        <field name="custom_currency_id" invisible="1"/>
-                        <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color'}"/>
-                        <field name="poizvedba_kraj" string='Kje išče' widget="many2many_tags" options="{'color_field': 'color'}"/>
-                        <field name="poizvedba_cena" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
-                        <field name="poizvedba_namen" string='S kakšnim namenom' widget="many2many_tags" options="{'color_field': 'color'}"/>
-                        <field name="poizvedba_kontakt_dan"/>
-                        <field name="poizvedba_zgodovina"/>
-                        <field name="poizvedba_ok"/>
-                        <field name="poizvedba_nok"/>
-                        <field name="poizvedba_kontaktiran"/>
+                        <group col='4' colspan='2'>
+                            <field name="poizvedba_cena" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
+                            <field name="custom_currency_id" invisible="1"/>
+                            <field name="poizvedba_kontakt_dan"/>
+                            <field name="poizvedba_kontaktiran"/>
+                            <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color'}" colspan='4'/>
+                            <field name="poizvedba_kraj" string='Kje išče' widget="many2many_tags" options="{'color_field': 'color'}" colspan='4'/>
+                            <field name="poizvedba_namen" string='S kakšnim namenom' widget="many2many_tags" options="{'color_field': 'color'}" colspan='4'/>
+                            <field name="poizvedba_zgodovina" colspan='4'/>
+                            <field name="poizvedba_ok" colspan='4'/>
+                            <field name="poizvedba_nok" colspan='4'/>
+                        </group>
                     </group>
                     <group string='Najemnik'>
-                        <field name="create_uid" string = 'Osebo vnesla'/>
-                        <field name="najemnik_osebe"/>
-                        <field name="najemnik_dolzina"/>
-                        <field name="najemnik_zgodovina"/>
-                        <field name="najemnik_zaposlitev"/>
-                        <field name="najemnik_studenti"/>
-                        <field name="najemnik_zivali"/>
-                        <field name="poizvedba_balkon"/>
-                        <field name="poizvedba_dvigalo"/>
-                        <field name="poizvedba_vrt"/>
+                        <group col='4' colspan='2'>
+                            <field name="create_uid" string = 'Osebo vnesla' colspan='4'/>
+                            
+                            <field name="najemnik_osebe"/>
+                            <field name="najemnik_dolzina"/>
+                            
+                            <field name="najemnik_zgodovina"/>
+                            <span colspan='2'/>
+                            
+                            <field name="najemnik_zaposlitev"/>
+                            <span colspan='2'/>
+                        </group>
+                        <group col='6' colspan='2'>    
+                            <field name="poizvedba_balkon"/>
+                            <field name="poizvedba_dvigalo"/>
+                            <field name="poizvedba_vrt"/>
+                            <field name="najemnik_studenti"/>
+                            <field name="najemnik_zivali"/>
+                        </group>
                     </group>
                 </page>
             </xpath>
@@ -142,26 +173,42 @@
             <xpath expr="//page[@name='nepremicnine']" position='after'>
                 <page name='tretjaoseba' string="Tretja oseba" attrs="{'invisible': ['|',('tretja_oseba','=', False),('tip_stranke', 'in', ['prodajalec','kupec','najemodajalec','najemnik'])]}">
                     <group string='Podatki o oglasu'>
-                        <field name="objava_kje"/>
-                        <field name="objava_kje_datum" attrs ="{'invisible':[('objava_kje', '=', False)]}"/>
-                        <field name="objava_odziv"/>
-                        <field name="objava_spremembe"/>
-                        <field name="objava_stevilo_ogledov"/>
+                        <group col='4' colspan='2'>
+                            <field name="objava_kje"/>
+                            <field name="objava_odziv"/>
+                            <field name="objava_kje_datum" attrs="{'readonly':[('objava_kje','=', False)]}"/>
+                            <field name="objava_spremembe"/>
+                            <field name="objava_stevilo_ogledov"/>
+                        </group>
                     </group>
                     <group string='Tretja Oseba'>
-                        <field name="create_uid" string = 'Osebo vnesla'/>
-                        <field name="spol"/> 
-                        <field name="tretja_oseba_namen" string='S kakšnim namenom' widget="many2many_tags" options="{'color_field': 'color'}"/> 
-                        <field name="prodajalec_koliko"/>
-                        <field name="prodajalec_ponudbe"/>
-                        <field name="prodajalec_ponudbe_info" attrs ="{'invisible':[('prodajalec_ponudbe','=', False)]}"/>
-                        <field name="prodajalec_procent"/>
-                        <field name="prodajalec_datum_pogodbe"/>
-                        <field name="prodajalec_komunikacija"/>
-                        <field name="kupec_narocnik"/>
-                        <field name="kupec_aktiven"/>
-                        <field name="kupec_znizana_cena"/>
-                        <field name="tretja_oseba_osebnost" string='Osebnost' widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <group col='4' colspan='2'>
+                            <field name="create_uid" string='Osebo vnesla'/>
+                            <field name="custom_currency_id" invisible="1"/>
+                            
+                            <field name="spol"/>
+                            <field name="tretja_oseba_osebnost" string='Osebnost' widget="many2many_tags" options="{'color_field': 'color'}"/>
+          
+                            <field name="prodajalec_koliko" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
+                            <field name="prodajalec_ponudbe"/>
+                            
+                            <label for='prodajalec_procent'/>
+                            <div class="o_row" name="procent">
+                                <field name="prodajalec_procent"/>
+                                    <span>%</span>
+                            </div>                        
+                            
+                            <field name="prodajalec_ponudbe_info" attrs ="{'readonly':[('prodajalec_ponudbe','=', False)]}"/>
+                            <field name="prodajalec_datum_pogodbe"/>
+                            <field name="prodajalec_komunikacija"/>
+                        </group>
+
+                        <group col='8' colspan='2'>
+                            <field name="kupec_narocnik"/>
+                            <field name="kupec_aktiven"/> <span colspan='4'/>
+                            <field name="kupec_znizana_cena" colspan='4'/> <span colspan='4'/>
+                            <field name="tretja_oseba_obvescanje" string='O kakšnih ponudbah ga obveščamo' widget="many2many_tags" options="{'color_field': 'color'}" colspan='8'/>
+                        </group>
                     </group>
                 </page>
             </xpath>

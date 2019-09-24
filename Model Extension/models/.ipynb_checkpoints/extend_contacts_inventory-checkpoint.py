@@ -28,7 +28,7 @@ class ExtendContacts(models.Model):
     objava_stevilo_ogledov = fields.Integer(string = 'Oglas / število ogledov')
     stranka_odziv = fields.Char(string = 'Ogled / odziv stranke')
     povprasevanje = fields.Char(string = 'Zadnji klici, povpraševanja')
-    mnenje = fields.Char(string = 'Naše mnenje')
+    mnenje = fields.Text(string = 'Naše mnenje')
     
     #PODATKI O ISKANJU
     poizvedba_nepremicnina=fields.Many2many(string="Kaj išče",
@@ -94,10 +94,22 @@ class ExtendContacts(models.Model):
     
     
     #PODATKI O NAJEMNIKIH
-    najemnik_osebe = fields.Integer(string = 'Koliko oseb')
+    najemnik_osebe = fields.Selection(string = 'Koliko oseb', selection=[('1','1'),
+                                                                         ('2','2'),
+                                                                         ('3','3'),
+                                                                         ('4','4'),
+                                                                         ('5','5'),
+                                                                         ('6','6'),
+                                                                         ('7','7'),
+                                                                         ('8','8'),
+                                                                         ('9','9'),
+                                                                         ('10','10')])
     najemnik_dolzina = fields.Integer(string = 'Dolžina najema v mesecih')
     najemnik_zgodovina = fields.Char(string = 'Kje so živeli')
-    najemnik_zaposlitev = fields.Char(string = 'Zaposlitev')
+    najemnik_zaposlitev = fields.Selection(string = 'Zaposlitev', selection=[('redno','Redna zaposlitev'), 
+                                                                             ('pol','Polovični delovni čas'), 
+                                                                             ('student','Študent'),
+                                                                             ('redno','Samo zaposlitev')])
     najemnik_studenti = fields.Boolean(string = 'Študent')
     najemnik_zivali = fields.Boolean(string = 'Živali')
     
@@ -108,10 +120,17 @@ class ExtendContacts(models.Model):
                               domain="[('tag_type','=','lastnosti')]",
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
-    tretja_oseba_namen = fields.Many2many(string="Namen",
+"""    tretja_oseba_namen = fields.Many2many(string="Namen",
                               comodel_name="res.partner.category",
-                              relation="contact_tretja_osbeba_tag_namen_rel",
+                              relation="contact_tretja_oseba_tag_namen_rel",
                               domain="[('tag_type','=','namen')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')"""
+    
+    tretja_oseba_obvescanje = fields.Many2many(string="Obveščanje za ponudbe",
+                              comodel_name="res.partner.category",
+                              relation="contact_tretja_oseba_tag_ponudba_rel",
+                              domain="[('tag_type','=','ponudba')]",
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
     
@@ -123,12 +142,13 @@ class ExtendContacts(models.Model):
             self.objava_odziv=""
             self.objava_spremembe=""
             self.objava_stevilo_ogledov=0
-            self.prodajalec_koliko=0
-            self.prodajalec_ponudbe=False
-            self.prodajalec_ponudbe_info=""
-            self.prodajalec_procent=0
-            self.prodajalec_datum_pogodbe=[]
-            self.prodajalec_komunikacija=""
+            if self.tretja_oseba!=True:
+                self.prodajalec_koliko=0
+                self.prodajalec_ponudbe=False
+                self.prodajalec_ponudbe_info=""
+                self.prodajalec_procent=0
+                self.prodajalec_datum_pogodbe=[]
+                self.prodajalec_komunikacija=""
         elif self.tip_stranke!='kupec':
             self.poizvedba_nepremicnina=[]
             self.poizvedba_kraj=[]
