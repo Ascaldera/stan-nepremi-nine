@@ -7,11 +7,13 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml"> 
             
-            <!-- Contacts main: dodaja polj -->
-            <field name="vat" position="after">
-                <field name="tip_stranke"/>
-                <field name="tretja_oseba"/>         
-            </field>
+            <xpath expr="/form/sheet/div[2]/div[1]" position="after">
+                <group>
+                    <field name="tip_stranke" style="width:40%"/>
+                    <field name="tretja_oseba"/>
+                </group>
+            </xpath>
+
             
             <!-- Contact TAB: Info o nepremičninah -->
             <xpath expr="//page[@name='sales_purchases']" position='after'>
@@ -190,35 +192,52 @@
             <!-- CUSTOM TAB -->
             <xpath expr="//page[@name='general_information']" position='after'>
                 <page name='nepremicnina' string="Nepremičnina">
-                    <group string='Osnovne informacije'>
-                        <field name="currency_id" invisible="1"/>
-                        <field name="create_uid" string = 'Nepremičnino vnesla'/>
-                        
-                        <label for='nepremicnina_povrsina'/>
-                        <div class="o_row" name="volume">
-                            <field name="nepremicnina_povrsina" string="Volume"/>
-                                <span>m²</span>
-                        </div>
-                        
-                        <label for='nepremicnina_zemljisce_pod'/>
-                        <div class="o_row" name="volume">
-                            <field name="nepremicnina_zemljisce_pod" string="Volume"/>
-                                <span>m²</span>
-                        </div>
-                        
-                        <label for='nepremicnina_velikost'/>
-                        <div class="o_row" name="volume">
-                            <field name="nepremicnina_velikost" string="Volume"/>
-                                <span>m²</span>
-                        </div>
-                        
-                        <field name="nepremicnina_cena_min" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                        <field name="nepremicnina_cena_dolgorocno" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                        
-                        <field name="nepremicnina_vrsta"/>
-                        <field name="nepremicnina_vrsta_tip_drugo" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'drugo')]}"/>
-                        <field name="nepremicnina_tip"/>
-                    </group> 
+                    <group>
+                        <group string='Lokacija'>
+                            <label for="street" string="Naslov"/>
+                            <div class="o_address_format">
+                                <field name="nepremicnina_lokacija" class="o_address_city" placeholder='Ulica'/>
+                                <div>
+                                    <field name="nepremicnina_obcina" class="o_address_city" placeholder='Občina' options="{&quot;no_open&quot;: True}"/>
+                                    <field name="nepremicnina_zip" class="o_address_zip" placeholder='Poštna številka'/>
+                                </div>
+                                <field name="nepremicnina_drzava" class="o_address_country" placeholder='Država' options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                            </div>
+                            
+                            <field name="nepremicnina_regija" placeholder='Regija'/>
+                            <field name="nepremicnina_soseska" placeholder='Soseska'/>
+                            <field name="nepremicnina_lokacija_opombe" placeholder='Opombe'/>
+                        </group>
+                        <group string='Osnovne informacije'>
+                            <field name="currency_id" invisible="1"/>
+                            <field name="create_uid" string = 'Nepremičnino vnesla'/>
+
+                            <label for='nepremicnina_povrsina'/>
+                            <div class="o_row" name="povrsina">
+                                <field name="nepremicnina_povrsina"/>
+                                    <span>m²</span>
+                            </div>
+
+                            <label for='nepremicnina_zemljisce_pod'/>
+                            <div class="o_row" name="povrsina_zemljisce_pod">
+                                <field name="nepremicnina_zemljisce_pod"/>
+                                    <span>m²</span>
+                            </div>
+
+                            <label for='nepremicnina_velikost'/>
+                            <div class="o_row" name="povrsina_skupna">
+                                <field name="nepremicnina_velikost"/>
+                                    <span>m²</span>
+                            </div>
+
+                            <field name="nepremicnina_cena_min" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                            <field name="nepremicnina_cena_dolgorocno" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+
+                            <field name="nepremicnina_vrsta"/>
+                            <field name="nepremicnina_vrsta_tip_drugo" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'drugo')]}"/>
+                            <field name="nepremicnina_tip"/>
+                        </group>
+                    </group>
                 </page>
             </xpath>
         </field>

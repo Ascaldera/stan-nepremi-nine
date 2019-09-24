@@ -115,7 +115,89 @@ class ExtendContacts(models.Model):
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
     
-                
+    @api.onchange('tip_stranke','tretja_oseba')
+    def erase_fields(self):
+        if self.tip_stranke!='prodajalec':
+            self.objava_kje=[]
+            self.objava_kje_datum=[]
+            self.objava_odziv=""
+            self.objava_spremembe=""
+            self.objava_stevilo_ogledov=0
+            self.prodajalec_koliko=0
+            self.prodajalec_ponudbe=False
+            self.prodajalec_ponudbe_info=""
+            self.prodajalec_procent=0
+            self.prodajalec_datum_pogodbe=[]
+            self.prodajalec_komunikacija=""
+        elif self.tip_stranke!='kupec':
+            self.poizvedba_nepremicnina=[]
+            self.poizvedba_kraj=[]
+            self.poizvedba_namen=[]
+            self.poizvedba_cena=0
+            self.poizvedba_kontakt_dan=[]
+            self.poizvedba_zgodovina=""
+            self.poizvedba_ok=""
+            self.poizvedba_nok=""
+            self.poizvedba_kontaktiran=[]
+            self.kupec_obvescanje=[]
+            self.kupec_narocnik=False
+            self.kupec_aktiven=False
+            self.kupec_znizana_cena=False
+        elif self.tip_stranke!='najemodajalec':
+            self.objava_kje=[]
+            self.objava_kje_datum=[]
+            self.objava_odziv=""
+            self.objava_spremembe=""
+            self.objava_stevilo_ogledov=0
+            self.najemodajalec_komu=[]
+            self.najemodajalec_od=[]
+            self.najemodajalec_do=[]
+            self.najemodajalec_otroci=False
+            self.najemodajalec_studenti=False
+            self.najemodajalec_zivali=False
+        elif self.tip_stranke!='najemnik':
+            self.poizvedba_nepremicnina=[]
+            self.poizvedba_kraj=[]
+            self.poizvedba_namen=[]
+            self.poizvedba_cena=0
+            self.poizvedba_kontakt_dan=[]
+            self.poizvedba_zgodovina=""
+            self.poizvedba_ok=""
+            self.poizvedba_nok=""
+            self.poizvedba_kontaktiran=[]
+            self.najemnik_osebe=0
+            self.najemnik_dolzina=0
+            self.najemnik_zgodovina=""
+            self.najemnik_zaposlitev=""
+            self.najemnik_studenti=False
+            self.najemnik_zivali=False
+            self.poizvedba_balkon=False
+            self.poizvedba_dvigalo=False
+            self.poizvedba_vrt=False
+        elif self.tip_stranke==False:
+            self.pridobitev=""
+            self.stranka_odziv=""
+            self.povprasevanje=""
+            self.mnenje=""
+            self.nepremicnine=[]
+        if self.tretja_oseba!=True:
+            self.objava_kje=[]
+            self.objava_kje_datum=[]
+            self.objava_odziv=""
+            self.objava_spremembe=""
+            self.objava_stevilo_ogledov=0
+            self.spol=[]
+            self.tretja_oseba_namen
+            self.prodajalec_koliko=0
+            self.prodajalec_ponudbe=False
+            self.prodajalec_ponudbe_info=""
+            self.prodajalec_procent=0
+            self.prodajalec_datum_pogodbe=[]
+            self.prodajalec_komunikacija=""
+            self.kupec_narocnik=False
+            self.kupec_aktiven=False
+            self.kupec_znizana_cena=False
+            self.tretja_oseba_osebnost=[]   
     
 class ExtendInventory(models.Model):
     _inherit = 'product.template'
@@ -146,10 +228,11 @@ class ExtendInventory(models.Model):
                                                                                     ('soba5','5 in večsobno'), 
                                                                                     ('drugo','Drugo')])
     #PODATKI O LOKACIJI
-    nepremicnina_drzava = fields.Char(string = 'Država')
+    nepremicnina_drzava = fields.Many2one('res.country', string = 'Država')
     nepremicnina_regija = fields.Char(string = 'Regija')
-    nepremicnina_obcina = fields.Char(string = 'Občina')
-    nepremicnina_soseska = fields.Char(string = 'Soseska')
+    nepremicnina_obcina = fields.Char(string = 'Poštna številka')
+    nepremicnina_zip = fields.Char(string = 'Občina', placeholder='Občina')
+    nepremicnina_soseska = fields.Char(string = 'Soseska', placeholder = 'Soseska')
     nepremicnina_lokacija = fields.Char(string = 'Točna Lokacija')
     nepremicnina_lokacija_opombe = fields.Char(string = 'Lokacija/opombe')
     
