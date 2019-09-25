@@ -51,7 +51,7 @@
                         </group>
                         <group string='Osnovne informacije'>
                             
-                            <field name="custom_currency_id" invisible="1"/>
+                            <field name="currency_id" invisible="1"/>
                             <field name="create_uid" string = 'Nepremičnino vnesla'/>
 
                             <label for='nepremicnina_povrsina'/>
@@ -72,8 +72,8 @@
                                     <span>m²</span>
                             </div>
 
-                            <field name="nepremicnina_cena_min" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
-                            <field name="nepremicnina_cena_dolgorocno" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
+                            <field name="nepremicnina_cena_min" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                            <field name="nepremicnina_cena_dolgorocno" widget='monetary' options="{'currency_field': 'currency_id'}"/>
 
                             <field name="nepremicnina_vrsta"/>
                             <field name="nepremicnina_vrsta_tip_drugo" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'drugo')]}"/>

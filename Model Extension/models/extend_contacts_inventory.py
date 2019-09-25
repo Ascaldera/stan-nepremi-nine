@@ -17,7 +17,7 @@ class ExtendContacts(models.Model):
                                               ('najemnik', 'Najemnik')])
     spol = fields.Selection(selection=[('moski', 'Moški'),('ženski', 'Ženski')])
     tretja_oseba = fields.Boolean(string = 'Tretja Oseba')
-    custom_currency_id = fields.Many2one('res.currency', 'Currency', default=_get_default_currency_id, required=True)
+    custom_currency_id = fields.Many2one('res.currency', 'Custom Currency', default=_get_default_currency_id)
     
     #PODATKI O NEPREMIČNINAH
     nepremicnine = fields.One2many(comodel_name='product.template', inverse_name="contact", string='Product ID')
@@ -217,11 +217,6 @@ class ExtendContacts(models.Model):
 class ExtendInventory(models.Model):
     _inherit = 'product.template'
     
-    def _get_default_currency_id(self):
-        return self.env.user.company_id.currency_id.id
-    
-    custom_currency_id = fields.Many2one('res.currency', 'Currency', default=_get_default_currency_id, required=True)
-    
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name="res.partner", string="Kdo prodaja")
     nepremicnina_povrsina = fields.Float(string='Neto površina') #m2
@@ -412,13 +407,25 @@ class ExtendInventory(models.Model):
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
     
-    @api.onchange('website_published')
+    @api.multi
     def check_publish_info(self):
-        if self.nepremicnina_regija!="" and self.nepremicnina_regija:
-            self.website_published=True
+        _errorMsg='Manjkajoči podatki: '
+        _error=False
+        #gre iz true v false
+        if self.website_published == True:
+            self.website_published = False
+        #gre iz false v true
         else:
-            self.website_published=False
-            return {'warning':{'title':'Warning!','message':"NOPETIY"}}
+            if self.nepremicnina_regija==False:
+                _errorMsg=_errorMsg + "Regija,"
+                _error=True
+            if self.nepremicnina_lokacija_opombe==False:
+                _errorMsg=_errorMsg + 'Lokacija/opombe,'
+                _error=True   
+            if _error==True:
+                raise exceptions.UserError(_errorMsg)
+            else:
+                self.website_published = True
 
 
             
