@@ -126,7 +126,7 @@ class ExtendContacts(models.Model):
                               domain="[('tag_type','=','namen')]",
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')"""
-    
+
     tretja_oseba_obvescanje = fields.Many2many(string="Obveščanje za ponudbe",
                               comodel_name="res.partner.category",
                               relation="contact_tretja_oseba_tag_ponudba_rel",
