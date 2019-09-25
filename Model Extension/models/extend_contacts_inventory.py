@@ -201,7 +201,7 @@ class ExtendContacts(models.Model):
             self.objava_spremembe=""
             self.objava_stevilo_ogledov=0
             self.spol=[]
-            self.tretja_oseba_namen
+            """self.tretja_oseba_namen"""
             self.prodajalec_koliko=0
             self.prodajalec_ponudbe=False
             self.prodajalec_ponudbe_info=""
@@ -215,6 +215,11 @@ class ExtendContacts(models.Model):
     
 class ExtendInventory(models.Model):
     _inherit = 'product.template'
+    
+    def _get_default_currency_id(self):
+        return self.env.user.company_id.currency_id.id
+    
+    custom_currency_id = fields.Many2one('res.currency', 'Currency', default=_get_default_currency_id, required=True)
     
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name="res.partner", string="Kdo prodaja")
@@ -405,6 +410,8 @@ class ExtendInventory(models.Model):
                               domain="[('tag_type','=','oprema')]",
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
+    
+    
     
     
 class ExtendContactTags(models.Model):   

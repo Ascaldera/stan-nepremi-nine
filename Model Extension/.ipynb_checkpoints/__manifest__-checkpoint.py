@@ -9,10 +9,14 @@
         'contacts',
         'product',
         'base',
-        'stock'
+        'stock',
+        'website',
+        'website_sale',
+        'crm'
     ],
     'data': [
-        'views/extend_models.xml'
+        'views/extend_models_contact.xml',
+        'views/extend_models_inventory.xml'
     ],
     'installable': True,
 }
