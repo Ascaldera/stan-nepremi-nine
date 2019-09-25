@@ -2,6 +2,7 @@
 # Part of Odoo. See LICENSE file for full copyright and licensing details.
 
 from odoo import fields, api, models, tools
+from odoo import exceptions
 
 class ExtendContacts(models.Model):
     _inherit = ['res.partner']
@@ -90,7 +91,7 @@ class ExtendContacts(models.Model):
     najemodajalec_do = fields.Date(string = 'Do kdaj oddaja')
     najemodajalec_otroci = fields.Boolean(string = 'Otroci')
     najemodajalec_studenti = fields.Boolean(string = 'Študenti')
-    najemodajalec_zivali = fields.Boolean(string = 'Živali')
+    najemodajalec_zivali = fields.Boolean(string = 'Ima živali')
     
     
     #PODATKI O NAJEMNIKIH
@@ -411,9 +412,17 @@ class ExtendInventory(models.Model):
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
     
-    
-    
-    
+    @api.onchange('website_published')
+    def check_publish_info(self):
+        if self.nepremicnina_regija!="" and self.nepremicnina_regija:
+            self.website_published=True
+        else:
+            self.website_published=False
+            return {'warning':{'title':'Warning!','message':"NOPETIY"}}
+
+
+            
+            
 class ExtendContactTags(models.Model):   
     _inherit = 'res.partner.category'
     

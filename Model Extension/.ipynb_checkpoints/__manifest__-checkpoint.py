@@ -16,7 +16,8 @@
     ],
     'data': [
         'views/extend_models_contact.xml',
-        'views/extend_models_inventory.xml'
+        'views/extend_models_inventory.xml',
+        'views/hide_default.xml'
     ],
     'installable': True,
 }
