@@ -120,19 +120,13 @@ class ExtendContacts(models.Model):
                               domain="[('tag_type','=','lastnosti')]",
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
-"""    tretja_oseba_namen = fields.Many2many(string="Namen",
-                              comodel_name="res.partner.category",
-                              relation="contact_tretja_oseba_tag_namen_rel",
-                              domain="[('tag_type','=','namen')]",
-                              options="{'color_field': 'color', 'no_create_edit': True}",
-                              track_visibility='onchange')"""
     
-    tretja_oseba_obvescanje = fields.Many2many(string="Obveščanje za ponudbe",
-                              comodel_name="res.partner.category",
-                              relation="contact_tretja_oseba_tag_ponudba_rel",
-                              domain="[('tag_type','=','ponudba')]",
-                              options="{'color_field': 'color', 'no_create_edit': True}",
-                              track_visibility='onchange')
+    tretja_oseba_obvescanje = fields.Many2many(string="Obveščanje test",
+                                               comodel_name="res.partner.category",
+                                               relation="contact_tretja_oseba_tag_ponudba_rel",
+                                               domain="[('tag_type','=','ponudba')]",
+                                               options="{'color_field': 'color', 'no_create_edit': True}",
+                                               track_visibility='onchange')
     
     @api.onchange('tip_stranke','tretja_oseba')
     def erase_fields(self):
@@ -426,7 +420,7 @@ class ExtendContactTags(models.Model):
     color = fields.Integer(compute='_compute_first',string='Color Index', store=True, readonly=True)
     
     @api.depends('tag_type')
-    def _compute_first (self):
+    def _compute_first(self):
         for record in self:
             if record.tag_type == 'nepremicnina':
                 record.color = 1
