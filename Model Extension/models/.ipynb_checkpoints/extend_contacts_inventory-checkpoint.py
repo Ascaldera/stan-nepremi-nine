@@ -255,8 +255,11 @@ class ExtendInventory(models.Model):
     nepremicnina_nadstropje = fields.Integer(string = 'Nadstropje')
     nepremicnina_st_nadstropij = fields.Integer(string = 'Št. nadstropij')
     nepremicnina_razlog_prodaje = fields.Char(string = 'Razlog za prodajo')
+    
+    #RAZLAGA
     nepremicnina_razlog_oddala = fields.Char(string = 'Razlog zakaj se ni oddala')
-    nepremicnina_razlog_oddala = fields.Char(string = 'Opis nepremičnine')
+    nepremicnina_razlog_prodala = fields.Char(string = 'Razlog zakaj se ni prodala')
+    nepremicnina_razlog_kupuje = fields.Char(string = 'Zakaj kupuje')
     
     #OPIS NEPREMIČNINE
     nepremicnina_leto_izgradnje = fields.Char(string = 'Leto izgradnje')
@@ -277,7 +280,7 @@ class ExtendInventory(models.Model):
     nepremicnina_okna_obnova = fields.Char(string = 'Leto obnove/inštalacije oken')
     nepremicnina_materiali = fields.Char(string = 'Materiali')
     nepremicnina_stroski = fields.Float(string = 'Stroški vzdrževanja') #EUR
-    nepremicnina_stroski = fields.Float(string = 'Stroški rezervnega sklada') #EUR
+    nepremicnina_stroski_sklada = fields.Float(string = 'Stroški rezervnega sklada') #EUR
     nepremicnina_upravnik = fields.Char(string = 'Upravnik') #mogoče: many2one na contacts?
     nepremicnina_energetska_izkaznica = fields.Char(string = 'Energetska izkaznica')
     nepremicnina_energetski_razred = fields.Char(string = 'Energijski razred')
@@ -337,7 +340,7 @@ class ExtendInventory(models.Model):
     infrastruktura_sola_info = fields.Char(string = 'Več o šolah')
     
     infrastruktura_fakultete = fields.Boolean(string = 'Fakulteta')
-    infrastruktura_vrtec_info = fields.Char(string = 'Več o fakultetah')
+    infrastruktura_fakultete_info = fields.Char(string = 'Več o fakultetah')
     
     infrastruktura_posta = fields.Boolean(string = 'Pošta')
     infrastruktura_posta_info = fields.Char(string = 'Več o poštah')
@@ -439,7 +442,8 @@ class ExtendContactTags(models.Model):
                                                           ('ponudba','Ponudba'), 
                                                           ('stranka', 'Stranka'), 
                                                           ('lastnosti','Osebnostne lastnosti'),
-                                                          ('obnova', 'Obnova')])
+                                                          ('obnova', 'Obnova'),
+                                                          ('oprema', 'Oprema')])
     color = fields.Integer(compute='_compute_first',string='Color Index', store=True, readonly=True)
     
     @api.depends('tag_type')
@@ -458,6 +462,8 @@ class ExtendContactTags(models.Model):
             elif record.tag_type == 'lastnosti':
                 record.color = 6
             elif record.tag_type == 'obnova':
-                record.color = 7
+                record.color = 1
+            elif record.tag_type == 'oprema':
+                record.color = 2
             else:
                 record.color = 0
