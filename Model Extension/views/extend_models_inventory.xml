@@ -14,7 +14,15 @@
         </field>
     </record>
 
-    
+    <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  INVENTORY: TAG DOMAIN  \\\\\\\\\\\\\\\\\\-->
+    <!--
+    <record id="res_partner_contact_with_domain" model="ir.ui.view"> 
+        <field name="name">Inherited Config Tags Form Contact Domain</field> 
+        <field name="model">res.partner.category</field> 
+        <field name="inherit_id" ref="res_partner_category_inherited"/> 
+        <field name="domain">[('tag_type','=',"nepremicnina")]</field> 
+    </record> 
+    -->
     <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  INVENTORY: dodaja polj  \\\\\\\\\\\\\\\\\\-->
     <record id="res_product_form_inherited" model="ir.ui.view"> 
         <field name="name">Inherited Product Template</field> 
@@ -72,7 +80,7 @@
 
                         <field name="nepremicnina_cena_min" widget='monetary' options="{'currency_field': 'currency_id'}"/>
                         <field name="nepremicnina_cena_dolgorocno" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                        <field name="oprema_seznam" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <field name="oprema_seznam" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
                         <span colspan='4'/>
 
                         <field name="nepremicnina_vrsta"/>
@@ -97,7 +105,7 @@
                     <group string='Opis nepremičnine' col="4" colspan="2">
                         <field name="nepremicnina_leto_izgradnje"/>
                         <field name="nepremicnina_leto_adaptacija"/>
-                        <field name="nepremicnina_adaptacija_info" widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <field name="nepremicnina_adaptacija_info" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
                         <field name="nepremicnina_streha"/>
                         <field name="nepremicnina_streha_obnova"/>
                         <field name="nepremicnina_izolacija"/>

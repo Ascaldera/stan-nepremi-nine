@@ -44,7 +44,7 @@ class ExtendContacts(models.Model):
                               domain="[('tag_type','=','lokacija')]",
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
-    poizvedba_namen = fields.Many2many(string="Namen",
+    poizvedba_namen = fields.Many2many(string="S kakšnim namenom",
                               comodel_name="res.partner.category",
                               relation="contact_tag_namen_rel",
                               domain="[('tag_type','=','namen')]",
@@ -70,7 +70,7 @@ class ExtendContacts(models.Model):
     prodajalec_komunikacija = fields.Char(string = 'Način komunikacije')
     
     #PODATKI O KUPCIH
-    kupec_obvescanje = fields.Many2many(string="Obveščanje za ponudbe",
+    kupec_obvescanje = fields.Many2many(string="O kakšnih ponudbah ga obveščamo",
                               comodel_name="res.partner.category",
                               relation="contact_tag_ponudba_rel",
                               domain="[('tag_type','=','ponudba')]",
@@ -122,7 +122,7 @@ class ExtendContacts(models.Model):
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
     
-    tretja_oseba_obvescanje = fields.Many2many(string="Obveščanje test",
+    tretja_oseba_obvescanje = fields.Many2many(string="Obveščanje",
                                                comodel_name="res.partner.category",
                                                relation="contact_tretja_oseba_tag_ponudba_rel",
                                                domain="[('tag_type','=','ponudba')]",

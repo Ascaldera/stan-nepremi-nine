@@ -83,9 +83,9 @@
                             <field name="custom_currency_id" invisible="1"/>
                             <field name="poizvedba_kontakt_dan"/>
                             <field name="poizvedba_kontaktiran"/>
-                            <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color'}" colspan='4'/>
-                            <field name="poizvedba_kraj" string='Kje išče' widget="many2many_tags" options="{'color_field': 'color'}" colspan='4'/>
-                            <field name="poizvedba_namen" string='S kakšnim namenom' widget="many2many_tags" options="{'color_field': 'color'}" colspan='4'/>
+                            <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
+                            <field name="poizvedba_kraj" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
+                            <field name="poizvedba_namen" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
                             <field name="poizvedba_zgodovina" colspan='4'/>
                             <field name="poizvedba_ok" colspan='4'/>
                             <field name="poizvedba_nok" colspan='4'/>
@@ -97,7 +97,7 @@
                             <field name="kupec_narocnik"/>
                             <field name="kupec_aktiven"/> <span colspan='4'/>
                             <field name="kupec_znizana_cena" colspan='4'/> <span colspan='4'/>
-                            <field name="kupec_obvescanje" string='O kakšnih ponudbah ga obveščamo' widget="many2many_tags" options="{'color_field': 'color'}" colspan='8'/>
+                            <field name="kupec_obvescanje" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='8'/>
                         </group>
                     </group>
                 </page>
@@ -118,7 +118,7 @@
                     </group>
                     <group string='Najemodajalec'>
                         <field name="create_uid" string = 'Osebo vnesla'/>
-                        <field name="najemodajalec_komu" string='Komu oddajajo' widget="many2many_tags" options="{'color_field': 'color'}"/>
+                        <field name="najemodajalec_komu" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
                         <field name="najemodajalec_od"/>
                         <field name="najemodajalec_do"/>
                         <field name="najemodajalec_otroci"/>
@@ -137,9 +137,9 @@
                             <field name="custom_currency_id" invisible="1"/>
                             <field name="poizvedba_kontakt_dan"/>
                             <field name="poizvedba_kontaktiran"/>
-                            <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color'}" colspan='4'/>
-                            <field name="poizvedba_kraj" string='Kje išče' widget="many2many_tags" options="{'color_field': 'color'}" colspan='4'/>
-                            <field name="poizvedba_namen" string='S kakšnim namenom' widget="many2many_tags" options="{'color_field': 'color'}" colspan='4'/>
+                            <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
+                            <field name="poizvedba_kraj" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
+                            <field name="poizvedba_namen" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
                             <field name="poizvedba_zgodovina" colspan='4'/>
                             <field name="poizvedba_ok" colspan='4'/>
                             <field name="poizvedba_nok" colspan='4'/>
@@ -187,7 +187,7 @@
                             <field name="custom_currency_id" invisible="1"/>
                             
                             <field name="spol"/>
-                            <field name="tretja_oseba_osebnost" string='Osebnost' widget="many2many_tags" options="{'color_field': 'color'}"/>
+                            <field name="tretja_oseba_osebnost" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
           
                             <field name="prodajalec_koliko" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
                             <field name="prodajalec_ponudbe"/>
@@ -207,7 +207,7 @@
                             <field name="kupec_narocnik"/>
                             <field name="kupec_aktiven"/> <span colspan='4'/>
                             <field name="kupec_znizana_cena" colspan='4'/> <span colspan='4'/>
-                            <field name="tretja_oseba_obvescanje" string='O kakšnih ponudbah ga obveščamo' widget="many2many_tags" options="{'color_field': 'color'}" colspan='8'/>
+                            <field name="tretja_oseba_obvescanje" string='O kakšnih ponudbah ga obveščamo' widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='8'/>
                         </group>
                     </group>
                 </page>
