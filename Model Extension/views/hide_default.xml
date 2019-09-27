@@ -1,0 +1,74 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="hide_product_extras" model="ir.ui.view"> 
+        <field name="name">hide_extras</field> 
+        <field name="model">product.template</field> 
+        <field name="inherit_id" ref="product.product_template_form_view"/>
+        <field name="arch" type="xml"> 
+            <xpath expr="//button[@name='website_publish_button']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    
+    <record id="hide_product_extras_buttons_1" model="ir.ui.view"> 
+        <field name="name">hide_extras</field> 
+        <field name="model">product.template</field> 
+        <field name="inherit_id" ref="stock.product_template_form_view_procurement_button"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_view_stock_move_lines']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_view_orderpoints']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_open_quants']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='185']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='199']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//button[@name='action_open_product_lot']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+        </field>
+    </record>
+    
+    <record id="hide_product_extras_buttons_2" model="ir.ui.view"> 
+        <field name="name">hide_extras</field> 
+        <field name="model">product.template</field> 
+        <field name="inherit_id" ref="sale.product_template_form_view_sale_order_button"/>
+        <field name="arch" type="xml">
+            <xpath expr="//button[@name='action_view_sales']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>        
+        </field>
+    </record>    
+
+    <record id="action_open_contact_tag" model="ir.actions.act_window">
+        <field name="name">Tags</field>
+        <field name="res_model">res.partner.category</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+    </record>
+
+    <menuitem id="stock.menu_product_variant_config_stock" name="Products" parent="stock.menu_stock_root" sequence="2"/>
+    <menuitem id="menu_contact_tags" name='Tags' parent="stock.menu_stock_root" action='action_open_contact_tag' sequence="3"/>
+
+    <delete model="ir.ui.menu" id="stock.menu_stock_warehouse_mgmt"/>
+    <delete model="ir.ui.menu" id="stock.all_picking"/>
+    <delete model="ir.ui.menu" id="stock.menu_action_inventory_form"/>
+    <delete model="ir.ui.menu" id="stock.menu_stock_scrap"/>
+    <delete model="ir.ui.menu" id="stock.menu_procurement_compute"/>
+    <delete model="ir.ui.menu" id="stock.menu_stock_inventory_control"/>
+    <delete model="ir.ui.menu" id="stock.product_product_menu"/>
+    <delete model="ir.ui.menu" id="stock.menu_reordering_rules_config"/>
+    <delete model="ir.ui.menu" id="stock.menu_action_production_lot_form"/>
+    <delete model="ir.ui.menu" id="stock.menu_package"/>
+    <delete model="ir.ui.menu" id="stock.menu_product_packagings"/>
+    
+</odoo>
