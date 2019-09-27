@@ -26,13 +26,19 @@
             <xpath expr="//button[@name='action_open_quants']" position='attributes'> 
                 <attribute name="invisible">1</attribute>
             </xpath>
-            <xpath expr="//button[@name='185']" position='attributes'> 
+            <!--<xpath expr="//button[@name='185']" position='attributes'> 
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath expr="//button[@name='199']" position='attributes'> 
                 <attribute name="invisible">1</attribute>
-            </xpath>
+            </xpath>-->
             <xpath expr="//button[@name='action_open_product_lot']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='inventory']" position='attributes'> 
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='variants']" position='attributes'> 
                 <attribute name="invisible">1</attribute>
             </xpath>
         </field>
@@ -47,17 +53,9 @@
                 <attribute name="invisible">1</attribute>
             </xpath>        
         </field>
-    </record>    
-
-    <record id="action_open_contact_tag" model="ir.actions.act_window">
-        <field name="name">Tags</field>
-        <field name="res_model">res.partner.category</field>
-        <field name="view_type">form</field>
-        <field name="view_mode">tree,form</field>
     </record>
 
     <menuitem id="stock.menu_product_variant_config_stock" name="Products" parent="stock.menu_stock_root" sequence="2"/>
-    <menuitem id="menu_contact_tags" name='Tags' parent="stock.menu_stock_root" action='action_open_contact_tag' sequence="3"/>
 
     <delete model="ir.ui.menu" id="stock.menu_stock_warehouse_mgmt"/>
     <delete model="ir.ui.menu" id="stock.all_picking"/>

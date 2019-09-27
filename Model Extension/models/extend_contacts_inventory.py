@@ -10,6 +10,7 @@ class ExtendContacts(models.Model):
     def _get_default_currency_id(self):
         return self.env.user.company_id.currency_id.id
     
+    
     #OSNOVNI REQUIRED PODATKI
     tip_stranke = fields.Selection(selection=[('prodajalec', 'Prodajalec'),
                                               ('kupec', 'Kupec'),
@@ -130,35 +131,35 @@ class ExtendContacts(models.Model):
                                                track_visibility='onchange')
     
     @api.onchange('tip_stranke','tretja_oseba')
-    def erase_fields(self):
+    def erase(self):
         if self.tip_stranke!='prodajalec':
             self.objava_kje=[]
             self.objava_kje_datum=[]
             self.objava_odziv=""
             self.objava_spremembe=""
             self.objava_stevilo_ogledov=0
-            if self.tretja_oseba!=True:
-                self.prodajalec_koliko=0
-                self.prodajalec_ponudbe=False
-                self.prodajalec_ponudbe_info=""
-                self.prodajalec_procent=0
-                self.prodajalec_datum_pogodbe=[]
-                self.prodajalec_komunikacija=""
+            self.prodajalec_koliko=0
+            self.prodajalec_ponudbe=False
+            self.prodajalec_ponudbe_info=""
+            self.prodajalec_procent=0
+            self.prodajalec_datum_pogodbe=[]
+            self.prodajalec_komunikacija=""
         elif self.tip_stranke!='kupec':
+            self.poizvedba_cena=0
+            self.poizvedba_kontakt_dan=[]
+            self.poizvedba_kontaktiran=[]
             self.poizvedba_nepremicnina=[]
             self.poizvedba_kraj=[]
             self.poizvedba_namen=[]
-            self.poizvedba_cena=0
-            self.poizvedba_kontakt_dan=[]
             self.poizvedba_zgodovina=""
             self.poizvedba_ok=""
             self.poizvedba_nok=""
-            self.poizvedba_kontaktiran=[]
             self.kupec_obvescanje=[]
             self.kupec_narocnik=False
             self.kupec_aktiven=False
             self.kupec_znizana_cena=False
-        elif self.tip_stranke!='najemodajalec':
+            self.kupec_obvescanje=[]
+        if self.tip_stranke!='najemodajalec':
             self.objava_kje=[]
             self.objava_kje_datum=[]
             self.objava_odziv=""
@@ -170,7 +171,7 @@ class ExtendContacts(models.Model):
             self.najemodajalec_otroci=False
             self.najemodajalec_studenti=False
             self.najemodajalec_zivali=False
-        elif self.tip_stranke!='najemnik':
+        if self.tip_stranke!='najemnik':
             self.poizvedba_nepremicnina=[]
             self.poizvedba_kraj=[]
             self.poizvedba_namen=[]
@@ -189,20 +190,13 @@ class ExtendContacts(models.Model):
             self.poizvedba_balkon=False
             self.poizvedba_dvigalo=False
             self.poizvedba_vrt=False
-        elif self.tip_stranke==False:
-            self.pridobitev=""
-            self.stranka_odziv=""
-            self.povprasevanje=""
-            self.mnenje=""
-            self.nepremicnine=[]
-        if self.tretja_oseba!=True:
+        if self.tip_stranke!=False and self.tretja_oseba!=True:
             self.objava_kje=[]
             self.objava_kje_datum=[]
             self.objava_odziv=""
             self.objava_spremembe=""
             self.objava_stevilo_ogledov=0
             self.spol=[]
-            """self.tretja_oseba_namen"""
             self.prodajalec_koliko=0
             self.prodajalec_ponudbe=False
             self.prodajalec_ponudbe_info=""
@@ -212,10 +206,28 @@ class ExtendContacts(models.Model):
             self.kupec_narocnik=False
             self.kupec_aktiven=False
             self.kupec_znizana_cena=False
-            self.tretja_oseba_osebnost=[]   
+            self.tretja_oseba_osebnost=[]
+        if (self.tip_stranke!="kupec" and self.tretja_oseba!=False) or (self.tip_stranke!="najemnik" and self.tretja_oseba!=False) or (self.tip_stranke!=False and self.tretja_oseba!=False):
+            self.pridobitev=""
+            self.stranka_odziv=""
+            self.povprasevanje=""
+            self.mnenje=""
+            self.nepremicnine=[]
+    
+    @api.onchange('objava_kje','prodajalec_ponudbe')
+    def izbris(self):
+        if self.objava_kje==False:
+            self.objava_kje_datum=[]
+        if self.prodajalec_ponudbe==False:
+            self.prodajalec_ponudbe_info=""
     
 class ExtendInventory(models.Model):
     _inherit = 'product.template'
+    
+    def _get_default_currency_id_2(self):
+        return self.env.user.company_id.currency_id.id
+    
+    custom_currency_id_2 = fields.Many2one('res.currency', 'Custom Currency', default=_get_default_currency_id_2)
     
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name="res.partner", string="Kdo prodaja")
@@ -229,7 +241,7 @@ class ExtendInventory(models.Model):
                                                                                       ('poslovni', 'Poslovni prostor'), 
                                                                                       ('garaza', 'Garaža'), 
                                                                                       ('drugo', 'Drugo')])
-    nepremicnina_vrsta_tip_drugo = fields.Char(string = 'Drugo')
+    nepremicnina_vrsta_drugo = fields.Char(string = 'Druga vrsta')
     nepremicnina_tip = fields.Selection(string = 'Tip nepremičnine', selection = [('apartma','Apartma'),('soba','Soba'), 
                                                                                     ('garsonjera', 'Garsonjera'), 
                                                                                     ('soba1','1-sobno'), 
@@ -242,6 +254,7 @@ class ExtendInventory(models.Model):
                                                                                     ('soba4_5','4,5-sobno'), 
                                                                                     ('soba5','5 in večsobno'), 
                                                                                     ('drugo','Drugo')])
+    nepremicnina_tip_drugo=fields.Char(string = 'Drug tip')
     #PODATKI O LOKACIJI
     nepremicnina_drzava = fields.Many2one('res.country', string = 'Država')
     nepremicnina_regija = fields.Char(string = 'Regija')
@@ -262,6 +275,7 @@ class ExtendInventory(models.Model):
     nepremicnina_razlog_kupuje = fields.Char(string = 'Zakaj kupuje')
     
     #OPIS NEPREMIČNINE
+    nepremicnina_adaptacija = fields.Boolean(string = 'Obnovljeno/adaptacija')
     nepremicnina_leto_izgradnje = fields.Char(string = 'Leto izgradnje')
     nepremicnina_leto_adaptacija = fields.Char(string = 'Leto adaptacije')
     nepremicnina_adaptacija_info = fields.Many2many(string="Kaj je bilo obnovljeno",
@@ -325,12 +339,12 @@ class ExtendInventory(models.Model):
     nepremicnina_garaza = fields.Char(string = 'Garaža')
     nepremicnina_parkiranje_mesto = fields.Char(string = 'Parkirno mesto')
     nepremicnina_parkiranje_hisa = fields.Char(string = 'Parkirna hiša')
-    nepremicnina_klima = fields.Char(string = 'Klima')
-    nepremicnina_alarm = fields.Char(string = 'Alarm')
-    nepremicnina_varovanje = fields.Char(string = 'Varovan objekt')
-    nepremicnina_video_nadzor = fields.Char(string = 'Video Nadzor')
-    nepremicnina_domofon = fields.Char(string = 'Domofon')
-    nepremicnina_360_id = fields.Char(string = '360 View ID')
+    nepremicnina_klima = fields.Boolean(string = 'Klima')
+    nepremicnina_alarm = fields.Boolean(string = 'Alarm')
+    nepremicnina_varovanje = fields.Boolean(string = 'Varovan objekt')
+    nepremicnina_video_nadzor = fields.Boolean(string = 'Video Nadzor')
+    nepremicnina_domofon = fields.Boolean(string = 'Domofon')
+    nepremicnina_360_id = fields.Boolean(string = '360 View ID')
    
     #INFRASTRUKTURA
     infrastruktura_vrtec = fields.Boolean(string = 'Vrtec')
@@ -430,8 +444,60 @@ class ExtendInventory(models.Model):
             else:
                 self.website_published = True
 
-
+    @api.onchange('nepremicnina_adaptacija','nepremicnina_balkon','nepremicnina_sanitarije','nepremicnina_klet','nepremicnina_vrt')
+    def izbris_nepremicnina(self):
+        if self.nepremicnina_adaptacija==False:
+            self.nepremicnina_leto_adaptacija=""
+            self.nepremicnina_adaptacija_info=[]
+            self.nepremicnina_streha_obnova=""
+            self.nepremicnina_izolacija_obnova=""
+            self.nepremicnina_okna_obnova=""
+        if self.nepremicnina_balkon==False:
+            self.nepremicnina_balkon_velikost=0
+        if self.nepremicnina_sanitarije==False:
+            self.nepremicnina_sanitarije_info=""
+        if self.nepremicnina_klet==False:
+            self.nepremicnina_klet_velikost=0
+        if self.nepremicnina_vrt==False:
+            self.nepremicnina_vrt_info=""
             
+    @api.onchange('infrastruktura_vrtec','infrastruktura_fakultete','infrastruktura_trgovina','infrastruktura_avtocesta','infrastruktura_vlak','infrastruktura_park','infrastruktura_sola','infrastruktura_posta','infrastruktura_banka','infrastruktura_avtobus','infrastruktura_igrisce','infrastruktura_zd')
+    def izbris_infrastruktura(self):
+        if self.infrastruktura_vrtec==False:
+            self.infrastruktura_vrtec_info=""        
+        if self.infrastruktura_fakultete==False:
+            self.infrastruktura_fakultete_info=""
+        if self.infrastruktura_trgovina==False:
+            self.infrastruktura_trgovina_info=""
+        if self.infrastruktura_avtocesta==False:
+            self.infrastruktura_avtocesta_info=""
+        if self.infrastruktura_vlak==False:
+            self.infrastruktura_vlak_info=""
+        if self.infrastruktura_park==False:
+            self.infrastruktura_park_info=""
+        if self.infrastruktura_sola==False:
+            self.infrastruktura_sola_info=""
+        if self.infrastruktura_posta==False:
+            self.infrastruktura_posta_info=""
+        if self.infrastruktura_banka==False:
+            self.infrastruktura_banka_info=""
+        if self.infrastruktura_avtobus==False:
+            self.infrastruktura_avtobus_info=""
+        if self.infrastruktura_igrisce==False:
+            self.infrastruktura_igrisce_info=""
+        if self.infrastruktura_zd==False:
+            self.infrastruktura_zd_info=""
+    
+    @api.onchange('komunikacija_telefon','komunikacija_kabel','komunikacija_optika','komunikacija_internet')
+    def izbris_komunikacija(self):
+        if self.komunikacija_telefon==False:
+            self.komunikacija_telefon_info=""
+        if self.komunikacija_kabel==False:
+            self.komunikacija_kabel_info=""
+        if self.komunikacija_optika==False:
+            self.komunikacija_optika_info=""
+        if self.komunikacija_internet==False:
+            self.komunikacija_internet_info=""
             
 class ExtendContactTags(models.Model):   
     _inherit = 'res.partner.category'
