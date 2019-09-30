@@ -533,3 +533,9 @@ class ExtendContactTags(models.Model):
                 record.color = 2
             else:
                 record.color = 0
+                
+
+class ExtendCrm(models.Model):   
+    _inherit = 'crm.lead'
+    
+    nepremicnina = fields.Many2one(comodel_name="product.template", string="Nepremičnina")
