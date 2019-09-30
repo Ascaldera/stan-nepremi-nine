@@ -20,8 +20,15 @@
         <field name="model">product.template</field> 
         <field name="inherit_id" ref="product.product_template_form_view"/> 
         <field name="arch" type="xml"> 
+    
+            <!-- NEW CRM LINK BUTTON-->
+            <xpath expr="//button[@name='toggle_active']" position="before">
+                <button class="oe_stat_button o_res_partner_tip_opp" name="crm_link" type="object" icon="fa-star">
+                    <field string="CRM vnos" name="opportunity_count" widget="statinfo"/>
+                </button>
+            </xpath>
+
             <!-- NEW PUBLISH BUTTON -->
-            
             <xpath expr="//button[@name='toggle_active']" position="before">
                 <button class="oe_stat_button" name="check_publish_info" type="object" icon="fa-globe" attrs="{'invisible': [('sale_ok','=',False)]}">
                     <field name="website_published" widget="website_button"/>
