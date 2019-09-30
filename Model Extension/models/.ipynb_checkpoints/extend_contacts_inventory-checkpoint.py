@@ -227,8 +227,13 @@ class ExtendInventory(models.Model):
     def _get_default_currency_id_2(self):
         return self.env.user.company_id.currency_id.id
     
-    custom_currency_id_2 = fields.Many2one('res.currency', 'Custom Currency', default=_get_default_currency_id_2)
+    @api.multi
+    def _compute_opportunity_count(self):
+        for nep in self:
+            nep.opportunity_count=self.env['crm.lead'].search_count([('nepremicnina','=',nep.id), ('type', '=', 'opportunity')])
     
+    custom_currency_id_2 = fields.Many2one('res.currency', 'Custom Currency', default=_get_default_currency_id_2)
+    opportunity_count = fields.Integer("Opportunity", compute='_compute_opportunity_count')
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name="res.partner", string="Kdo prodaja")
     nepremicnina_povrsina = fields.Float(string='Neto površina') #m2
@@ -499,6 +504,18 @@ class ExtendInventory(models.Model):
         if self.komunikacija_internet==False:
             self.komunikacija_internet_info=""
             
+    @api.multi
+    def crm_link(self):
+        ctx=dict(self._context)
+        return {'view_type': 'kanban',
+                "view_mode": 'kanban,list',
+                'res_model': 'crm.lead',
+                'name':"CRM",
+                'type': 'ir.actions.act_window',
+                'context': ctx,
+                'domain':[('nepremicnina','=',self.id)]
+               }
+            
 class ExtendContactTags(models.Model):   
     _inherit = 'res.partner.category'
     
@@ -534,7 +551,6 @@ class ExtendContactTags(models.Model):
             else:
                 record.color = 0
                 
-
 class ExtendCrm(models.Model):   
     _inherit = 'crm.lead'
     
