@@ -155,9 +155,9 @@ class ExtendContacts(models.Model):
             self.poizvedba_cena=0
             self.poizvedba_kontakt_dan=[]
             self.poizvedba_kontaktiran=[]
-            self.poizvedba_nepremicnina=[]            
-            self.poizvedba_kraj=[]
-            self.poizvedba_namen=[]
+            self.poizvedba_nepremicnina=False         
+            self.poizvedba_kraj=False
+            self.poizvedba_namen=False
             self.poizvedba_zgodovina=""
             self.poizvedba_ok=""
             self.poizvedba_nok=""
@@ -165,7 +165,7 @@ class ExtendContacts(models.Model):
             self.kupec_narocnik=False
             self.kupec_aktiven=False
             self.kupec_znizana_cena=False
-            self.kupec_obvescanje=[]
+            self.kupec_obvescanje=False
         if self.tip_stranke!='najemodajalec':
             self.objava_kje=[]
             self.objava_kje_datum=[]
@@ -179,9 +179,9 @@ class ExtendContacts(models.Model):
             self.najemodajalec_studenti=False
             self.najemodajalec_zivali=False
         if self.tip_stranke!='najemnik':
-            self.poizvedba_nepremicnina=[]
-            self.poizvedba_kraj=[]
-            self.poizvedba_namen=[]
+            self.poizvedba_nepremicnina=False
+            self.poizvedba_kraj=False
+            self.poizvedba_namen=False
             self.poizvedba_cena=0
             self.poizvedba_kontakt_dan=[]
             self.poizvedba_zgodovina=""
@@ -219,7 +219,7 @@ class ExtendContacts(models.Model):
             self.stranka_odziv=""
             self.povprasevanje=""
             self.mnenje=""
-            self.nepremicnine=[]
+            self.nepremicnine=False
     
     @api.onchange('objava_kje','prodajalec_ponudbe')
     def izbris(self):
