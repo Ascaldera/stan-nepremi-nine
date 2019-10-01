@@ -109,6 +109,7 @@
                 <page name='najemodajalec' string="Najemodajalec" attrs="{'invisible': [('tip_stranke','!=','najemodajalec')]}">
                     <group string='Podatki o oglasu'>
                         <group col='4' colspan='2'>
+                            <field name="test"/>
                             <field name="objava_kje"/>
                             <field name="objava_odziv"/>
                             <field name="objava_kje_datum" attrs="{'readonly':[('objava_kje','=', False)]}"/>
@@ -138,7 +139,6 @@
                             <field name="poizvedba_kontakt_dan"/>
                             <field name="poizvedba_kontaktiran"/>
                             <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
-                            <field name="test"/>
                             <field name="poizvedba_kraj" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
                             <field name="poizvedba_namen" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
                             <field name="poizvedba_zgodovina" colspan='4'/>

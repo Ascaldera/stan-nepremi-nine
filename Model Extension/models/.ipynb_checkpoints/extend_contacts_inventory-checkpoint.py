@@ -11,6 +11,13 @@ class ExtendContacts(models.Model):
         return self.env.user.company_id.currency_id.id
     
     
+    test=fields.Char(string='TEST')
+    
+    @api.onchange('poizvedba_nepremicnina')
+    def test(self):
+        self.test=str(self.poizvedba_nepremicnina)
+    
+    
     #OSNOVNI REQUIRED PODATKI
     tip_stranke = fields.Selection(selection=[('prodajalec', 'Prodajalec'),
                                               ('kupec', 'Kupec'),
@@ -129,7 +136,6 @@ class ExtendContacts(models.Model):
                                                domain="[('tag_type','=','ponudba')]",
                                                options="{'color_field': 'color', 'no_create_edit': True}",
                                                track_visibility='onchange')
-    test=fields.Char(string='TEST')
     
     @api.onchange('tip_stranke','tretja_oseba')
     def erase(self):
@@ -214,10 +220,6 @@ class ExtendContacts(models.Model):
             self.povprasevanje=""
             self.mnenje=""
             self.nepremicnine=[]
-    
-    @api.onchange('poizvedba_nepremicnina')
-    def test(self):
-        self.test=str(self.poizvedba_nepremicnina)
     
     @api.onchange('objava_kje','prodajalec_ponudbe')
     def izbris(self):
