@@ -109,7 +109,6 @@
                 <page name='najemodajalec' string="Najemodajalec" attrs="{'invisible': [('tip_stranke','!=','najemodajalec')]}">
                     <group string='Podatki o oglasu'>
                         <group col='4' colspan='2'>
-                            <field name="test"/>
                             <field name="objava_kje"/>
                             <field name="objava_odziv"/>
                             <field name="objava_kje_datum" attrs="{'readonly':[('objava_kje','=', False)]}"/>
@@ -126,6 +125,11 @@
                         <field name="najemodajalec_studenti"/>
                         <field name="najemodajalec_zivali"/>
                     </group>
+                    <!--
+                    <group string="TEST">
+                        <field name="test"/>                        
+                    </group>
+                    -->
                 </page>
             </xpath>
             

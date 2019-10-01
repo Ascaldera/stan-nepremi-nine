@@ -11,11 +11,11 @@ class ExtendContacts(models.Model):
         return self.env.user.company_id.currency_id.id
     
     
-    test=fields.Char(string='TEST')
+    """test=fields.Char(string='TEST')
     
     @api.onchange('poizvedba_nepremicnina')
     def test(self):
-        self.test=str(self.poizvedba_nepremicnina)
+        self.test=str(self.poizvedba_nepremicnina)"""
     
     
     #OSNOVNI REQUIRED PODATKI
