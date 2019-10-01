@@ -138,6 +138,7 @@
                             <field name="poizvedba_kontakt_dan"/>
                             <field name="poizvedba_kontaktiran"/>
                             <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
+                            <field name="test"/>
                             <field name="poizvedba_kraj" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
                             <field name="poizvedba_namen" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
                             <field name="poizvedba_zgodovina" colspan='4'/>

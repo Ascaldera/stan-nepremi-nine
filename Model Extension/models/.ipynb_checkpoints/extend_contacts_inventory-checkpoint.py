@@ -129,6 +129,7 @@ class ExtendContacts(models.Model):
                                                domain="[('tag_type','=','ponudba')]",
                                                options="{'color_field': 'color', 'no_create_edit': True}",
                                                track_visibility='onchange')
+    test=fields.Char(string='TEST')
     
     @api.onchange('tip_stranke','tretja_oseba')
     def erase(self):
@@ -148,7 +149,7 @@ class ExtendContacts(models.Model):
             self.poizvedba_cena=0
             self.poizvedba_kontakt_dan=[]
             self.poizvedba_kontaktiran=[]
-            self.poizvedba_nepremicnina=[]
+            self.poizvedba_nepremicnina=[]            
             self.poizvedba_kraj=[]
             self.poizvedba_namen=[]
             self.poizvedba_zgodovina=""
@@ -213,6 +214,10 @@ class ExtendContacts(models.Model):
             self.povprasevanje=""
             self.mnenje=""
             self.nepremicnine=[]
+    
+    @api.onchange('poizvedba_nepremicnina')
+    def test(self):
+        self.test=str(self.poizvedba_nepremicnina)
     
     @api.onchange('objava_kje','prodajalec_ponudbe')
     def izbris(self):
