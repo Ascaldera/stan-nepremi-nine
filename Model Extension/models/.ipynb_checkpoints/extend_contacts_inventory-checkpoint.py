@@ -252,7 +252,7 @@ class ExtendInventory(models.Model):
     nepremicnina_moznost_vselitve=fields.Char(string="Možnost vselitve")
     nepremicnina_pogoji_prodaje=fields.Char(string="Pogoji prodaje")
     nepremicnina_za_investicijo=fields.Boolean(string="Za investicijo")
-    nepremicnina_oznake_nepremicnin=fields.fields.Many2many(string="Seznam opreme, ki je vključena v ceno",
+    nepremicnina_oznake_nepremicnin=fields.Many2many(string="Seznam opreme, ki je vključena v ceno",
                               comodel_name="res.partner.category",
                               relation="contact_tag_oznake_nepremicnin_rel",
                               domain="[('tag_type','=','oznake_nepremicnin')]",
