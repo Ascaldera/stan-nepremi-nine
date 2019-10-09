@@ -261,8 +261,9 @@ class ExtendInventory(models.Model):
     #-----------------------------------------------------------------------------------------
     
     #SISTEM
-    datum_objave=field.Date(string="Datum objave")
+    datum_objave=fields.Date(string="Datum objave")
     
+    #------------------------------------------------------------------------------------------
     
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name="res.partner", string="Kdo prodaja")
