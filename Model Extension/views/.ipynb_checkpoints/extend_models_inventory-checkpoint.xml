@@ -59,8 +59,8 @@
                         </group>
                     </group>
                     <group string='Osnovne informacije' col="4" colspan="2">
-                        <field name="create_uid" string = 'Lastnik nepremičnine'/>      
-                        <field name="contact"/>
+                        <field name="create_uid"/>      
+                        <field name="contact" string = 'Lastnik nepremičnine'/>
                             
                         <label for='nepremicnina_povrsina'/>
                         <div class="o_row" name="povrsina">
@@ -85,9 +85,9 @@
                         <span colspan='4'/>
 
                         <field name="nepremicnina_vrsta"/>
-                        <field name="nepremicnina_tip"/>
+                        <field name="nepremicnina_tip_1"/>
                         <field name="nepremicnina_vrsta_drugo" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'drugo')]}"/>
-                        <field name="nepremicnina_tip_drugo" attrs ="{'invisible':[('nepremicnina_tip','!=', 'drugo')]}"/>
+                        <field name="nepremicnina_tip_drugo" attrs ="{'invisible':[('nepremicnina_tip_1','!=', 'drugo')]}"/>
                         
                         <field name="nepremicnina_razlog_oddala" string='Razlog / Ni oddana'/>
                         <field name="nepremicnina_nadstropje"/>
@@ -261,13 +261,14 @@
         <field name="res_model">res.partner.category</field>
         <field name="view_type">form</field>
         <field name="view_mode">tree,form</field>
-        <field name="domain">[('tag_type','in',['obnova','oprema'])]</field>
+        <field name="domain"></field>
     </record>
     
     <!-- TAG: Contact Meni Filter -->
     <record id="base.action_partner_category_form" model="ir.actions.act_window">
-        <field name="domain">[('tag_type','not in',['obnova','oprema'])]</field>
+        <field name="domain"></field>
     </record>
+    
     
     <!-- TAG: Tree Extend -->
     <record model="ir.ui.view" id="view_partner_category_list_extended">
@@ -282,5 +283,5 @@
        </field>
    </record>
 
-    <menuitem id="menu_contact_tags" name='Oznake Zaloge' parent="stock.menu_stock_root" action='action_open_inventory_tag' sequence="3"/>
+    <menuitem id="menu_contact_tags" name='Oznake' parent="stock.menu_stock_root" action='action_open_inventory_tag' sequence="3"/>
 </odoo>

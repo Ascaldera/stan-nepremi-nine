@@ -227,7 +227,7 @@ class ExtendContacts(models.Model):
             self.objava_kje_datum=[]
         if self.prodajalec_ponudbe==False:
             self.prodajalec_ponudbe_info=""
-    
+  
 class ExtendInventory(models.Model):
     _inherit = 'product.template'
     
@@ -241,6 +241,29 @@ class ExtendInventory(models.Model):
     
     custom_currency_id_2 = fields.Many2one('res.currency', 'Custom Currency', default=_get_default_currency_id_2)
     opportunity_count = fields.Integer("Opportunity", compute='_compute_opportunity_count')
+
+    #POSREDOVANJE
+    nepremicnina_vrsta_posredovanja=fields.Selection(string="Vrsta posredovanja", 
+                                                     selection=[('prodamo','Prodamo'),
+                                                                ('oddamo','Oddamo')])
+    nepremicnina_novogradnja=fields.Boolean(string="Novogradnja")
+    nepremicnina_etaza=fields.Char(string="Etaža")
+    nepremicnina_se_prodaja=fields.Char(string="Nepremičnina se prodaja")
+    nepremicnina_moznost_vselitve=fields.Char(string="Možnost vselitve")
+    nepremicnina_pogoji_prodaje=fields.Char(string="Pogoji prodaje")
+    nepremicnina_za_investicijo=fields.Boolean(string="Za investicijo")
+    nepremicnina_oznake_nepremicnin=fields.fields.Many2many(string="Seznam opreme, ki je vključena v ceno",
+                              comodel_name="res.partner.category",
+                              relation="contact_tag_oznake_nepremicnin_rel",
+                              domain="[('tag_type','=','oznake_nepremicnin')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')
+    #-----------------------------------------------------------------------------------------
+    
+    #SISTEM
+    datum_objave=field.Date(string="Datum objave")
+    
+    
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name="res.partner", string="Kdo prodaja")
     nepremicnina_povrsina = fields.Float(string='Neto površina') #m2
@@ -250,11 +273,14 @@ class ExtendInventory(models.Model):
     nepremicnina_cena_dolgorocno = fields.Float(string = 'Cena / dolgoročni najem') #EUR
     nepremicnina_vrsta = fields.Selection(string = 'Vrsta nepremičnine', selection = [('stanovanje', 'Stanovanje'), 
                                                                                       ('hisa', 'Hiša'), 
-                                                                                      ('poslovni', 'Poslovni prostor'), 
+                                                                                      ('poslovni', 'Poslovni prostor'),
+                                                                                      ('posest','Posest'),
+                                                                                      ('vikend','Vikend'),
+                                                                                      ('kmetija','Kmetija'), 
                                                                                       ('garaza', 'Garaža'), 
-                                                                                      ('drugo', 'Drugo')])
+                                                                                      ('drugo', 'Drugo'),])
     nepremicnina_vrsta_drugo = fields.Char(string = 'Druga vrsta')
-    nepremicnina_tip = fields.Selection(string = 'Tip nepremičnine', selection = [('apartma','Apartma'),('soba','Soba'), 
+    nepremicnina_tip_1 = fields.Selection(string = 'Tip nepremičnine 1', selection = [('apartma','Apartma'),('soba','Soba'), 
                                                                                     ('garsonjera', 'Garsonjera'), 
                                                                                     ('soba1','1-sobno'), 
                                                                                     ('soba1_5', '1,5-sobno'), 
@@ -266,6 +292,17 @@ class ExtendInventory(models.Model):
                                                                                     ('soba4_5','4,5-sobno'), 
                                                                                     ('soba5','5 in večsobno'), 
                                                                                     ('drugo','Drugo')])
+    nepremicnina_tip_2 = fields.Selection(string="Tip nepremičnine 2", selection= [('atrij','Atrij'),
+                                                                                 ('dvojcek','Dvojcek'),
+                                                                                 ('samostojna','Samostojna')])
+    nepremicnina_tip_3 = fields.Selection(string="Tip nepremicnine 3", selection=[('delavnica','Delavnica'),
+                                                                                  ('gostinskiLokal','Gostinski lokal'),
+                                                                                  ('pisarna','Pisarna'),
+                                                                                  ('prostorZaStoritve','Prostor za storitve'),
+                                                                                  ('skladisce','Skladišče'),
+                                                                                  ('vecjiPoslovniKompleks','Večji poslovni kompleks'),
+                                                                                  ('drugo','Drugo'),])
+    
     nepremicnina_tip_drugo=fields.Char(string = 'Drug tip')
     #PODATKI O LOKACIJI
     nepremicnina_drzava = fields.Many2one('res.country', string = 'Država')
@@ -315,16 +352,26 @@ class ExtendInventory(models.Model):
     nepremicnina_balkon = fields.Boolean(string = 'Balkon')
     nepremicnina_balkon_velikost = fields.Float(string = 'Velikost Balkona') #hide if balkon False
     
+    #------------------------------------------------------------------------------------------------------
+    nepremicnina_terasa = fields.Boolean(string='Terasa')
+    nepremicnina_terasa_velikost=fields.Float(string='Velikost terase')
+    #------------------------------------------------------------------------------------------------------
+    
     nepremicnina_atrij = fields.Boolean(string = 'Atrij')
     
     nepremicnina_klet = fields.Boolean(string = 'Klet') #hide if Klet False
     nepremicnina_klet_velikost = fields.Float(string = 'Velikost kleti')
     
     nepremicnina_dvigalo = fields.Boolean(string = 'Dvigalo')
-    nepremicnina_vrsta_ogrevanja = fields.Selection(string = 'Vrsta ogrevanja', selection=[('plinovod','Plinovod'),
+    nepremicnina_vrsta_ogrevanja = fields.Selection(string = 'Vrsta ogrevanja', selection=[('skupnaKurilnica','Skupna kurilnica'),
+                                                                                           ('plinovod','Plinovod'),
                                                                                            ('toplovod','Toplovod'),
+                                                                                           ('elektrika','Elektrika'),
+                                                                                           ('centralnaKurjava','Centralna kurjava'),
                                                                                            ('crpalka','Toplotna Črpalka'), 
-                                                                                           ('biomasa','Biomasa')])
+                                                                                           ('biomasa','Biomasa'),
+                                                                                           ('klimatskaNaprava','Klimatska naprava')
+                                                                                           ])
     nepremicnina_lega = fields.Char(string = 'Lega')
     
     nepremicnina_sanitarije = fields.Boolean(string = 'Sanitarije')
@@ -455,6 +502,12 @@ class ExtendInventory(models.Model):
                 raise exceptions.UserError(_errorMsg)
             else:
                 self.website_published = True
+                """self.datum_objave=date.today()"""
+                
+                
+                
+                #TUKAJ SE POPRAVI-----------------------------------------------
+                
 
     @api.onchange('nepremicnina_adaptacija','nepremicnina_balkon','nepremicnina_sanitarije','nepremicnina_klet','nepremicnina_vrt')
     def izbris_nepremicnina(self):
@@ -533,7 +586,8 @@ class ExtendContactTags(models.Model):
                                                           ('stranka', 'Stranka'), 
                                                           ('lastnosti','Osebnostne lastnosti'),
                                                           ('obnova', 'Obnova'),
-                                                          ('oprema', 'Oprema')])
+                                                          ('oprema', 'Oprema'),
+                                                          ('oznake_nepremicnin','Oznake nepremičnin')])
     color = fields.Integer(compute='_compute_first',string='Color Index', store=True, readonly=True)
     
     @api.depends('tag_type')
@@ -555,6 +609,8 @@ class ExtendContactTags(models.Model):
                 record.color = 1
             elif record.tag_type == 'oprema':
                 record.color = 2
+            elif record.tag_type == 'oznake_nepremicnin':
+                record.color = 3
             else:
                 record.color = 0
                 
@@ -562,3 +618,4 @@ class ExtendCrm(models.Model):
     _inherit = 'crm.lead'
     
     nepremicnina = fields.Many2one(comodel_name="product.template", string="Nepremičnina")
+    
