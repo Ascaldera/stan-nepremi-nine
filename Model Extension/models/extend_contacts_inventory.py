@@ -252,12 +252,13 @@ class ExtendInventory(models.Model):
     nepremicnina_moznost_vselitve=fields.Char(string="Možnost vselitve")
     nepremicnina_pogoji_prodaje=fields.Char(string="Pogoji prodaje")
     nepremicnina_za_investicijo=fields.Boolean(string="Za investicijo")
-    nepremicnina_oznake_nepremicnin=fields.Many2many(string="Seznam opreme, ki je vključena v ceno",
+    nepremicnina_oznake_nepremicnin=fields.Many2many(string="Oznake nepremičnine",
                               comodel_name="res.partner.category",
                               relation="contact_tag_oznake_nepremicnin_rel",
                               domain="[('tag_type','=','oznake_nepremicnin')]",
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
+    nepremicnina_opis=fields.Html(string="Opis")
     #-----------------------------------------------------------------------------------------
     
     #SISTEM
@@ -272,6 +273,7 @@ class ExtendInventory(models.Model):
     nepremicnina_velikost = fields.Float(string = 'Velikost skupaj') #m2
     nepremicnina_cena_min = fields.Float(string = 'Minimalna cena') #EUR
     nepremicnina_cena_dolgorocno = fields.Float(string = 'Cena / dolgoročni najem') #EUR
+        
     nepremicnina_vrsta = fields.Selection(string = 'Vrsta nepremičnine', selection = [('stanovanje', 'Stanovanje'), 
                                                                                       ('hisa', 'Hiša'), 
                                                                                       ('poslovni', 'Poslovni prostor'),
@@ -281,29 +283,84 @@ class ExtendInventory(models.Model):
                                                                                       ('garaza', 'Garaža'), 
                                                                                       ('drugo', 'Drugo'),])
     nepremicnina_vrsta_drugo = fields.Char(string = 'Druga vrsta')
-    nepremicnina_tip_1 = fields.Selection(string = 'Tip nepremičnine 1', selection = [('apartma','Apartma'),('soba','Soba'), 
-                                                                                    ('garsonjera', 'Garsonjera'), 
-                                                                                    ('soba1','1-sobno'), 
-                                                                                    ('soba1_5', '1,5-sobno'), 
-                                                                                    ('soba2','2-sobno'), 
-                                                                                    ('soba2_5','2,5-sobno'), 
-                                                                                    ('soba3','3-sobno'), 
-                                                                                    ('soba3_5','3,5-sobno'), 
-                                                                                    ('soba4','4-sobno'), 
-                                                                                    ('soba4_5','4,5-sobno'), 
-                                                                                    ('soba5','5 in večsobno'), 
-                                                                                    ('drugo','Drugo')])
-    nepremicnina_tip_2 = fields.Selection(string="Tip nepremičnine 2", selection= [('atrij','Atrij'),
-                                                                                 ('dvojcek','Dvojcek'),
-                                                                                 ('samostojna','Samostojna')])
-    nepremicnina_tip_3 = fields.Selection(string="Tip nepremicnine 3", selection=[('delavnica','Delavnica'),
+    nepremicnina_tip=fields.Selection(string="Tip nepremičnine", selection=[('apartma','Apartma'),
+                                                                                  ('soba','Soba'),
+                                                                                  ('garsonjera', 'Garsonjera'),
+                                                                                  ('soba1','1-sobno'),
+                                                                                  ('soba1_5', '1,5-sobno'),
+                                                                                  ('soba2','2-sobno'),
+                                                                                  ('soba2_5','2,5-sobno'),
+                                                                                  ('soba3','3-sobno'),
+                                                                                  ('soba3_5','3,5-sobno'),
+                                                                                  ('soba4','4-sobno'),
+                                                                                  ('soba4_5','4,5-sobno'),
+                                                                                  ('soba5','5 in večsobno'),
+                                                                                  ('atrij','Atrij'),
+                                                                                  ('dvojcek','Dvojcek'),
+                                                                                  ('samostojna','Samostojna'),
+                                                                                  ('delavnica','Delavnica'),
                                                                                   ('gostinskiLokal','Gostinski lokal'),
                                                                                   ('pisarna','Pisarna'),
                                                                                   ('prostorZaStoritve','Prostor za storitve'),
                                                                                   ('skladisce','Skladišče'),
                                                                                   ('vecjiPoslovniKompleks','Večji poslovni kompleks'),
-                                                                                  ('drugo','Drugo'),])
+                                                                                  ('drugo','Drugo')])
+    nepremicnina_tip_1 = fields.Selection(string = 'Tip nepremičnine 1', selection=[('apartma','Apartma'),
+                                                                                  ('soba','Soba'),
+                                                                                  ('garsonjera', 'Garsonjera'),
+                                                                                  ('soba1','1-sobno'),
+                                                                                  ('soba1_5', '1,5-sobno'),
+                                                                                  ('soba2','2-sobno'),
+                                                                                  ('soba2_5','2,5-sobno'),
+                                                                                  ('soba3','3-sobno'),
+                                                                                  ('soba3_5','3,5-sobno'),
+                                                                                  ('soba4','4-sobno'),
+                                                                                  ('soba4_5','4,5-sobno'),
+                                                                                  ('soba5','5 in večsobno'),
+                                                                                  ('drugo','Drugo')])
     
+    nepremicnina_tip_2 = fields.Selection(string = 'Tip nepremičnine 2', selection=[('atrij','Atrij'),
+                                                                                  ('dvojcek','Dvojcek'),
+                                                                                  ('samostojna','Samostojna'),
+                                                                                  ('drugo','Drugo')])
+    
+    nepremicnina_tip_3 = fields.Selection(string = 'Tip nepremičnine 3', selection=[('delavnica','Delavnica'),
+                                                                                  ('gostinskiLokal','Gostinski lokal'),
+                                                                                  ('pisarna','Pisarna'),
+                                                                                  ('prostorZaStoritve','Prostor za storitve'),
+                                                                                  ('skladisce','Skladišče'),
+                                                                                  ('vecjiPoslovniKompleks','Večji poslovni kompleks'),
+                                                                                  ('drugo','Drugo')])
+    
+    @api.onchange('nepremicnina_vrsta','nepremicnina_tip_1','nepremicnina_tip_2','nepremicnina_tip_3')
+    def prepis_vrednosti(self):
+        if self.nepremicnina_vrsta=='stanovanje':
+            self.nepremicnina_tip_2=[]
+            self.nepremicnina_tip_3=[]
+            if self.nepremicnina_tip_1==False:
+                self.nepremicnina_tip=[]
+        if self.nepremicnina_vrsta=='hisa':
+            self.nepremicnina_tip_1=[]
+            self.nepremicnina_tip_3=[]
+            if self.nepremicnina_tip_2==False:
+                self.nepremicnina_tip=[]
+        if self.nepremicnina_vrsta=='poslovni':
+            self.nepremicnina_tip_1=[]
+            self.nepremicnina_tip_2=[]
+            if self.nepremicnina_tip_3==False:
+                self.nepremicnina_tip=[]
+        if self.nepremicnina_vrsta not in ['stanovanje','hisa','poslovni']:
+            self.nepremicnina_tip=[]
+            self.nepremicnina_tip_1=[]
+            self.nepremicnina_tip_2=[]
+            self.nepremicnina_tip_3=[]
+        if self.nepremicnina_tip_1:
+            self.nepremicnina_tip=self.nepremicnina_tip_1
+        if self.nepremicnina_tip_2:
+            self.nepremicnina_tip=self.nepremicnina_tip_2
+        if self.nepremicnina_tip_3:
+            self.nepremicnina_tip=self.nepremicnina_tip_3
+
     nepremicnina_tip_drugo=fields.Char(string = 'Drug tip')
     #PODATKI O LOKACIJI
     nepremicnina_drzava = fields.Many2one('res.country', string = 'Država')
@@ -510,7 +567,7 @@ class ExtendInventory(models.Model):
                 #TUKAJ SE POPRAVI-----------------------------------------------
                 
 
-    @api.onchange('nepremicnina_adaptacija','nepremicnina_balkon','nepremicnina_sanitarije','nepremicnina_klet','nepremicnina_vrt')
+    @api.onchange('nepremicnina_adaptacija','nepremicnina_balkon','nepremicnina_terasa','nepremicnina_sanitarije','nepremicnina_klet','nepremicnina_vrt')
     def izbris_nepremicnina(self):
         if self.nepremicnina_adaptacija==False:
             self.nepremicnina_leto_adaptacija=""
@@ -520,6 +577,8 @@ class ExtendInventory(models.Model):
             self.nepremicnina_okna_obnova=""
         if self.nepremicnina_balkon==False:
             self.nepremicnina_balkon_velikost=0
+        if self.nepremicnina_terasa==False:
+            self.nepremicnina_terasa_velikost=0
         if self.nepremicnina_sanitarije==False:
             self.nepremicnina_sanitarije_info=""
         if self.nepremicnina_klet==False:
