@@ -162,7 +162,7 @@ class ExtendContacts(models.Model):
             self.poizvedba_ok=""
             self.poizvedba_nok=""
             self.kupec_obvescanje=[]
-            self.kupec_narocnik=False
+            self.kupec_narocnik=False 
             self.kupec_aktiven=False
             self.kupec_znizana_cena=False
             self.kupec_obvescanje=False
