@@ -101,9 +101,10 @@
                         <!-- DODANI POGOJI KDAJ SO VIDNI -->
                         
                         <field name="nepremicnina_tip" attrs ="{'invisible':1}"/>
-                        <field name="nepremicnina_tip_1" string="Tip nepremičnine" attrs ="{'invisible':[('nepremicnina_vrsta','!=','stanovanje')]}"/>
-                        <field name="nepremicnina_tip_2" string="Tip nepremičnine" attrs ="{'invisible':[('nepremicnina_vrsta','!=','hisa')]}"/>
-                        <field name="nepremicnina_tip_3" string="Tip nepremičnine" attrs ="{'invisible':[('nepremicnina_vrsta','!=','poslovni')]}"/>
+                        <field name="nepremicnina_tip_1" string="Tip nepremičnine" attrs ="{'invisible':[('nepremicnina_vrsta','!=','stanovanje')],'required':[('nepremicnina_vrsta','==','stanovanje')]
+}"/>
+                        <field name="nepremicnina_tip_2" string="Tip nepremičnine" attrs ="{'invisible':[('nepremicnina_vrsta','!=','hisa')],'required':[('nepremicnina_vrsta','==','hisa')]}"/>
+                        <field name="nepremicnina_tip_3" string="Tip nepremičnine" attrs ="{'invisible':[('nepremicnina_vrsta','!=','poslovni')],'required':[('nepremicnina_vrsta','==','poslovni')]}"/>
                         
                         <field name="nepremicnina_vrsta_drugo" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'drugo')]}"/>
                         <field name="nepremicnina_tip_drugo" attrs ="{'invisible':[('nepremicnina_tip','!=', 'drugo')]}"/>
