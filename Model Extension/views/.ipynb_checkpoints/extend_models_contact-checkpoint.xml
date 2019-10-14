@@ -34,7 +34,7 @@
                                 <field name="currency_id" invisible="1"/>
                                 <field name='name' string='Nepremičnina'/>
                                 <field name='type' string='Tip'/>
-                                <field name='list_price' string = 'Cena' widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name='list_price' string = 'Cena' widget='monetary'/>
                             </tree>
                         </field>  
                     </group>
@@ -56,8 +56,7 @@
                     <group string='Prodajalec'>        
                         <group col='4' colspan='2'>
                             <field name="create_uid" string='Osebo vnesla'/>
-                            <field name="custom_currency_id" invisible="1"/>
-                            <field name="prodajalec_koliko" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
+                            <field name="prodajalec_koliko" widget='monetary'/>
                             <field name="prodajalec_ponudbe" widget="boolean_toggle"/>
                             
                             <label for='prodajalec_procent'/>
@@ -79,8 +78,7 @@
                 <page name='kupec' string="Kupec" attrs="{'invisible': [('tip_stranke','!=','kupec')]}">     
                     <group string='Iskalni podatki'>
                         <group col='4' colspan='2'>
-                            <field name="poizvedba_cena" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
-                            <field name="custom_currency_id" invisible="1"/>
+                            <field name="poizvedba_cena" widget='monetary'/>
                             <field name="poizvedba_kontakt_dan"/>
                             <field name="poizvedba_kontaktiran"/>
                             <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
@@ -138,8 +136,7 @@
                 <page name='najemnik' string="Najemnik" attrs="{'invisible': [('tip_stranke','!=','najemnik')]}">
                     <group string='Iskalni podatki'>
                         <group col='4' colspan='2'>
-                            <field name="poizvedba_cena" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
-                            <field name="custom_currency_id" invisible="1"/>
+                            <field name="poizvedba_cena" widget='monetary'/>
                             <field name="poizvedba_kontakt_dan"/>
                             <field name="poizvedba_kontaktiran"/>
                             <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
@@ -189,12 +186,11 @@
                     <group string='Tretja Oseba'>
                         <group col='4' colspan='2'>
                             <field name="create_uid" string='Osebo vnesla'/>
-                            <field name="custom_currency_id" invisible="1"/>
                             
                             <field name="spol"/>
                             <field name="tretja_oseba_osebnost" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
           
-                            <field name="prodajalec_koliko" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
+                            <field name="prodajalec_koliko" widget='monetary'/>
                             <field name="prodajalec_ponudbe" widget="boolean_toggle"/>
                             
                             <label for='prodajalec_procent'/>

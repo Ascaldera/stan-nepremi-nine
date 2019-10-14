@@ -6,18 +6,7 @@ from odoo import exceptions
 
 class ExtendContacts(models.Model):
     _inherit = ['res.partner']
-    
-    def _get_default_currency_id(self):
-        return self.env.user.company_id.currency_id.id
-    
-    
-    """test=fields.Char(string='TEST')
-    
-    @api.onchange('poizvedba_nepremicnina')
-    def test(self):
-        self.test=str(self.poizvedba_nepremicnina)"""
-    
-    
+
     #OSNOVNI REQUIRED PODATKI
     tip_stranke = fields.Selection(selection=[('prodajalec', 'Prodajalec'),
                                               ('kupec', 'Kupec'),
@@ -25,8 +14,7 @@ class ExtendContacts(models.Model):
                                               ('najemnik', 'Najemnik')])
     spol = fields.Selection(selection=[('moski', 'Moški'),('ženski', 'Ženski')])
     tretja_oseba = fields.Boolean(string = 'Tretja Oseba')
-    custom_currency_id = fields.Many2one('res.currency', 'Custom Currency', default=_get_default_currency_id)
-    
+  
     #PODATKI O NEPREMIČNINAH
     nepremicnine = fields.One2many(comodel_name='product.template', inverse_name="contact", string='Product ID')
     pridobitev = fields.Char(string = 'Način pridobitve')
