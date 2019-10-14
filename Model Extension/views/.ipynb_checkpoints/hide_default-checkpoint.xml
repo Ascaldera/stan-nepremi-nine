@@ -58,8 +58,9 @@
         </field>
     </record>
 
-    <menuitem id="stock.menu_product_variant_config_stock" name="Products" parent="stock.menu_stock_root" sequence="2"/>
-
+    <menuitem id="stock.menu_product_variant_config_stock" name="Nepremičnine" parent="stock.menu_stock_root" sequence="2"/>
+    <menuitem id="stock.menu_stock_root" name="Nepremičnine"/>
+    
     <delete model="ir.ui.menu" id="stock.menu_stock_warehouse_mgmt"/>
     <delete model="ir.ui.menu" id="stock.all_picking"/>
     <delete model="ir.ui.menu" id="stock.menu_action_inventory_form"/>

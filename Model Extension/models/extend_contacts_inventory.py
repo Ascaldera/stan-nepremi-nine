@@ -6,11 +6,7 @@ from odoo import exceptions
 
 class ExtendContacts(models.Model):
     _inherit = ['res.partner']
-    
-    def _get_default_currency_id(self):
-        return self.env.user.company_id.currency_id.id
-    
-    
+
     #OSNOVNI REQUIRED PODATKI
     tip_stranke = fields.Selection(selection=[('prodajalec', 'Prodajalec'),
                                               ('kupec', 'Kupec'),
@@ -18,8 +14,7 @@ class ExtendContacts(models.Model):
                                               ('najemnik', 'Najemnik')])
     spol = fields.Selection(selection=[('moski', 'Moški'),('ženski', 'Ženski')])
     tretja_oseba = fields.Boolean(string = 'Tretja Oseba')
-    custom_currency_id = fields.Many2one('res.currency', 'Custom Currency', default=_get_default_currency_id)
-    
+  
     #PODATKI O NEPREMIČNINAH
     nepremicnine = fields.One2many(comodel_name='product.template', inverse_name="contact", string='Product ID')
     pridobitev = fields.Char(string = 'Način pridobitve')
@@ -148,17 +143,17 @@ class ExtendContacts(models.Model):
             self.poizvedba_cena=0
             self.poizvedba_kontakt_dan=[]
             self.poizvedba_kontaktiran=[]
-            self.poizvedba_nepremicnina=[]
-            self.poizvedba_kraj=[]
-            self.poizvedba_namen=[]
+            self.poizvedba_nepremicnina=False         
+            self.poizvedba_kraj=False
+            self.poizvedba_namen=False
             self.poizvedba_zgodovina=""
             self.poizvedba_ok=""
             self.poizvedba_nok=""
             self.kupec_obvescanje=[]
-            self.kupec_narocnik=False
+            self.kupec_narocnik=False 
             self.kupec_aktiven=False
             self.kupec_znizana_cena=False
-            self.kupec_obvescanje=[]
+            self.kupec_obvescanje=False
         if self.tip_stranke!='najemodajalec':
             self.objava_kje=[]
             self.objava_kje_datum=[]
@@ -172,9 +167,9 @@ class ExtendContacts(models.Model):
             self.najemodajalec_studenti=False
             self.najemodajalec_zivali=False
         if self.tip_stranke!='najemnik':
-            self.poizvedba_nepremicnina=[]
-            self.poizvedba_kraj=[]
-            self.poizvedba_namen=[]
+            self.poizvedba_nepremicnina=False
+            self.poizvedba_kraj=False
+            self.poizvedba_namen=False
             self.poizvedba_cena=0
             self.poizvedba_kontakt_dan=[]
             self.poizvedba_zgodovina=""
@@ -212,7 +207,7 @@ class ExtendContacts(models.Model):
             self.stranka_odziv=""
             self.povprasevanje=""
             self.mnenje=""
-            self.nepremicnine=[]
+            self.nepremicnine=False
     
     @api.onchange('objava_kje','prodajalec_ponudbe')
     def izbris(self):
@@ -220,7 +215,7 @@ class ExtendContacts(models.Model):
             self.objava_kje_datum=[]
         if self.prodajalec_ponudbe==False:
             self.prodajalec_ponudbe_info=""
-    
+  
 class ExtendInventory(models.Model):
     _inherit = 'product.template'
     
@@ -234,6 +229,31 @@ class ExtendInventory(models.Model):
     
     custom_currency_id_2 = fields.Many2one('res.currency', 'Custom Currency', default=_get_default_currency_id_2)
     opportunity_count = fields.Integer("Opportunity", compute='_compute_opportunity_count')
+
+    #POSREDOVANJE
+    nepremicnina_vrsta_posredovanja=fields.Selection(string="Vrsta posredovanja", 
+                                                     selection=[('prodamo','Prodamo'),
+                                                                ('oddamo','Oddamo')])
+    nepremicnina_novogradnja=fields.Boolean(string="Novogradnja")
+    nepremicnina_etaza=fields.Char(string="Etaža")
+    nepremicnina_se_prodaja=fields.Char(string="Nepremičnina se prodaja")
+    nepremicnina_moznost_vselitve=fields.Char(string="Možnost vselitve")
+    nepremicnina_pogoji_prodaje=fields.Char(string="Pogoji prodaje")
+    nepremicnina_za_investicijo=fields.Boolean(string="Za investicijo")
+    nepremicnina_oznake_nepremicnin=fields.Many2many(string="Oznake nepremičnine",
+                              comodel_name="res.partner.category",
+                              relation="contact_tag_oznake_nepremicnin_rel",
+                              domain="[('tag_type','=','oznake_nepremicnin')]",
+                              options="{'color_field': 'color', 'no_create_edit': True}",
+                              track_visibility='onchange')
+    nepremicnina_opis=fields.Html(string="Opis")
+    #-----------------------------------------------------------------------------------------
+    
+    #SISTEM
+    datum_objave=fields.Date(string="Datum objave")
+    
+    #------------------------------------------------------------------------------------------
+    
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name="res.partner", string="Kdo prodaja")
     nepremicnina_povrsina = fields.Float(string='Neto površina') #m2
@@ -241,24 +261,94 @@ class ExtendInventory(models.Model):
     nepremicnina_velikost = fields.Float(string = 'Velikost skupaj') #m2
     nepremicnina_cena_min = fields.Float(string = 'Minimalna cena') #EUR
     nepremicnina_cena_dolgorocno = fields.Float(string = 'Cena / dolgoročni najem') #EUR
+        
     nepremicnina_vrsta = fields.Selection(string = 'Vrsta nepremičnine', selection = [('stanovanje', 'Stanovanje'), 
                                                                                       ('hisa', 'Hiša'), 
-                                                                                      ('poslovni', 'Poslovni prostor'), 
+                                                                                      ('poslovni', 'Poslovni prostor'),
+                                                                                      ('posest','Posest'),
+                                                                                      ('vikend','Vikend'),
+                                                                                      ('kmetija','Kmetija'), 
                                                                                       ('garaza', 'Garaža'), 
-                                                                                      ('drugo', 'Drugo')])
+                                                                                      ('drugo', 'Drugo'),])
     nepremicnina_vrsta_drugo = fields.Char(string = 'Druga vrsta')
-    nepremicnina_tip = fields.Selection(string = 'Tip nepremičnine', selection = [('apartma','Apartma'),('soba','Soba'), 
-                                                                                    ('garsonjera', 'Garsonjera'), 
-                                                                                    ('soba1','1-sobno'), 
-                                                                                    ('soba1_5', '1,5-sobno'), 
-                                                                                    ('soba2','2-sobno'), 
-                                                                                    ('soba2_5','2,5-sobno'), 
-                                                                                    ('soba3','3-sobno'), 
-                                                                                    ('soba3_5','3,5-sobno'), 
-                                                                                    ('soba4','4-sobno'), 
-                                                                                    ('soba4_5','4,5-sobno'), 
-                                                                                    ('soba5','5 in večsobno'), 
-                                                                                    ('drugo','Drugo')])
+    nepremicnina_tip=fields.Selection(string="Tip nepremičnine", selection=[('apartma','Apartma'),
+                                                                                  ('soba','Soba'),
+                                                                                  ('garsonjera', 'Garsonjera'),
+                                                                                  ('soba1','1-sobno'),
+                                                                                  ('soba1_5', '1,5-sobno'),
+                                                                                  ('soba2','2-sobno'),
+                                                                                  ('soba2_5','2,5-sobno'),
+                                                                                  ('soba3','3-sobno'),
+                                                                                  ('soba3_5','3,5-sobno'),
+                                                                                  ('soba4','4-sobno'),
+                                                                                  ('soba4_5','4,5-sobno'),
+                                                                                  ('soba5','5 in večsobno'),
+                                                                                  ('atrij','Atrij'),
+                                                                                  ('dvojcek','Dvojcek'),
+                                                                                  ('samostojna','Samostojna'),
+                                                                                  ('delavnica','Delavnica'),
+                                                                                  ('gostinskiLokal','Gostinski lokal'),
+                                                                                  ('pisarna','Pisarna'),
+                                                                                  ('prostorZaStoritve','Prostor za storitve'),
+                                                                                  ('skladisce','Skladišče'),
+                                                                                  ('vecjiPoslovniKompleks','Večji poslovni kompleks'),
+                                                                                  ('drugo','Drugo')])
+    nepremicnina_tip_1 = fields.Selection(string = 'Tip nepremičnine 1', selection=[('apartma','Apartma'),
+                                                                                  ('soba','Soba'),
+                                                                                  ('garsonjera', 'Garsonjera'),
+                                                                                  ('soba1','1-sobno'),
+                                                                                  ('soba1_5', '1,5-sobno'),
+                                                                                  ('soba2','2-sobno'),
+                                                                                  ('soba2_5','2,5-sobno'),
+                                                                                  ('soba3','3-sobno'),
+                                                                                  ('soba3_5','3,5-sobno'),
+                                                                                  ('soba4','4-sobno'),
+                                                                                  ('soba4_5','4,5-sobno'),
+                                                                                  ('soba5','5 in večsobno'),
+                                                                                  ('drugo','Drugo')])
+    
+    nepremicnina_tip_2 = fields.Selection(string = 'Tip nepremičnine 2', selection=[('atrij','Atrij'),
+                                                                                  ('dvojcek','Dvojcek'),
+                                                                                  ('samostojna','Samostojna'),
+                                                                                  ('drugo','Drugo')])
+    
+    nepremicnina_tip_3 = fields.Selection(string = 'Tip nepremičnine 3', selection=[('delavnica','Delavnica'),
+                                                                                  ('gostinskiLokal','Gostinski lokal'),
+                                                                                  ('pisarna','Pisarna'),
+                                                                                  ('prostorZaStoritve','Prostor za storitve'),
+                                                                                  ('skladisce','Skladišče'),
+                                                                                  ('vecjiPoslovniKompleks','Večji poslovni kompleks'),
+                                                                                  ('drugo','Drugo')])
+    
+    @api.onchange('nepremicnina_vrsta','nepremicnina_tip_1','nepremicnina_tip_2','nepremicnina_tip_3')
+    def prepis_vrednosti(self):
+        if self.nepremicnina_vrsta=='stanovanje':
+            self.nepremicnina_tip_2=[]
+            self.nepremicnina_tip_3=[]
+            if self.nepremicnina_tip_1==False:
+                self.nepremicnina_tip=[]
+        if self.nepremicnina_vrsta=='hisa':
+            self.nepremicnina_tip_1=[]
+            self.nepremicnina_tip_3=[]
+            if self.nepremicnina_tip_2==False:
+                self.nepremicnina_tip=[]
+        if self.nepremicnina_vrsta=='poslovni':
+            self.nepremicnina_tip_1=[]
+            self.nepremicnina_tip_2=[]
+            if self.nepremicnina_tip_3==False:
+                self.nepremicnina_tip=[]
+        if self.nepremicnina_vrsta not in ['stanovanje','hisa','poslovni']:
+            self.nepremicnina_tip=[]
+            self.nepremicnina_tip_1=[]
+            self.nepremicnina_tip_2=[]
+            self.nepremicnina_tip_3=[]
+        if self.nepremicnina_tip_1:
+            self.nepremicnina_tip=self.nepremicnina_tip_1
+        if self.nepremicnina_tip_2:
+            self.nepremicnina_tip=self.nepremicnina_tip_2
+        if self.nepremicnina_tip_3:
+            self.nepremicnina_tip=self.nepremicnina_tip_3
+
     nepremicnina_tip_drugo=fields.Char(string = 'Drug tip')
     #PODATKI O LOKACIJI
     nepremicnina_drzava = fields.Many2one('res.country', string = 'Država')
@@ -308,16 +398,26 @@ class ExtendInventory(models.Model):
     nepremicnina_balkon = fields.Boolean(string = 'Balkon')
     nepremicnina_balkon_velikost = fields.Float(string = 'Velikost Balkona') #hide if balkon False
     
+    #------------------------------------------------------------------------------------------------------
+    nepremicnina_terasa = fields.Boolean(string='Terasa')
+    nepremicnina_terasa_velikost=fields.Float(string='Velikost terase')
+    #------------------------------------------------------------------------------------------------------
+    
     nepremicnina_atrij = fields.Boolean(string = 'Atrij')
     
     nepremicnina_klet = fields.Boolean(string = 'Klet') #hide if Klet False
     nepremicnina_klet_velikost = fields.Float(string = 'Velikost kleti')
     
     nepremicnina_dvigalo = fields.Boolean(string = 'Dvigalo')
-    nepremicnina_vrsta_ogrevanja = fields.Selection(string = 'Vrsta ogrevanja', selection=[('plinovod','Plinovod'),
+    nepremicnina_vrsta_ogrevanja = fields.Selection(string = 'Vrsta ogrevanja', selection=[('skupnaKurilnica','Skupna kurilnica'),
+                                                                                           ('plinovod','Plinovod'),
                                                                                            ('toplovod','Toplovod'),
+                                                                                           ('elektrika','Elektrika'),
+                                                                                           ('centralnaKurjava','Centralna kurjava'),
                                                                                            ('crpalka','Toplotna Črpalka'), 
-                                                                                           ('biomasa','Biomasa')])
+                                                                                           ('biomasa','Biomasa'),
+                                                                                           ('klimatskaNaprava','Klimatska naprava')
+                                                                                           ])
     nepremicnina_lega = fields.Char(string = 'Lega')
     
     nepremicnina_sanitarije = fields.Boolean(string = 'Sanitarije')
@@ -448,8 +548,14 @@ class ExtendInventory(models.Model):
                 raise exceptions.UserError(_errorMsg)
             else:
                 self.website_published = True
+                """self.datum_objave=date.today()"""
+                
+                
+                
+                #TUKAJ SE POPRAVI-----------------------------------------------
+                
 
-    @api.onchange('nepremicnina_adaptacija','nepremicnina_balkon','nepremicnina_sanitarije','nepremicnina_klet','nepremicnina_vrt')
+    @api.onchange('nepremicnina_adaptacija','nepremicnina_balkon','nepremicnina_terasa','nepremicnina_sanitarije','nepremicnina_klet','nepremicnina_vrt')
     def izbris_nepremicnina(self):
         if self.nepremicnina_adaptacija==False:
             self.nepremicnina_leto_adaptacija=""
@@ -459,6 +565,8 @@ class ExtendInventory(models.Model):
             self.nepremicnina_okna_obnova=""
         if self.nepremicnina_balkon==False:
             self.nepremicnina_balkon_velikost=0
+        if self.nepremicnina_terasa==False:
+            self.nepremicnina_terasa_velikost=0
         if self.nepremicnina_sanitarije==False:
             self.nepremicnina_sanitarije_info=""
         if self.nepremicnina_klet==False:
@@ -526,7 +634,8 @@ class ExtendContactTags(models.Model):
                                                           ('stranka', 'Stranka'), 
                                                           ('lastnosti','Osebnostne lastnosti'),
                                                           ('obnova', 'Obnova'),
-                                                          ('oprema', 'Oprema')])
+                                                          ('oprema', 'Oprema'),
+                                                          ('oznake_nepremicnin','Oznake nepremičnin')])
     color = fields.Integer(compute='_compute_first',string='Color Index', store=True, readonly=True)
     
     @api.depends('tag_type')
@@ -548,6 +657,8 @@ class ExtendContactTags(models.Model):
                 record.color = 1
             elif record.tag_type == 'oprema':
                 record.color = 2
+            elif record.tag_type == 'oznake_nepremicnin':
+                record.color = 3
             else:
                 record.color = 0
                 
@@ -555,3 +666,4 @@ class ExtendCrm(models.Model):
     _inherit = 'crm.lead'
     
     nepremicnina = fields.Many2one(comodel_name="product.template", string="Nepremičnina")
+    
