@@ -4,9 +4,10 @@
 from odoo import fields, api, models, tools
 from odoo import exceptions
 
+
 class ExtendContacts(models.Model):
     _inherit = ['res.partner']
-
+    
     #OSNOVNI REQUIRED PODATKI
     tip_stranke = fields.Selection(selection=[('prodajalec', 'Prodajalec'),
                                               ('kupec', 'Kupec'),
@@ -14,7 +15,8 @@ class ExtendContacts(models.Model):
                                               ('najemnik', 'Najemnik')])
     spol = fields.Selection(selection=[('moski', 'Moški'),('ženski', 'Ženski')])
     tretja_oseba = fields.Boolean(string = 'Tretja Oseba')
-  
+    zakaj_kupuje=fields.Char(string='Zakaj kupuje')
+    
     #PODATKI O NEPREMIČNINAH
     nepremicnine = fields.One2many(comodel_name='product.template', inverse_name="contact", string='Product ID')
     pridobitev = fields.Char(string = 'Način pridobitve')
@@ -125,6 +127,23 @@ class ExtendContacts(models.Model):
                                                options="{'color_field': 'color', 'no_create_edit': True}",
                                                track_visibility='onchange')
     
+    @api.onchange('email')
+    def check_mail(self):
+        contact=self.env['res.partner'].search([('email','=',self.email)])
+        if len(contact)==0:
+            return {'warning':{'title':'Opozorilo!','message':"E-mail naslov je že v uporabi."}}
+    
+    @api.onchange('mobile','phone')
+    def check_phone(self):
+        mobile_contact=self.env['res.partner'].search([('mobile','=',self.mobile)])
+        phone_contact=self.env['res.partner'].search([('phone','=',self.phone)])
+        if len(mobile_contact)!=0 and len(phone_contact)!=0:
+            return {'warning':{'title':'Opozorilo!','message':"Telefonska in mobilna številka sta že v uporabi."}}
+        if len(mobile_contact)!=0:
+            return {'warning':{'title':'Opozorilo!','message':"Mobilna številka je že v uporabi."}}
+        if len(phone_contact)!=0:
+            return {'warning':{'title':'Opozorilo!','Telefonska številka je že v uporabi."}}
+
     @api.onchange('tip_stranke','tretja_oseba')
     def erase(self):
         if self.tip_stranke!='prodajalec':
@@ -253,6 +272,16 @@ class ExtendInventory(models.Model):
     datum_objave=fields.Date(string="Datum objave")
     
     #------------------------------------------------------------------------------------------
+    
+    #SLIKE
+    nepremicnina_slika_1=fields.Binary("Slika 1",attachment=True)
+    nepremicnina_slika_2=fields.Binary("Slika 2",attachment=True)
+    nepremicnina_slika_3=fields.Binary("Slika 3",attachment=True)
+    nepremicnina_slika_4=fields.Binary("Slika 4",attachment=True)
+    nepremicnina_slika_5=fields.Binary("Slika 5",attachment=True)
+    nepremicnina_slika_6=fields.Binary("Slika 6",attachment=True)
+    nepremicnina_slika_7=fields.Binary("Slika 7",attachment=True)
+    nepremicnina_slika_8=fields.Binary("Slika 8",attachment=True)
     
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name="res.partner", string="Kdo prodaja")

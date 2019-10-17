@@ -131,6 +131,54 @@
                     </group>
             </xpath>
             
+            <!-- CUSTOM TAB - Slike -->
+            <xpath expr="//page[@name='general_information']" position='after'>
+                <page name="slike" string="Slike">
+                    <group colspan="4" rowspan="1" string="Dodatne slike">
+                        <div class="o_image_box">
+                            <div class="o_attachment_wrap">
+                                <field name="nepremicnina_slika_1" widget="image" nolabel="1" height="200"/>
+                            </div>
+                        </div>
+                        <div class="o_image_box">
+                            <div class="o_attachment_wrap">
+                                <field name="nepremicnina_slika_2" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_1','==', False)]}"/>
+                            </div>
+                        </div>
+                        <div class="o_image_box">
+                            <div class="o_attachment_wrap">
+                                <field name="nepremicnina_slika_3" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_2','==', False)]}"/>
+                            </div>
+                        </div>
+                        <div class="o_image_box">
+                            <div class="o_attachment_wrap">
+                                <field name="nepremicnina_slika_4" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_3','==', False)]}"/>
+                            </div>
+                        </div>
+                        <div class="o_image_box">
+                            <div class="o_attachment_wrap">
+                                <field name="nepremicnina_slika_5" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_4','==', False)]}"/>
+                            </div>
+                        </div>
+                        <div class="o_image_box">
+                            <div class="o_attachment_wrap">
+                                <field name="nepremicnina_slika_6" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_5','==', False)]}"/>
+                            </div>
+                        </div>
+                        <div class="o_image_box">
+                            <div class="o_attachment_wrap">
+                                <field name="nepremicnina_slika_7" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_6','==', False)]}"/>
+                            </div>
+                        </div>
+                        <div class="o_image_box">
+                            <div class="o_attachment_wrap">
+                                <field name="nepremicnina_slika_8" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_7','==', False)]}"/>
+                            </div>
+                        </div>
+                    </group>
+                </page>
+            </xpath>
+            
             <!-- CUSTOM TAB - Opis -->
             <xpath expr="//page[@name='general_information']" position='after'>
                 <page name='opis' string="Nepremičnina / Opis">
