@@ -142,7 +142,7 @@ class ExtendContacts(models.Model):
         if len(mobile_contact)!=0:
             return {'warning':{'title':'Opozorilo!','message':"Mobilna številka je že v uporabi."}}
         if len(phone_contact)!=0:
-            return {'warning':{'title':'Opozorilo!','Telefonska številka je že v uporabi."}}
+            return {'warning':{'title':'Opozorilo!','message':"Telefonska številka je že v uporabi."}}
 
     @api.onchange('tip_stranke','tretja_oseba')
     def erase(self):
