@@ -54,16 +54,16 @@
                             <label for="street" string="Naslov"/>
                             <div class="o_address_format">
 
-                                <field name="nepremicnina_lokacija" class="o_address_city" placeholder='Ulica'/>
+                                <field name="nepremicnina_lokacija" class="o_address_city" placeholder='Ulica' attrs ="{'required':1}"/>
                                 <div>
-                                    <field name="nepremicnina_obcina" class="o_address_city" placeholder='Občina' options="{&quot;no_open&quot;: True}"/>
-                                    <field name="nepremicnina_zip" class="o_address_zip" placeholder='Poštna št.'/>
+                                    <field name="nepremicnina_obcina" class="o_address_city" placeholder='Občina' options="{&quot;no_open&quot;: True}" attrs ="{'required':1}"/>
+                                    <field name="nepremicnina_zip" class="o_address_zip" placeholder='Poštna št.' attrs ="{'required':1}"/>
                                 </div>
-                                <field name="nepremicnina_drzava" class="o_address_country" placeholder='Država' options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
+                                <field name="nepremicnina_drzava" class="o_address_country" placeholder='Država' options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}" attrs ="{'required':1}"/>
 
                             </div>
-                            <field name="nepremicnina_regija"/>
-                            <field name="nepremicnina_upravna_enota" attrs ="{'invisible':1}"/>
+                            <field name="nepremicnina_regija" attrs ="{'required':1}"/>
+                            <field name="nepremicnina_upravna_enota" attrs ="{'invisible':1, 'required':1}"/>
                             <field name="nepremicnina_upravne_enote_1" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'dolenjska')]}"/>
                             <field name="nepremicnina_upravne_enote_2" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'gorenjska')]}"/>
                             <field name="nepremicnina_upravne_enote_3" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'juzna_primorska')]}"/>
@@ -82,7 +82,7 @@
                         </group>
                     </group>
                     <group>
-                        <field name="nepremicnina_opis" type="html"/>
+                        <field name="nepremicnina_opis" type="html" attrs ="{'required':1}"/>
                     </group>
                     <group string='Osnovne informacije' col="4" colspan="2">
                         <field name="create_uid"/>      
@@ -90,7 +90,7 @@
                             
                         <label for='nepremicnina_povrsina'/>
                         <div class="o_row" name="povrsina">
-                            <field name="nepremicnina_povrsina"/>
+                            <field name="nepremicnina_povrsina"  attrs ="{'required':1}"/>
                                 <span>m²</span>
                         </div>
                         <label for='nepremicnina_zemljisce_pod'/>
@@ -105,13 +105,17 @@
                         </div>
                         <span colspan='4'/>
 
-                        <field name="nepremicnina_cena_min" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                        <field name="nepremicnina_cena_dolgorocno" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                        <field name="nepremicnina_cena_dolgorocno_valuta"/>
-                        <span colspan='4'/>
+                        
                     </group>
                     <group>
-                        <field name="nepremicnina_vrsta"/>
+                        <group>
+                            <field name="nepremicnina_cena_min" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                            <field name="nepremicnina_cena_dolgorocno"  attrs ="{'required':1}"/>
+                            <field name="nepremicnina_cena_dolgorocno_valuta" widget='radio' attrs ="{'required':1}"/>
+                        </group>
+                    </group>
+                    <group>
+                        <field name="nepremicnina_vrsta"  attrs ="{'required':1}"/>
                         <!-- DODANI POGOJI KDAJ SO VIDNI -->
                         
                         <field name="nepremicnina_tip" attrs ="{'invisible':1}"/>
@@ -202,7 +206,7 @@
                         <field name="nepremicnina_leto_izgradnje"/>
                         <field name="nepremicnina_adaptacija" widget="boolean_toggle"/>
                         <field name="nepremicnina_streha"/>
-                        <field name="nepremicnina_leto_adaptacija" attrs ="{'invisible':[('nepremicnina_adaptacija','!=', True)]}"/>
+                        <field name="nepremicnina_leto_adaptacija" attrs ="{'invisible':[('nepremicnina_adaptacija','!=', True)],'required':[('nepremicnina_adaptacija','=',True)]}"/>
                         <field name="nepremicnina_izolacija"/>
                         <field name="nepremicnina_adaptacija_info" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" attrs ="{'invisible':[('nepremicnina_adaptacija','!=', True)]}"/>
                         <field name="nepremicnina_okna"/>

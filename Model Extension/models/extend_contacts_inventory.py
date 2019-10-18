@@ -290,15 +290,8 @@ class ExtendInventory(models.Model):
     nepremicnina_velikost = fields.Float(string = 'Velikost skupaj') #m2
     nepremicnina_cena_min = fields.Float(string = 'Minimalna cena') #EUR
     nepremicnina_cena_dolgorocno = fields.Float(string = 'Cena / Najemnina') #EUR
-    nepremicnina_cena_dolgorocno_valuta=fields.Selection(string="Valuta", selection=[('e','EUR'),('em2','EUR/m')])
+    nepremicnina_cena_dolgorocno_valuta=fields.Selection(string="Valuta", selection=[('e','EUR'),('em2','EUR/m²')])
     
-    #------------------------------------------------------------------------------------------------------------------------------
-    #DODAJ MESTO ZA EUR ALI EUR/m2
-    
-    
-    
-    
-    #------------------------------------------------------------------------------------------------------------------------------
         
     nepremicnina_vrsta = fields.Selection(string = 'Vrsta nepremičnine', selection = [('stanovanje', 'Stanovanje'), 
                                                                                       ('hisa', 'Hiša'), 
