@@ -62,8 +62,22 @@
                                 <field name="nepremicnina_drzava" class="o_address_country" placeholder='Država' options="{&quot;no_open&quot;: True, &quot;no_create&quot;: True}"/>
 
                             </div>
-                            <field name="nepremicnina_regija" placeholder='Regija'/>
-                            <field name="nepremicnina_soseska" placeholder='Soseska'/>
+                            <field name="nepremicnina_regija"/>
+                            <field name="nepremicnina_upravna_enota" attrs ="{'invisible':1}"/>
+                            <field name="nepremicnina_upravne_enote_1" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'dolenjska')]}"/>
+                            <field name="nepremicnina_upravne_enote_2" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'gorenjska')]}"/>
+                            <field name="nepremicnina_upravne_enote_3" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'juzna_primorska')]}"/>
+                            <field name="nepremicnina_upravne_enote_4" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'severna_primorska')]}"/>
+                            <field name="nepremicnina_upravne_enote_5" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'koroska')]}"/>
+                            <field name="nepremicnina_upravne_enote_6" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'lj_mesto')]}"/>
+                            <field name="nepremicnina_upravne_enote_7" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'lj_okolica')]}"/>
+                            <field name="nepremicnina_upravne_enote_8" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'notranjska')]}"/>
+                            <field name="nepremicnina_upravne_enote_9" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'podravska')]}"/>
+                            <field name="nepremicnina_upravne_enote_10" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'pomurska')]}"/>
+                            <field name="nepremicnina_upravne_enote_11" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'posavska')]}"/>
+                            <field name="nepremicnina_upravne_enote_12" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'savinjska')]}"/>
+                            <field name="nepremicnina_upravne_enote_13" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'zasavska')]}"/>
+
                             <field name="nepremicnina_lokacija_opombe" placeholder='Opombe'/>
                         </group>
                     </group>
@@ -92,8 +106,8 @@
                         <span colspan='4'/>
 
                         <field name="nepremicnina_cena_min" widget='monetary' options="{'currency_field': 'currency_id'}"/>
-                        <field name="oprema_seznam" string='Seznam opreme' widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
                         <field name="nepremicnina_cena_dolgorocno" widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                        <field name="nepremicnina_cena_dolgorocno_valuta"/>
                         <span colspan='4'/>
                     </group>
                     <group>
@@ -111,16 +125,17 @@
                         
                     </group>
                     <group>
+                        
+                        <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+                        
                         <group>
-                            <field name="nepremicnina_razlog_oddala" string='Razlog / Ni oddana'/>
-                            <field name="nepremicnina_razlog_prodala" string='Razlog / Ni prodana'/>
-                            <field name="nepremicnina_razlog_kupuje"/>
+                            <field name="nepremicnina_etaza" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa')]}"/>
+                            <field name="nepremicnina_nadstropje" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
+                            <field name="nepremicnina_st_nadstropij" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
                         </group>
-                        <group>
-                            <field name="nepremicnina_etaza"/>
-                            <field name="nepremicnina_nadstropje"/>
-                            <field name="nepremicnina_st_nadstropij"/>
-                        </group>
+                        
+                        <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
+                        
                     </group> 
                     <!-- DODANI TAGI ZA KOGA PRIMERNO -->
                     <group>
@@ -199,9 +214,8 @@
                         <field name="nepremicnina_upravnik"/>
                         <span colspan='4'/>
                         <field name="nepremicnina_stroski" widget='monetary' options="{'currency_field': 'custom_currency_id_2'}"/> 
-                        <field name="nepremicnina_energetska_izkaznica"/>
-                        <field name="nepremicnina_stroski_sklada" widget='monetary' options="{'currency_field': 'custom_currency_id_2'}"/>
                         <field name="nepremicnina_energetski_razred"/>
+                        <field name="nepremicnina_stroski_sklada" widget='monetary' options="{'currency_field': 'custom_currency_id_2'}"/>
                     </group>
                     <group string='Dodatki' col="8" colspan="2">
                         <field name="nepremicnina_balkon" colspan='4' widget="boolean_toggle"/>
@@ -262,11 +276,12 @@
                         <field name="nepremicnina_domofon"/>
                         <field name="nepremicnina_360_id"/>       
                     </group>
-                    <group string='Parkiranje' col="4" colspan="2">
-                        <field name="nepremicnina_parkiranje"/>
-                        <field name="nepremicnina_garaza"/>
-                        <field name="nepremicnina_parkiranje_mesto"/>
-                        <field name="nepremicnina_parkiranje_hisa"/>   
+                    <group string='Parkiranje'>
+                        <group>
+                            <field name="nepremicnina_parkiranje" widget="boolean_toggle"/>
+                            <field name="nepremicnina_parkiranje_vrsta" attrs ="{'invisible':[('nepremicnina_parkiranje','=', False)]}"/>
+                            <field name="nepremicnina_parkiranje_stevilo" attrs ="{'invisible':[('nepremicnina_parkiranje','=', False)]}"/>
+                        </group>
                     </group>
                 </page>
             </xpath>
