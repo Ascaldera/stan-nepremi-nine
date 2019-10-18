@@ -7,7 +7,8 @@
         <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/> 
         <field name="arch" type="xml"> 
             <xpath expr="//field[@name='partner_id']" position="before">
-               <field name="nepremicnina"/> 
+                <field name="tip_priloznosti"/>
+                <field name="nepremicnina"/> 
             </xpath>
         </field>
     </record>
@@ -20,13 +21,14 @@
             <xpath expr="//field[@name='tag_ids']" position="before">
                 <field name="partner_id"/>
                 <br></br>
+                <field name="tip_priloznosti"/>
                 <field name="nepremicnina"/> 
             </xpath>
             <xpath expr="//div[@class='text-muted o_kanban_record_subtitle']" position="attributes">
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath expr="//field[@name='tag_ids']" position="after">
-                <field name="planned_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/>                
+                <field name="planned_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/>          
             </xpath>
         </field>
     </record>
@@ -37,7 +39,8 @@
         <field name="inherit_id" ref="crm.quick_create_opportunity_form"/> 
         <field name="arch" type="xml">
 		<xpath expr="//field[@name='partner_id']" position="after">
-			<field name="nepremicnina"/>
+			<field name="tip_priloznosti"/>
+            <field name="nepremicnina"/>
 		</xpath>
         </field>
     </record>
