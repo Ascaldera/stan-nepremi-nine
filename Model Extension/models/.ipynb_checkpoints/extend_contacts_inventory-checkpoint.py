@@ -1014,8 +1014,8 @@ class ExtendInventory(models.Model):
                 raise exceptions.UserError(_errorMsg_Full)
             else:
                 self.website_published = True
-                """self.datum_objave=date.today()"""
- @api.onchange('nepremicnina_adaptacija','nepremicnina_balkon','nepremicnina_terasa','nepremicnina_sanitarije','nepremicnina_klet','nepremicnina_vrt')
+                
+    @api.onchange('nepremicnina_adaptacija','nepremicnina_balkon','nepremicnina_terasa','nepremicnina_sanitarije','nepremicnina_klet','nepremicnina_vrt')
     def izbris_nepremicnina(self):
         if self.nepremicnina_adaptacija==False:
             self.nepremicnina_leto_adaptacija=""
