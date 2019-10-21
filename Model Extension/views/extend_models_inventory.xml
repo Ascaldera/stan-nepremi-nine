@@ -40,8 +40,8 @@
             <xpath expr="//field[@name='sale_ok']" position="before">
                 <group>
                     <field name="nepremicnina_vrsta_posredovanja"/>
-                    <field name="nepremicnina_novogradnja" widget="boolean_toggle"/>
-                    <field name="nepremicnina_za_investicijo" widget="boolean_toggle"/>
+                    <field name="nepremicnina_novogradnja"/>
+                    <field name="nepremicnina_za_investicijo"/>
                 </group>
             </xpath>
             

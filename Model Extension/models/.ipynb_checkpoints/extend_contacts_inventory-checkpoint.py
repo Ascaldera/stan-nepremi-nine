@@ -389,7 +389,6 @@ class ExtendInventory(models.Model):
     nepremicnina_lokacija_opombe = fields.Char(string = 'Lokacija/opombe')
     
     #DODATNO O REGIJI IN UPRAVNI ENOTI
-    
     nepremicnina_regija=fields.Selection(string ="Regija",
                                          selection=[('dolenjska','Dolenjska'),
                                                     ('gorenjska','Gorenjska'),
@@ -985,8 +984,9 @@ class ExtendInventory(models.Model):
                 _errorMsg=_errorMsg + " - Leto izgradnje \n"
                 _error=True
             if self.nepremicnina_cena_dolgorocno==False:
-                _errorMsg=_errorMsg + " - Cena/najemnina \n"
-                _error=True
+                if self.nepremicnina_adaptacija==False:
+                    _errorMsg=_errorMsg + " - Cena/najemnina \n"
+                    _error=True
             if self.nepremicnina_opis==False:
                 _errorMsg=_errorMsg + " - Opis \n"
                 _error=True
