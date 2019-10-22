@@ -129,20 +129,24 @@ class ExtendContacts(models.Model):
     
     @api.onchange('email')
     def check_mail(self):
-        contact=self.env['res.partner'].search([('email','=',self.email)])
-        if len(contact)==0:
-            return {'warning':{'title':'Opozorilo!','message':"E-mail naslov je že v uporabi."}}
+        if self.email:
+            contact=self.env['res.partner'].search([('email','=',self.email)])
+            if len(contact)==0:
+                return {'warning':{'title':'Opozorilo!','message':"E-mail naslov je že v uporabi."}}
     
     @api.onchange('mobile','phone')
     def check_phone(self):
         mobile_contact=self.env['res.partner'].search([('mobile','=',self.mobile)])
         phone_contact=self.env['res.partner'].search([('phone','=',self.phone)])
-        if len(mobile_contact)!=0 and len(phone_contact)!=0:
-            return {'warning':{'title':'Opozorilo!','message':"Telefonska in mobilna številka sta že v uporabi."}}
-        if len(mobile_contact)!=0:
-            return {'warning':{'title':'Opozorilo!','message':"Mobilna številka je že v uporabi."}}
-        if len(phone_contact)!=0:
-            return {'warning':{'title':'Opozorilo!','message':"Telefonska številka je že v uporabi."}}
+        if self.mobile and self.phone:
+            if len(mobile_contact)!=0 and len(phone_contact)!=0:
+                return {'warning':{'title':'Opozorilo!','message':"Telefonska in mobilna številka sta že v uporabi."}}
+        if self.mobile:
+            if len(mobile_contact)!=0:
+                return {'warning':{'title':'Opozorilo!','message':"Mobilna številka je že v uporabi."}}
+        if self.phone:
+            if len(phone_contact)!=0:
+                return {'warning':{'title':'Opozorilo!','message':"Telefonska številka je že v uporabi."}}
 
     @api.onchange('tip_stranke','tretja_oseba')
     def erase(self):
