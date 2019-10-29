@@ -248,7 +248,8 @@ class ExtendInventory(models.Model):
     #POSREDNIŠKA POGOBDA
     @api.onchange('nepremicnina_pogodba_datum')
     def calculate_field(self):
-        self.nepremicnina_potek_datum = self.nepremicnina_pogodba_datum + relativedelta(months=+1) + relativedelta(days=-1)
+        if self.nepremicnina_pogodba_datum:
+            self.nepremicnina_potek_datum = self.nepremicnina_pogodba_datum + relativedelta(months=+1) + relativedelta(days=-1)
     
     nepremicnina_pogodba_datum = fields.Date(string = 'Sklenitev pogodbe')
     nepremicnina_potek_datum = fields.Date(string = 'Potek pogodbe')
@@ -280,137 +281,10 @@ class ExtendInventory(models.Model):
     datum_objave=fields.Date(string="Datum objave")
     
     #------------------------------------------------------------------------------------------
-    
-    #SLIKE
-"""    slike = fields.Many2many('ir.attachment', string="Image")
-    #slike = fields.Binary(string="Image")
-    nepremicnina_slika_1=fields.Binary("Slika 1",attachment=True)
-    nepremicnina_prikaz_1=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_2=fields.Binary("Slika 2",attachment=True)
-    nepremicnina_prikaz_2=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_3=fields.Binary("Slika 3",attachment=True)
-    nepremicnina_prikaz_3=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_4=fields.Binary("Slika 4",attachment=True)
-    nepremicnina_prikaz_4=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_5=fields.Binary("Slika 5",attachment=True)
-    nepremicnina_prikaz_5=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_6=fields.Binary("Slika 6",attachment=True)
-    nepremicnina_prikaz_6=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_7=fields.Binary("Slika 7",attachment=True)
-    nepremicnina_prikaz_7=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_8=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_8=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_9=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_9=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_10=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_10=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_11=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_11=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_12=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_12=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_13=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_13=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_14=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_14=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_15=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_15=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_16=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_16=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_17=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_17=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_18=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_18=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_19=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_19=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_20=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_20=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_21=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_21=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_22=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_22=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_23=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_23=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_24=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_24=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_25=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_25=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_26=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_26=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_27=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_27=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_28=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_28=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_29=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_29=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    nepremicnina_slika_30=fields.Binary("Slika 8",attachment=True)
-    nepremicnina_prikaz_30=fields.Selection(selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
-    
-    @api.onchange('nepremicnina_slika_1','nepremicnina_slika_2','nepremicnina_slika_3','nepremicnina_slika_4','nepremicnina_slika_5','nepremicnina_slika_6','nepremicnina_slika_7','nepremicnina_slika_8','nepremicnina_slika_8','nepremicnina_slika_10','nepremicnina_slika_11','nepremicnina_slika_12','nepremicnina_slika_13','nepremicnina_slika_14','nepremicnina_slika_15','nepremicnina_slika_16','nepremicnina_slika_17','nepremicnina_slika_18','nepremicnina_slika_19','nepremicnina_slika_20','nepremicnina_slika_21','nepremicnina_slika_22','nepremicnina_slika_23','nepremicnina_slika_24','nepremicnina_slika_25','nepremicnina_slika_26','nepremicnina_slika_27','nepremicnina_slika_28','nepremicnina_slika_29','nepremicnina_slika_30')
-    def slike_clear_dropdown(self):
-        if self.nepremicnina_slika_1==False:
-            self.nepremicnina_prikaz_1='splet'
-        if self.nepremicnina_slika_2==False:
-            self.nepremicnina_prikaz_2='splet'
-        if self.nepremicnina_slika_3==False:
-            self.nepremicnina_prikaz_3='splet'
-        if self.nepremicnina_slika_4==False:
-            self.nepremicnina_prikaz_4='splet'
-        if self.nepremicnina_slika_5==False:
-            self.nepremicnina_prikaz_5='splet'
-        if self.nepremicnina_slika_6==False:
-            self.nepremicnina_prikaz_6='splet'
-        if self.nepremicnina_slika_7==False:
-            self.nepremicnina_prikaz_7='splet'
-        if self.nepremicnina_slika_8==False:
-            self.nepremicnina_prikaz_8='splet'
-        if self.nepremicnina_slika_9==False:
-            self.nepremicnina_prikaz_9='splet'
-        if self.nepremicnina_slika_10==False:
-            self.nepremicnina_prikaz_10='splet'
-        if self.nepremicnina_slika_11==False:
-            self.nepremicnina_prikaz_11='splet'
-        if self.nepremicnina_slika_12==False:
-            self.nepremicnina_prikaz_12='splet'
-        if self.nepremicnina_slika_13==False:
-            self.nepremicnina_prikaz_13='splet'
-        if self.nepremicnina_slika_14==False:
-            self.nepremicnina_prikaz_14='splet'
-        if self.nepremicnina_slika_15==False:
-            self.nepremicnina_prikaz_15='splet'
-        if self.nepremicnina_slika_16==False:
-            self.nepremicnina_prikaz_16='splet'
-        if self.nepremicnina_slika_17==False:
-            self.nepremicnina_prikaz_17='splet'
-        if self.nepremicnina_slika_18==False:
-            self.nepremicnina_prikaz_18='splet'
-        if self.nepremicnina_slika_19==False:
-            self.nepremicnina_prikaz_19='splet'
-        if self.nepremicnina_slika_20==False:
-            self.nepremicnina_prikaz_20='splet'
-        if self.nepremicnina_slika_21==False:
-            self.nepremicnina_prikaz_21='splet'
-        if self.nepremicnina_slika_22==False:
-            self.nepremicnina_prikaz_22='splet'
-        if self.nepremicnina_slika_23==False:
-            self.nepremicnina_prikaz_23='splet'
-        if self.nepremicnina_slika_24==False:
-            self.nepremicnina_prikaz_24='splet'
-        if self.nepremicnina_slika_25==False:
-            self.nepremicnina_prikaz_25='splet'
-        if self.nepremicnina_slika_26==False:
-            self.nepremicnina_prikaz_26='splet'
-        if self.nepremicnina_slika_27==False:
-            self.nepremicnina_prikaz_27='splet'
-        if self.nepremicnina_slika_28==False:
-            self.nepremicnina_prikaz_28='splet'
-        if self.nepremicnina_slika_29==False:
-            self.nepremicnina_prikaz_29='splet'
-        if self.nepremicnina_slika_30==False:
-            self.nepremicnina_prikaz_30='splet'
-    """
+            
     #OSNOVNI PODATKI
-    contact = fields.Many2one(comodel_name="res.partner", string="Kdo prodaja")
-    nepremicnina_posrednik = fields.Many2one("res.users", string="Posrednik", default=lambda self: self.env.user)
+    contact = fields.Many2one(comodel_name='res.partner',string="Kdo prodaja")
+    nepremicnina_posrednik = fields.Many2one('res.users',string="Posrednik",default=lambda self: self.env.user)
     nepremicnina_povrsina = fields.Float(string='Uporabna površina') #m2
     #nepremicnina_zemljisce_pod = fields.Float(string = 'Zemljišče pod stavbo') #m2
     nepremicnina_velikost = fields.Float(string = 'Površina dela stavbe') #m2
@@ -534,7 +408,7 @@ class ExtendInventory(models.Model):
                                                     ('posavska','Posavska'),
                                                     ('savinjska','Savinjska'),
                                                     ('zasavska','Zasavska')])
-    nepremicnina_upravna_enota=fields.Selection(string="Upravna enota", 
+    nepremicnina_upravna_enota=fields.Selection(string="Upravna enota",
                                                 selection=[('crnomelj','Črnomelj'),
                                                            ('kocevje','Kočevje'),
                                                            ('metlika','Metlika'),
@@ -942,12 +816,12 @@ class ExtendInventory(models.Model):
                                                                  ('b2','B2 (25 - 35 kWh/m2a)'),
                                                                  ('c','C (35 - 60 kWh/m2a)'),
                                                                  ('d','D (60 - 105 kWh/m2a)'),
-                                                                ('e','E (105 - 150 kWh/m2a)'),
-                                                                ('f','F (150 - 210 kWh/m2a)'),
-                                                                ('g','G (210+ kWh/m2a)'),
-                                                                ('merjena','Merjena EI'),
-                                                                ('ni_potrebna','EI ni potrebna (334.člen EZ-1)'),
-                                                                ('ni_mogoc','EI: Izračun ni mogoč'),])
+                                                                 ('e','E (105 - 150 kWh/m2a)'),
+                                                                 ('f','F (150 - 210 kWh/m2a)'),
+                                                                 ('g','G (210+ kWh/m2a)'),
+                                                                 ('merjena','Merjena EI'),
+                                                                 ('ni_potrebna','EI ni potrebna (334.člen EZ-1)'),
+                                                                 ('ni_mogoc','EI: Izračun ni mogoč'),])
     
     #DODATKI
     nepremicnina_balkon = fields.Boolean(string = 'Balkon')
@@ -977,7 +851,6 @@ class ExtendInventory(models.Model):
                                                                                            ('klimatskaNaprava','Klimatska naprava')
                                                                                            ])
     nepremicnina_lega = fields.Char(string = 'Lega')
-    
     nepremicnina_sanitarije = fields.Boolean(string = 'Sanitarije')
     nepremicnina_sanitarije_info = fields.Char(string = 'Več o sanitarijah')
     
@@ -1007,7 +880,6 @@ class ExtendInventory(models.Model):
     
     nepremicnina_soba2 = fields.Boolean(string = 'Soba 2')
     nepremicnina_soba2_info = fields.Char(string = 'Več o sobi 2')
-    
     
     nepremicnina_pritlicje = fields.Boolean(string = 'Pritličje')
     nepremicnina_pritlicje_info = fields.Char(string = 'Več o pritličju')
