@@ -13,6 +13,22 @@
             </field> 
         </field>
     </record>
+    
+    <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  INVENTORY: IMAGE EXTEND  \\\\\\\\\\\\\\\\\\-->
+    <record model="ir.ui.view" id="view_product_image_form_inherited">
+        <field name="name">product.image.form.inherited</field>
+        <field name="model">product.image</field>
+        <field name="inherit_id" ref="website_sale.view_product_image_form"/> 
+        <field name="arch" type="xml">
+            <xpath expr="/form/div[1]/div[1]/div[1]" position="after">
+                <div class="oe_title">
+                    <label class="small text-muted" for="prikaz" string="Prikaz"/>
+                    <h2><field name="prikaz" placeholder="Prikaz" required="True"/></h2>
+                </div>
+            </xpath>
+        </field>
+    </record>
+
 
     <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  INVENTORY: dodaja polj  \\\\\\\\\\\\\\\\\\-->
     <record id="res_product_form_inherited" model="ir.ui.view"> 
@@ -49,6 +65,10 @@
             <xpath expr="/form/sheet/notebook/page/group[1]" position='after'>
                     <field name="currency_id" invisible="1"/>
                     <hr/>
+                    <group string='Posredniška pogodba' col='4' colspan='2'>
+                        <field name="nepremicnina_pogodba_datum"/> <span colspan='2'/>
+                        <field name="nepremicnina_potek_datum"/>
+                    </group>
                     <group>
                         <group string='Lokacija'>
                             <label for="street" string="Naslov"/>
@@ -87,15 +107,12 @@
                     <group string='Osnovne informacije' col="4" colspan="2">
                         <field name="create_uid"/>      
                         <field name="contact" string = 'Lastnik nepremičnine'/>
+                        <field name="nepremicnina_posrednik" attrs ="{'required':1}"/>
+                        <span colspan='4'/>
                             
                         <label for='nepremicnina_povrsina'/>
                         <div class="o_row" name="povrsina">
                             <field name="nepremicnina_povrsina"  attrs ="{'required':1}"/>
-                                <span>m²</span>
-                        </div>
-                        <label for='nepremicnina_zemljisce_pod'/>
-                        <div class="o_row" name="povrsina_zemljisce_pod">
-                            <field name="nepremicnina_zemljisce_pod"/>
                                 <span>m²</span>
                         </div>
                         <label for='nepremicnina_velikost'/>
@@ -104,8 +121,6 @@
                                 <span>m²</span>
                         </div>
                         <span colspan='4'/>
-
-                        
                     </group>
                     <group>
                         <group>
@@ -134,8 +149,8 @@
                         
                         <group>
                             <field name="nepremicnina_etaza" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa')]}"/>
-                            <field name="nepremicnina_nadstropje" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
-                            <field name="nepremicnina_st_nadstropij" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
+                            <field name="nepremicnina_nadstropje" attrs ="{'invisible':[('nepremicnina_vrsta','not in', ['stanovanje', 'poslovni'])]}"/>
+                            <field name="nepremicnina_st_nadstropij" attrs ="{'invisible':[('nepremicnina_vrsta','not in', ['stanovanje', 'poslovni'])]}"/>
                         </group>
                         
                         <!-- xxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxxx -->
@@ -146,54 +161,51 @@
                         <field name="nepremicnina_se_prodaja"/>
                         <field name="nepremicnina_moznost_vselitve"/>
                         <field name="nepremicnina_pogoji_prodaje"/>
+                        <field name="nepremicnina_pogoji_prodaje_opis"/>
                         <field name="nepremicnina_oznake_nepremicnin" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
                     </group>
             </xpath>
             
-            <!-- CUSTOM TAB - Slike -->
+            <!-- SLIKE 2 -->
+            
             <xpath expr="//page[@name='general_information']" position='after'>
                 <page name="slike" string="Slike">
-                    <group colspan="4" rowspan="1" string="Dodatne slike">
-                        <div class="o_image_box">
-                            <div class="o_attachment_wrap">
-                                <field name="nepremicnina_slika_1" widget="image" nolabel="1" height="200"/>
-                            </div>
-                        </div>
-                        <div class="o_image_box">
-                            <div class="o_attachment_wrap">
-                                <field name="nepremicnina_slika_2" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_1','==', False)]}"/>
-                            </div>
-                        </div>
-                        <div class="o_image_box">
-                            <div class="o_attachment_wrap">
-                                <field name="nepremicnina_slika_3" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_2','==', False)]}"/>
-                            </div>
-                        </div>
-                        <div class="o_image_box">
-                            <div class="o_attachment_wrap">
-                                <field name="nepremicnina_slika_4" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_3','==', False)]}"/>
-                            </div>
-                        </div>
-                        <div class="o_image_box">
-                            <div class="o_attachment_wrap">
-                                <field name="nepremicnina_slika_5" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_4','==', False)]}"/>
-                            </div>
-                        </div>
-                        <div class="o_image_box">
-                            <div class="o_attachment_wrap">
-                                <field name="nepremicnina_slika_6" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_5','==', False)]}"/>
-                            </div>
-                        </div>
-                        <div class="o_image_box">
-                            <div class="o_attachment_wrap">
-                                <field name="nepremicnina_slika_7" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_6','==', False)]}"/>
-                            </div>
-                        </div>
-                        <div class="o_image_box">
-                            <div class="o_attachment_wrap">
-                                <field name="nepremicnina_slika_8" widget="image" nolabel="1" height="200" attrs ="{'invisible':[('nepremicnina_slika_7','==', False)]}"/>
-                            </div>
-                        </div>
+                    <group name="slike" string="Slike">
+                        <field name="product_image_ids" class="o_website_sale_image_list" context="{'default_name': name, 'default_product_tmpl_id': active_id}" nolabel="1">
+                            <kanban string="Product Images" class="o_attachments_previews">
+                                <field name="id"/>
+                                <field name="name"/>
+                                <field name="image"/>
+                                <field name="prikaz"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div class="o_attachment oe_kanban_global_click o_website_sale_image_card">
+                                            <div class="o_attachment_wrap">
+                                                <div class="o_image_box">
+                                                    <div class="o_attachment_image" t-attf-style="background-image:url({{kanban_image('product.image', 'image', record.id.raw_value)}});"/>
+                                                    <div t-attf-class="o_image_overlay" t-att-title="record.name.value"/>
+                                                    <div class="o_website_sale_image_card_title" t-att-title="record.name.value">
+                                                        <field name="name"/>
+                                                    </div>
+                                                </div>
+
+                                                <t t-set="size" t-value="[record.image.value][0]"/>
+                                                <t t-set="size_status" t-value="'normal'" t-if="size.indexOf('Bytes') !== -1 or ( size.indexOf('Kb') !== -1 and size[2]=='.')"/>
+                                                <t t-set="size_status" t-value="'warning'" t-elif="( size.indexOf('Kb') !== -1 and size[3]=='.')"/>
+                                                <t t-set="size_status" t-value="'danger'"  t-else=""/>
+                                                <t t-set="message" t-value="'Acceptable file size'" t-if="size_status == 'normal'"></t>
+                                                <t t-set="message" t-value="'Huge file size. The image should be optimized/reduced.'" t-elif="size_status == 'warning'"></t>
+                                                <t t-set="message" t-value="'Optimization required! Reduce the image size or increase your compression settings.'" t-else=""></t>
+
+                                                <span t-attf-class="o_website_sale_image_card_size badge badge-#{size_status}" t-att-title="message">
+                                                    <t t-esc="record.image.value"/>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
                     </group>
                 </page>
             </xpath>
@@ -220,6 +232,7 @@
                         <field name="nepremicnina_stroski" widget='monetary' options="{'currency_field': 'custom_currency_id_2'}"/> 
                         <field name="nepremicnina_energetski_razred"/>
                         <field name="nepremicnina_stroski_sklada" widget='monetary' options="{'currency_field': 'custom_currency_id_2'}"/>
+                        <field name="nepremicnina_stanje_sklada"/>
                     </group>
                     <group string='Dodatki' col="8" colspan="2">
                         <field name="nepremicnina_balkon" colspan='4' widget="boolean_toggle"/>
@@ -237,28 +250,53 @@
                                 <span>m²</span>
                         </div>
                         
+                        <field name="nepremicnina_balkon_info" colspan='4' attrs ="{'invisible':[('nepremicnina_balkon','=', False)]}"/>
+                        <field name="nepremicnina_klet_info" colspan='4' attrs ="{'invisible':[('nepremicnina_klet','=', False)]}"/>
+                        
                         <field name="nepremicnina_terasa" colspan='4' widget="boolean_toggle"/>
-                        <!--<field name="nepremicnina_sanitarije" colspan='4' widget="boolean_toggle"/>-->
                         <field name="nepremicnina_vrt" colspan='4' widget="boolean_toggle"/>
                         <label for='nepremicnina_terasa_velikost' attrs ="{'invisible':[('nepremicnina_terasa','=', False)]}"/>
                         <div class="o_row" name="terasa_velikost" colspan='3' attrs ="{'invisible':[('nepremicnina_terasa','=', False)]}">
                             <field name="nepremicnina_terasa_velikost"/>
                                 <span>m²</span>
                         </div>
-                        <!--<field name="nepremicnina_sanitarije_info" attrs ="{'invisible':[('nepremicnina_sanitarije','=', False)]}" colspan='4'/>-->
                         <field name="nepremicnina_vrt_info" attrs ="{'invisible':[('nepremicnina_vrt','=', False)]}" colspan='4'/>
+                        <field name="nepremicnina_terasa_info" attrs ="{'invisible':[('nepremicnina_terasa','=', False)]}" colspan='4'/>
+                        <span colspan='4'/>
                         
                         <field name="nepremicnina_sanitarije" colspan='4' widget="boolean_toggle"/>
-                        <span colspan='4'/>
-                        <field name="nepremicnina_sanitarije_info" attrs ="{'invisible':[('nepremicnina_sanitarije','=', False)]}" colspan='4'/>
+                        <field name="nepremicnina_dnevna" colspan='4' widget="boolean_toggle"/>
+                        <field name="nepremicnina_sanitarije_info" colspan='4' attrs ="{'invisible':[('nepremicnina_sanitarije','=', False)]}"/>
+                        <field name="nepremicnina_dnevna_info" colspan='4' attrs ="{'invisible':[('nepremicnina_dnevna','=', False)]}"/>
+                        
+                        
+                        <field name="nepremicnina_spalnice" colspan='4' widget="boolean_toggle"/>
+                        <field name="nepremicnina_hodnik" colspan='4' widget="boolean_toggle"/>
+                        <field name="nepremicnina_spalnice_info" colspan='4' attrs ="{'invisible':[('nepremicnina_spalnice','=', False)]}"/>
+                        <field name="nepremicnina_hodnik_info" colspan='4' attrs ="{'invisible':[('nepremicnina_hodnik','=', False)]}"/>
+                        
+                        <field name="nepremicnina_kuhinja" colspan='4' widget="boolean_toggle"/>
+                        <field name="nepremicnina_jedilnica" colspan='4' widget="boolean_toggle"/>
+                        <field name="nepremicnina_kuhinja_info" colspan='4' attrs ="{'invisible':[('nepremicnina_kuhinja','=', False)]}"/>
+                        <field name="nepremicnina_jedilnica_info" colspan='4' attrs ="{'invisible':[('nepremicnina_jedilnica','=', False)]}"/>
+                        
+                        <field name="nepremicnina_kopalnica" colspan='4' widget="boolean_toggle"/>
+                        <field name="nepremicnina_garderoba" colspan='4' widget="boolean_toggle"/>
+                        <field name="nepremicnina_kopalnica_info" colspan='4' attrs ="{'invisible':[('nepremicnina_kopalnica','=', False)]}"/>
+                        <field name="nepremicnina_garderoba_info" colspan='4' attrs ="{'invisible':[('nepremicnina_garderoba','=', False)]}"/>
+                        
+                        <field name="nepremicnina_soba1" colspan='4' widget="boolean_toggle"/>
+                        <field name="nepremicnina_soba2" colspan='4' widget="boolean_toggle"/>
+                        <field name="nepremicnina_soba1_info" colspan='4' attrs ="{'invisible':[('nepremicnina_soba1','=', False)]}"/>
+                        <field name="nepremicnina_soba2_info" colspan='4' attrs ="{'invisible':[('nepremicnina_soba2','=', False)]}"/>
+                        
+                        <field name="nepremicnina_pritlicje" colspan='4' widget="boolean_toggle"/>
+                        <field name="nepremicnina_lega" colspan='4'/>
+                        <field name="nepremicnina_pritlicje_info" colspan='4' attrs ="{'invisible':[('nepremicnina_pritlicje','=', False)]}"/>
                         <span colspan='4'/>
                         
-                        <field name="nepremicnina_dnevna" colspan='4'/>
                         <field name="nepremicnina_pogled" colspan='4'/>
-                        <field name="nepremicnina_spalnice" colspan='4'/>
                         <field name="nepremicnina_razgled" colspan='4'/>
-                        <field name="nepremicnina_lega" colspan='4'/>
-                        <span colspan='4'/>
                         
                         <field name="nepremicnina_atrij"/>
                         <field name="nepremicnina_opremljeno"/>
