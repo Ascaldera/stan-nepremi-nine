@@ -178,7 +178,7 @@
                                 <field name="image"/>
                                 <field name="prikaz"/>
                                 <templates>
-                                    <t t-name="kanban-box-image">
+                                    <t t-name="kanban-box">
                                         <div class="o_attachment oe_kanban_global_click o_website_sale_image_card">
                                             <div class="o_attachment_wrap">
                                                 <div class="o_image_box">
