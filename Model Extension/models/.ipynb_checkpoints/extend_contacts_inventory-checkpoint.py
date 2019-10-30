@@ -281,7 +281,14 @@ class ExtendInventory(models.Model):
     datum_objave=fields.Date(string="Datum objave")
     
     #------------------------------------------------------------------------------------------
-            
+    
+    #WEBSITE
+    website_published=fields.Boolean()
+    is_published=fields.Boolean()
+    
+    #SLIKE
+    slike_ids = fields.One2many('custom.image', 'product_tmpl_id', string='Images')
+    
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name='res.partner',string="Kdo prodaja")
     nepremicnina_posrednik = fields.Many2one('res.users',string="Posrednik",default=lambda self: self.env.user)
@@ -804,7 +811,8 @@ class ExtendInventory(models.Model):
                                                                          ('pol','Pol-pol')])
     nepremicnina_okna_obnova = fields.Char(string = 'Leto obnove/inštalacije oken')
     nepremicnina_materiali = fields.Char(string = 'Materiali')
-    nepremicnina_stroski = fields.Float(string = 'Stroški vzdrževanja') #EUR
+    nepremicnina_stroski_poleti = fields.Float(string = 'Stroški vzdrževanja poleti') #EUR
+    nepremicnina_stroski_pozimi = fields.Float(string = 'Stroški vzdrževanja pozimi') #EUR
     nepremicnina_stroski_sklada = fields.Float(string = 'Stroški rezervnega sklada') #EUR
     nepremicnina_stanje_sklada = fields.Char(string = 'Stanje rezervnega sklada')
     nepremicnina_upravnik = fields.Char(string = 'Upravnik') #mogoče: many2one na contacts?
@@ -1184,9 +1192,3 @@ class ExtendCrm(models.Model):
                                        selection=[('navadno','Navadno'),
                                                   ('zasebno','Zasebno')],
                                        default='navadno')
-    
-
-class ExtendProductImage(models.Model):   
-    _inherit = 'product.image'
-    
-    prikaz=fields.Selection(string='Prikaz', selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')

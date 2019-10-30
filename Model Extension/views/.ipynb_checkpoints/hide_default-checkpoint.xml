@@ -1,17 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
 <odoo>
-    
-    <record id="hide_product_extras" model="ir.ui.view"> 
-        <field name="name">hide_extras</field> 
-        <field name="model">product.template</field> 
-        <field name="inherit_id" ref="product.product_template_form_view"/>
-        <field name="arch" type="xml"> 
-            <xpath expr="//button[@name='website_publish_button']" position='attributes'> 
-                <attribute name="invisible">1</attribute>
-            </xpath>
-        </field>
-    </record>
-    
     <record id="hide_product_extras_buttons_1" model="ir.ui.view"> 
         <field name="name">hide_extras</field> 
         <field name="model">product.template</field> 
@@ -46,19 +34,9 @@
             
         </field>
     </record>
-    
-    <record id="hide_product_extras_buttons_2" model="ir.ui.view"> 
-        <field name="name">hide_extras</field> 
-        <field name="model">product.template</field> 
-        <field name="inherit_id" ref="sale.product_template_form_view_sale_order_button"/>
-        <field name="arch" type="xml">
-            <xpath expr="//button[@name='action_view_sales']" position='attributes'> 
-                <attribute name="invisible">1</attribute>
-            </xpath>        
-        </field>
-    </record>
 
-    <menuitem id="stock.menu_product_variant_config_stock" name="Nepremičnine" parent="stock.menu_stock_root" sequence="2"/>
+    <menuitem id="stock.stock_picking_type_menu" name="Overview" parent="stock.menu_stock_root" sequence="1"/>
+    <menuitem id="stock.menu_product_variant_config_stock" name="Nepremičnine" parent="stock.menu_stock_root" sequence="0"/>
     <menuitem id="stock.menu_stock_root" name="Nepremičnine"/>
     
     <delete model="ir.ui.menu" id="stock.menu_stock_warehouse_mgmt"/>

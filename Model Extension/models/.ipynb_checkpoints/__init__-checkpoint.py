@@ -1,1 +1,1 @@
-from . import extend_contacts_inventory
+from . import extend_contacts_inventory, custom_image
