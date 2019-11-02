@@ -288,6 +288,7 @@ class ExtendInventory(models.Model):
     
     #SLIKE
     slike_ids = fields.One2many('custom.image', 'product_tmpl_id', string='Images')
+    slike_ids_2 = fields.Many2many('ir.attachment', string='Images 2')
     
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name='res.partner',string="Kdo prodaja")

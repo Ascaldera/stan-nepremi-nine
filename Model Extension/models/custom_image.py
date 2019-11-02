@@ -9,6 +9,13 @@ class custom_image(models.Model):
 
     name = fields.Char('Name')
     image = fields.Binary('Image', attachment=True)
-    #image_many = fields.Many2many('ir.attachment', string='slike')
+    image_many = fields.Many2many('ir.attachment', string='slike')
+    product_tmpl_id = fields.Many2one('product.template', 'Related Product', copy=True)
+    prikaz=fields.Selection(string='Prikaz', selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
+    
+    
+class extend_attachment(models.Model):   
+    _inherit = 'ir.attachment'
+
     product_tmpl_id = fields.Many2one('product.template', 'Related Product', copy=True)
     prikaz=fields.Selection(string='Prikaz', selection = [('splet','Splet'),('arhiv','Arhiv')], default = 'splet')
