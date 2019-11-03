@@ -287,9 +287,29 @@ class ExtendInventory(models.Model):
     is_published=fields.Boolean()
     
     #SLIKE
-    slike_ids = fields.One2many('custom.image', 'product_tmpl_id', string='Images')
+    slike_ids = fields.One2many(comodel_name='custom.image',  inverse_name="product_tmpl_id", string='Images')
     slike_ids_2 = fields.Many2many('ir.attachment', string='Images 2')
+    slike_ids_3 = fields.One2many('ir.attachment', 'product_tmpl_id', compute='calculate_debug', string='Images')
+    #compute='_compute_document_ids',
+    #attachments = self.env['ir.attachment'].search([('res_model', '=', self._name), ('res_id', '=', self.id), ('type', 'in', ('binary', 'url'))])
     
+    help_tekst = fields.Char(string='Debugg')
+    
+    #@api.onchange('slike_ids_2')
+    def calculate_debug(self):
+        attachments = self.env['ir.attachment'].search([('res_model', '=', self._name), ('res_id', '=', self.id), ('type', 'in', ('binary', 'url'))])
+        self.slike_ids_3 = attachments
+        
+        """for attachment in attachments:
+        self.env['custom.image'].create(
+        {
+        'name': attachment.name,
+        'image': attachment.datas,
+        'product_tmpl_id': self._origin.id
+        })"""
+        #attachments = self.env['ir.attachment'].search([])
+        #self.help_tekst = attachments
+        
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name='res.partner',string="Kdo prodaja")
     nepremicnina_posrednik = fields.Many2one('res.users',string="Posrednik",default=lambda self: self.env.user)
