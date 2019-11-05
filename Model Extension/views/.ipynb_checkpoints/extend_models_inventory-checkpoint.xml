@@ -39,32 +39,6 @@
             </form>
         </field>
     </record>
-<!--
-    <record model="ir.ui.view" id="view_custom_ir_attachment">
-        <field name="name">custom.irattachment.form</field>
-        <field name="model">ir.attachment</field>
-        <field name="arch" type="xml">
-            <form string="Product Images">
-                <div class="row o_website_sale_image_modal">
-                    <div class="col-md-6 col-xl-5">
-                        <div class="oe_title">
-                            <label class="small text-muted" for="name" string="Image Name"/>
-                            <h2><field name="name" placeholder="Image Name" required="True"/></h2>
-                            <field name="product_tmpl_id" invisible="1"/>
-                        </div>
-                        <div class="oe_title">
-                            <label class="small text-muted" for="prikaz" string="Prikaz"/>
-                            <h2><field name="prikaz" placeholder="Prikaz" required="True"/></h2>
-                        </div>
-                    </div>
-                    <div class="col-md-6 col-xl-7 text-center o_website_sale_image_modal_container">
-                        <field name="datas" widget="image"/>
-                    </div>
-                </div>
-            </form>
-        </field>
-    </record>
--->
 
     <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  INVENTORY: dodaja polj  \\\\\\\\\\\\\\\\\\-->
     <record id="res_product_form_inherited" model="ir.ui.view"> 
@@ -202,39 +176,27 @@
                     </group>
             </xpath>
             
-            <!-- SLIKE 1 -->
+            <!-- SLIKE ECOMMERCE COPY -->
             <xpath expr="//page[@name='general_information']" position='after'>
                 <page name="slike" string="Slike">
                     <group name="slike" string="Slike">
-                        <field name="slike_ids" class="o_website_sale_image_list" context="{'default_name': name, 'default_product_tmpl_id': active_id}" nolabel="1">
-                            <kanban string="Product Images" class="o_attachments_previews">
+                        <field name="slike_ids" nolabel="1" domain="[('prikaz', '=', 'splet')]">
+                            <kanban string="Slike" class="o_attachments_previews">
                                 <field name="id"/>
                                 <field name="name"/>
                                 <field name="image"/>
                                 <field name="prikaz"/>
                                 <templates>
                                     <t t-name="kanban-box">
-                                        <div class="o_attachment oe_kanban_global_click o_website_sale_image_card">
+                                        <div class="o_attachment oe_kanban_global_click">
                                             <div class="o_attachment_wrap">
                                                 <div class="o_image_box">
                                                     <div class="o_attachment_image" t-attf-style="background-image:url({{kanban_image('custom.image', 'image', record.id.raw_value)}});"/>
                                                     <div t-attf-class="o_image_overlay" t-att-title="record.name.value"/>
-                                                    <div class="o_website_sale_image_card_title" t-att-title="record.name.value">
+                                                    <div t-att-title="record.name.value">
                                                         <field name="name"/>
                                                     </div>
                                                 </div>
-
-                                                <t t-set="size" t-value="[record.image.value][0]"/>
-                                                <t t-set="size_status" t-value="'normal'" t-if="size.indexOf('Bytes') !== -1 or ( size.indexOf('Kb') !== -1 and size[2]=='.')"/>
-                                                <t t-set="size_status" t-value="'warning'" t-elif="( size.indexOf('Kb') !== -1 and size[3]=='.')"/>
-                                                <t t-set="size_status" t-value="'danger'"  t-else=""/>
-                                                <t t-set="message" t-value="'Acceptable file size'" t-if="size_status == 'normal'"></t>
-                                                <t t-set="message" t-value="'Huge file size. The image should be optimized/reduced.'" t-elif="size_status == 'warning'"></t>
-                                                <t t-set="message" t-value="'Optimization required! Reduce the image size or increase your compression settings.'" t-else=""></t>
-
-                                                <span t-attf-class="o_website_sale_image_card_size badge badge-#{size_status}" t-att-title="message">
-                                                    <t t-esc="record.image.value"/>
-                                                </span>
                                             </div>
                                         </div>
                                     </t>
@@ -242,30 +204,60 @@
                             </kanban>
                         </field>
                     </group>
+                    <group name="arhiv" string="Arhiv">
+                        <field name="slike_arhiv" nolabel="1" domain="[('prikaz', '=', 'splet')]">
+                            <kanban string="Arhiv" class="o_attachments_previews">
+                                <field name="id"/>
+                                <field name="name"/>
+                                <field name="image"/>
+                                <field name="prikaz"/>
+                                <templates>
+                                    <t t-name="kanban-box">
+                                        <div class="o_attachment oe_kanban_global_click">
+                                            <div class="o_attachment_wrap">
+                                                <div class="o_image_box">
+                                                    <div class="o_attachment_image" t-attf-style="background-image:url({{kanban_image('custom.image', 'image', record.id.raw_value)}});"/>
+                                                    <div t-attf-class="o_image_overlay" t-att-title="record.name.value"/>
+                                                    <div t-att-title="record.name.value">
+                                                        <field name="name"/>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </t>
+                                </templates>
+                            </kanban>
+                        </field>
+                    </group>
+                    <group name="slike_več" string="Naloži več slik" class="oe_edit_only">
+                        <field name='slike_attachments' nolabel='1' widget='many2many_binary'/>
+                    </group>
                 </page>
-            </xpath>          
+            </xpath>
             
             <!-- SLIKE 2 -->
             <xpath expr="//page[@name='general_information']" position='after'>
                 <page name="slike" string="Slike 2">
-                    <group name="slike" string="Slike" col='4' colspan='4'>
-                        <field name="slike_ids_3" class="o_website_sale_image_list" context="{'default_name': name, 'default_product_tmpl_id': active_id}" nolabel="1">
-                            <kanban string="Product Images" class="o_attachments_previews">
-                                <field name="id"/>
+                    <group name="slike" string="Slike 2">
+                        <field name="slike_kanban" nolabel='1'>
+                            <kanban>
                                 <field name="name"/>
-                                <field name="datas"/>
                                 <field name="prikaz"/>
+                                <field name="image"/>
+                                <field name="id"/>
                                 <templates>
                                     <t t-name="kanban-box">
-                                        <div class="o_attachment oe_kanban_global_click o_website_sale_image_card">
-                                            <div class="o_attachment_wrap">
-                                                <div class="o_image_box">
-                                                    <div class="o_attachment_image" t-attf-style="background-image:url({{kanban_image('ir.attachment', 'datas', record.id.raw_value)}});"/>
-                                                    <div t-attf-class="o_image_overlay" t-att-title="record.name.value"/>
-                                                    <div class="o_website_sale_image_card_title" t-att-title="record.name.value">
-                                                        <field name="name"/>
-                                                    </div>
-                                                </div>
+                                        <div class="oe_kanban_global_click">
+                                            <div class="o_kanban_image">
+                                                <img t-att-src="kanban_image('custom.image', 'image', record.id.raw_value)" alt="Slika"/>
+                                            </div>
+                                            <div class="oe_kanban_details">
+                                                <strong class="o_kanban_record_title">
+                                                    <field name="name"/>
+                                                </strong>
+                                                <ul>
+                                                    <li>Prikaz: <field name="prikaz"/></li>
+                                                </ul>
                                             </div>
                                         </div>
                                     </t>
@@ -273,15 +265,12 @@
                             </kanban>
                         </field>
                     </group>
-                    <group name="slike" string="Slike 2">
-                        <field name='slike_ids_2' widget='many2many_binary'/>
-                    </group>
-                    <group name="debug" string="Debug">
-                        <field name='help_tekst'/>
+                    <group name="slike_več" string="Naloži več slik" class="oe_edit_only">
+                        <field name='slike_attachments' nolabel='1' widget='many2many_binary'/>
                     </group>
                 </page>
             </xpath>
-
+            
             <!-- CUSTOM TAB - Opis -->
             <xpath expr="//page[@name='general_information']" position='after'>
                 <page name='opis' string="Nepremičnina / Opis">

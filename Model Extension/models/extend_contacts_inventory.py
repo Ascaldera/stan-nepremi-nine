@@ -287,28 +287,35 @@ class ExtendInventory(models.Model):
     is_published=fields.Boolean()
     
     #SLIKE
-    slike_ids = fields.One2many(comodel_name='custom.image',  inverse_name="product_tmpl_id", string='Images')
-    slike_ids_2 = fields.Many2many('ir.attachment', string='Images 2')
-    slike_ids_3 = fields.One2many('ir.attachment', 'product_tmpl_id', compute='calculate_debug', string='Images')
-    #compute='_compute_document_ids',
-    #attachments = self.env['ir.attachment'].search([('res_model', '=', self._name), ('res_id', '=', self.id), ('type', 'in', ('binary', 'url'))])
-    
+    slike_ids = fields.One2many(comodel_name='custom.image',  inverse_name="product_tmpl_id", string='Dodaj', domain=lambda self:[('prikaz','=','splet')])
+    slike_arhiv = fields.One2many(comodel_name='custom.image',  inverse_name="product_tmpl_id", string='Dodaj', domain=lambda self:[('prikaz','=','arhiv')])
+    slike_attachments = fields.Many2many('ir.attachment', string='Dodaj več')
+    slike_kanban = fields.One2many(comodel_name='custom.image',  inverse_name="product_tmpl_id", string='Dodaj')
     help_tekst = fields.Char(string='Debugg')
-    
-    #@api.onchange('slike_ids_2')
-    def calculate_debug(self):
-        attachments = self.env['ir.attachment'].search([('res_model', '=', self._name), ('res_id', '=', self.id), ('type', 'in', ('binary', 'url'))])
-        self.slike_ids_3 = attachments
         
-        """for attachment in attachments:
-        self.env['custom.image'].create(
-        {
-        'name': attachment.name,
-        'image': attachment.datas,
-        'product_tmpl_id': self._origin.id
-        })"""
-        #attachments = self.env['ir.attachment'].search([])
-        #self.help_tekst = attachments
+    @api.multi
+    def write(self,values):
+        if 'slike_attachments' in values:
+            ids = values['slike_attachments'][0][2]
+            for id in ids:
+                record = self.env['ir.attachment'].browse(id)
+                if 'image' in record.mimetype:
+                    self.env['custom.image'].create({'name':record.name, 'image':record.datas, 'product_tmpl_id':self.id})
+            values['help_tekst'] = ids
+            values['slike_attachments'] = [(5,)]
+        rec = super(ExtendInventory,self).write(values)
+        return rec
+    
+    @api.model
+    def create(self,values):
+        rec = super(ExtendInventory,self).create(values)
+        records = rec['slike_attachments']
+        for record in records:
+            if 'image' in record.mimetype:
+                self.env['custom.image'].create({'name':record.name, 'image':record.datas, 'product_tmpl_id':rec.id})
+        rec['help_tekst'] = records
+        rec['slike_attachments'] = False
+        return rec
         
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name='res.partner',string="Kdo prodaja")
