@@ -1,0 +1,391 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    <data noupdate="1">
+        <!-- DATA: REGIJA -->
+        
+        <record model="custom.location.regija" id="dolenjska">
+            <field name="name">Dolenjska</field>
+        </record>
+        
+        <record model="custom.location.regija" id="gorenjska">
+            <field name="name">Gorenjska</field>
+        </record>
+        
+        <record model="custom.location.regija" id="juzna_primorska">
+            <field name="name">Južna primorska</field>
+        </record>
+        
+        <record model="custom.location.regija" id="severna_primorska">
+            <field name="name">Severna primorska</field>
+        </record>
+        
+        <record model="custom.location.regija" id="koroska">
+            <field name="name">Koroška</field>
+        </record>
+        
+        <record model="custom.location.regija" id="lj_mesto">
+            <field name="name">Lj-mesto</field>
+        </record>
+        
+        <record model="custom.location.regija" id="lj_okolica">
+            <field name="name">Lj-okolica</field>
+        </record>
+        
+        <record model="custom.location.regija" id="notranjska">
+            <field name="name">Notranjska</field>
+        </record>
+        
+        <record model="custom.location.regija" id="podravska">
+            <field name="name">Podravska</field>
+        </record>
+        
+        <record model="custom.location.regija" id="pomurska">
+            <field name="name">Pomurska</field>
+        </record>
+        
+        <record model="custom.location.regija" id="posavska">
+            <field name="name">Posavska</field>
+        </record>
+        
+        <record model="custom.location.regija" id="savinjska">
+            <field name="name">Savinjska</field>
+        </record>
+        
+        <record model="custom.location.regija" id="regija">
+            <field name="name">Zasavska</field>
+        </record>
+    </data>
+    
+    <!-- DATA: UPRAVNA ENOTA -->
+    <data noupdate="1">
+    	<record model="custom.location" id="crnomelj">
+            <field name="name">Črnomelj</field>
+            <field name="regija">1</field>
+        </record>
+        
+        <record model="custom.location" id="kocevje">
+            <field name="name">Kočevje</field>
+            <field name="regija">1</field>
+        </record>
+        
+        <record model="custom.location" id="metlika">
+            <field name="name">Metlika</field>
+            <field name="regija">1</field>
+        </record>
+        
+        <record model="custom.location" id="novo_mesto">
+            <field name="name">Novo mesto</field>
+            <field name="regija">1</field>
+        </record>
+        
+        <record model="custom.location" id="ribnica">
+            <field name="name">Ribnica</field>
+            <field name="regija">1</field>
+        </record>
+        
+        <record model="custom.location" id="trebnje">
+            <field name="name">Trebnje</field>
+            <field name="regija">1</field>
+        </record>
+        
+        <record model="custom.location" id="jesenice">
+            <field name="name">Jesenice</field>
+            <field name="regija">2</field>
+        </record>
+        
+        <record model="custom.location" id="kranj">
+            <field name="name">Kranj</field>
+            <field name="regija">2</field>
+        </record>
+        
+        <record model="custom.location" id="radovljica">
+            <field name="name">Radovljica</field>
+            <field name="regija">2</field>
+        </record>
+        
+        <record model="custom.location" id="skofja_loka">
+            <field name="name">Škofja loka</field>
+            <field name="regija">2</field>
+        </record>
+        
+        <record model="custom.location" id="trzic">
+            <field name="name">Tržič</field>
+            <field name="regija">2</field>
+        </record>
+        
+        <record model="custom.location" id="izola">
+            <field name="name">Izola</field>
+            <field name="regija">3</field>
+        </record>
+        
+        <record model="custom.location" id="koper">
+            <field name="name">Koper</field>
+            <field name="regija">3</field>
+        </record>
+        
+        <record model="custom.location" id="piran">
+            <field name="name">Piran</field>
+            <field name="regija">3</field>
+        </record>
+        
+        <record model="custom.location" id="sezana">
+            <field name="name">Sežana</field>
+            <field name="regija">3</field>
+        </record>
+        
+        <record model="custom.location" id="ajdovscina">
+            <field name="name">Ajdovščina</field>
+            <field name="regija">4</field>
+        </record>
+        
+        <record model="custom.location" id="idrija">
+            <field name="name">Idrija</field>
+            <field name="regija">4</field>
+        </record>
+        
+        <record model="custom.location" id="dravograd">
+            <field name="name">Nova Gorica</field>
+            <field name="regija">4</field>
+        </record>
+        
+        <record model="custom.location" id="tolmin">
+            <field name="name">Tolmin</field>
+            <field name="regija">4</field>
+        </record>
+        
+        <record model="custom.location" id="nova_gorica">
+            <field name="name">Dravograd</field>
+            <field name="regija">5</field>
+        </record>
+        
+        <record model="custom.location" id="radlje_ob_dravi">
+            <field name="name">Radlje ob Dravi</field>
+            <field name="regija">5</field>
+        </record>
+        
+        <record model="custom.location" id="ravne_na_koroskem">
+            <field name="name">Ravne na Koroškem</field>
+            <field name="regija">5</field>
+        </record>
+        
+        <record model="custom.location" id="slovenj_gradec">
+            <field name="name">Slovenj Gradec</field>
+            <field name="regija">5</field>
+        </record>
+        
+        <record model="custom.location" id="bezigrad">
+            <field name="name">Lj. Bežigrad</field>
+            <field name="regija">6</field>
+        </record>
+        
+        <record model="custom.location" id="center">
+            <field name="name">Lj. Center</field>
+            <field name="regija">6</field>
+        </record>
+        
+        <record model="custom.location" id="moste_polje">
+            <field name="name">Lj. Moste-Polje</field>
+            <field name="regija">6</field>
+        </record>
+        
+        <record model="custom.location" id="siska">
+            <field name="name">Lj. Šiška'</field>
+            <field name="regija">6</field>
+        </record>
+        
+        <record model="custom.location" id="vic_rudnik">
+            <field name="name">Lj. Vič-Rudnik</field>
+            <field name="regija">6</field>
+        </record>
+        
+        <record model="custom.location" id="domzale">
+            <field name="name">Domžale</field>
+            <field name="regija">7</field>
+        </record>
+        
+        <record model="custom.location" id="grosuplje">
+            <field name="name">Grosuplje</field>
+            <field name="regija">7</field>
+        </record>
+        
+        <record model="custom.location" id="kamnik">
+            <field name="name">Kamnik</field>
+            <field name="regija">7</field>
+        </record>
+        
+        <record model="custom.location" id="litija">
+            <field name="name">Litija</field>
+            <field name="regija">7</field>
+        </record>
+        
+        <record model="custom.location" id="lj_j_z">
+            <field name="name">Lj. J&amp;Z (Vič, Rudnik)</field>
+            <field name="regija">7</field>
+        </record>
+        
+        <record model="custom.location" id="lj_s_v">
+            <field name="name">Lj. SV del (Bežigrad)</field>
+            <field name="regija">7</field>
+        </record>
+        
+        <record model="custom.location" id="lj_s_z">
+            <field name="name">Lj. SZ del (Šiška)</field>
+            <field name="regija">7</field>
+        </record>
+        
+        <record model="custom.location" id="lj_v">
+            <field name="name">Lj. V del (Moste-Polje)</field>
+            <field name="regija">7</field>
+        </record>
+        
+        <record model="custom.location" id="logatec">
+            <field name="name">Logatec</field>
+            <field name="regija">7</field>
+        </record>
+        
+        <record model="custom.location" id="vrhnika">
+            <field name="name">Vrhnika</field>
+            <field name="regija">7</field>
+        </record>
+        
+        <record model="custom.location" id="cerknica">
+            <field name="name">Cerknica</field>
+            <field name="regija">8</field>
+        </record>
+        
+        <record model="custom.location" id="ilirska_bistrica">
+            <field name="name">Ilirska Bistrica</field>
+            <field name="regija">8</field>
+        </record>
+        
+        <record model="custom.location" id="postojna">
+            <field name="name">Postojna</field>
+            <field name="regija">8</field>
+        </record>
+        
+        <record model="custom.location" id="lenart">
+            <field name="name">Lenart</field>
+            <field name="regija">9</field>
+        </record>
+        
+        <record model="custom.location" id="maribor">
+            <field name="name">Maribor</field>
+            <field name="regija">9</field>
+        </record>
+        
+        <record model="custom.location" id="ormoz">
+            <field name="name">Ormož</field>
+            <field name="regija">9</field>
+        </record>
+        
+        <record model="custom.location" id="pesnica">
+            <field name="name">Pesnica</field>
+            <field name="regija">9</field>
+        </record>
+        
+        <record model="custom.location" id="ptuj">
+            <field name="name">Ptuj</field>
+            <field name="regija">9</field>
+        </record>
+        
+        <record model="custom.location" id="ruse">
+            <field name="name">Ruše</field>
+            <field name="regija">9</field>
+        </record>
+        
+        <record model="custom.location" id="slovenska_bistrica">
+            <field name="name">Slovenska bistrica</field>
+            <field name="regija">9</field>
+        </record>
+        
+        <record model="custom.location" id="gornja_radgona">
+            <field name="name">Gornja Radgona</field>
+            <field name="regija">10</field>
+        </record>
+        
+        <record model="custom.location" id="lendava">
+            <field name="name">Lendava</field>
+            <field name="regija">10</field>
+        </record>
+        
+        <record model="custom.location" id="ljutomer">
+            <field name="name">Ljutomer</field>
+            <field name="regija">10</field>
+        </record>
+        
+        <record model="custom.location" id="murska_sobota">
+            <field name="name">Murska Sobota</field>
+            <field name="regija">10</field>
+        </record>
+        
+        <record model="custom.location" id="brezice">
+            <field name="name">Brežice</field>
+            <field name="regija">11</field>
+        </record>
+        
+        <record model="custom.location" id="krsko">
+            <field name="name">Krško</field>
+            <field name="regija">11</field>
+        </record>
+        
+        <record model="custom.location" id="sevnica">
+            <field name="name">Sevnica</field>
+            <field name="regija">11</field>
+        </record>
+        
+        <record model="custom.location" id="celje">
+            <field name="name">Celje</field>
+            <field name="regija">12</field>
+        </record>
+        
+        <record model="custom.location" id="lasko">
+            <field name="name">Laško</field>
+            <field name="regija">12</field>
+        </record>
+        
+        <record model="custom.location" id="mozirje">
+            <field name="name">Mozirje</field>
+            <field name="regija">12</field>
+        </record>
+        
+        <record model="custom.location" id="slovenske_konjica">
+            <field name="name">Slovenske Konjice</field>
+            <field name="regija">12</field>
+        </record>
+        
+        <record model="custom.location" id="sentjur">
+            <field name="name">Šentjur</field>
+            <field name="regija">12</field>
+        </record>
+        
+        <record model="custom.location" id="smarje_pri_jelsah">
+            <field name="name">Šmarje pri Jelšah</field>
+            <field name="regija">12</field>
+        </record>
+        
+        <record model="custom.location" id="velenje">
+            <field name="name">Velenje</field>
+            <field name="regija">12</field>
+        </record>
+        
+        <record model="custom.location" id="zalec">
+            <field name="name">Žalec</field>
+            <field name="regija">12</field>
+        </record>
+        
+        <record model="custom.location" id="hrastnik">
+            <field name="name">Hrastnik</field>
+            <field name="regija">13</field>
+        </record>
+        
+        <record model="custom.location" id="trbovlje">
+            <field name="name">Trbovlje</field>
+            <field name="regija">13</field>
+        </record>
+        
+        <record model="custom.location" id="zagorje_ob_savi">
+            <field name="name">Zagorje ob Savi</field>
+            <field name="regija">13</field>
+        </record>
+    </data>
+</odoo>

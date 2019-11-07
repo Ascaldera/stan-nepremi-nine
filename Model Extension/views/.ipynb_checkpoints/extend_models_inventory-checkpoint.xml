@@ -93,7 +93,7 @@
 
                             </div>
                             <field name="nepremicnina_regija" string="Regija" attrs ="{'required':1}"/>
-                            <field name="nepremicnina_upravna_enota" string="Upravna enota" attrs ="{'invisible':1, 'required':1}"/>
+                            <field name="nepremicnina_upravna_enota_test" string="Upravna enota - test"/>
                             <field name="nepremicnina_upravne_enote_1" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'dolenjska')]}"/>
                             <field name="nepremicnina_upravne_enote_2" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'gorenjska')]}"/>
                             <field name="nepremicnina_upravne_enote_3" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'juzna_primorska')]}"/>
@@ -107,7 +107,6 @@
                             <field name="nepremicnina_upravne_enote_11" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'posavska')]}"/>
                             <field name="nepremicnina_upravne_enote_12" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'savinjska')]}"/>
                             <field name="nepremicnina_upravne_enote_13" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'zasavska')]}"/>
-
                             <field name="nepremicnina_lokacija_opombe" placeholder='Opombe'/>
                         </group>
                     </group>
@@ -467,6 +466,34 @@
         </field>
     </record>
     
+    <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  REGIJA: FORM  \\\\\\\\\\\\\\\\\\-->
+    <record id="inventory_regija_config" model="ir.ui.view"> 
+        <field name="name">Regija</field> 
+        <field name="model">custom.location.regija</field> 
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                    <field name="drzava"/>  
+                </group>
+            </form>
+        </field>
+    </record>
+    
+    <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  UPRAVNA ENOTA: FORM  \\\\\\\\\\\\\\\\\\-->
+    <record id="inventory_ue_config" model="ir.ui.view"> 
+        <field name="name">Regija</field> 
+        <field name="model">custom.location</field> 
+        <field name="arch" type="xml">
+            <form>
+                <group>
+                    <field name="name"/>
+                    <field name="regija"/>
+                </group>
+            </form>
+        </field>
+    </record>
+    
     <!-- TAG: Inventory Meni Filter -->
     <record id="action_open_inventory_tag" model="ir.actions.act_window">
         <field name="name">oznake</field>
@@ -476,6 +503,24 @@
         <field name="domain"></field>
     </record>
     
+    <!-- UPRAVNA ENOTA: Inventory Meni Filter -->
+    <record id="action_open_inventory_ue" model="ir.actions.act_window">
+        <field name="name">Upravna Enota</field>
+        <field name="res_model">custom.location</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain"></field>
+    </record>
+    
+    <!-- REGIJA: Inventory Meni Filter -->
+    <record id="action_open_inventory_regija" model="ir.actions.act_window">
+        <field name="name">Regija</field>
+        <field name="res_model">custom.location.regija</field>
+        <field name="view_type">form</field>
+        <field name="view_mode">tree,form</field>
+        <field name="domain"></field>
+    </record>
+
     <!-- TAG: Contact Meni Filter -->
     <record id="base.action_partner_category_form" model="ir.actions.act_window">
         <field name="domain"></field>
@@ -496,4 +541,7 @@
    </record>
 
     <menuitem id="menu_contact_tags" name='Oznake' parent="stock.menu_stock_root" action='action_open_inventory_tag' sequence="3"/>
+    <menuitem id="menu_inventory_location" name='Lokacija' parent="stock.menu_stock_root" sequence="3"/>
+    <menuitem id="menu_inventory_location_ue" name='Upravna Enota' parent="menu_inventory_location" action='action_open_inventory_ue'/>
+    <menuitem id="menu_inventory_location_regija" name='Regija' parent="menu_inventory_location" action='action_open_inventory_regija'/>
 </odoo>

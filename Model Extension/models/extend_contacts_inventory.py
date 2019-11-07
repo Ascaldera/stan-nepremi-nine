@@ -429,6 +429,8 @@ class ExtendInventory(models.Model):
     nepremicnina_lokacija_opombe = fields.Char(string = 'Lokacija/opombe')
     
     #DODATNO O REGIJI IN UPRAVNI ENOTI
+    nepremicnina_upravna_enota_test=fields.Many2one('custom.location', string="Upravna enota - test")
+    
     nepremicnina_regija=fields.Selection(string ="Regija",
                                          selection=[('dolenjska','Dolenjska'),
                                                     ('gorenjska','Gorenjska'),
