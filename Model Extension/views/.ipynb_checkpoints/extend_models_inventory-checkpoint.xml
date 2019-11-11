@@ -235,7 +235,7 @@
                 </page>
             </xpath>
             
-            <!-- SLIKE 2 -->
+            <!-- SLIKE 2 
             <xpath expr="//page[@name='general_information']" position='after'>
                 <page name="slike" string="Slike 2">
                     <group name="slike" string="Slike 2">
@@ -270,6 +270,7 @@
                     </group>
                 </page>
             </xpath>
+            -->
             
             <!-- CUSTOM TAB - Opis -->
             <xpath expr="//page[@name='general_information']" position='after'>
