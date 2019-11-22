@@ -4,7 +4,7 @@
     'version': '12',
     'category': 'Contacts',
     'author': 'Ascaldera',
-    'license': 'AGPL-3',
+    'license': 'AGPL-3', 
     'depends': [
         'contacts',
         'product',
