@@ -3,7 +3,7 @@
  
 from odoo import fields, api, models, tools 
 from odoo import exceptions
-from dateutil.relativedelta import *
+from dateutil.relativedelta import * 
 
 
 class ExtendContacts(models.Model):
