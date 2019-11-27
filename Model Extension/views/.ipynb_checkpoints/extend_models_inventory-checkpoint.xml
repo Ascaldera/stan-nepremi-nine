@@ -93,7 +93,6 @@
 
                             </div>
                             <field name="nepremicnina_regija" string="Regija" attrs ="{'required':1}"/>
-                            <field name="nepremicnina_upravna_enota_test" string="Upravna enota - test"/>
                             <field name="nepremicnina_upravne_enote_1" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'dolenjska')]}"/>
                             <field name="nepremicnina_upravne_enote_2" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'gorenjska')]}"/>
                             <field name="nepremicnina_upravne_enote_3" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'juzna_primorska')]}"/>
@@ -466,7 +465,7 @@
         </field>
     </record>
     
-    <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  REGIJA: FORM  \\\\\\\\\\\\\\\\\\-->
+    <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  REGIJA: FORM  \\\\\\\\\\\\\\\\\\
     <record id="inventory_regija_config" model="ir.ui.view"> 
         <field name="name">Regija</field> 
         <field name="model">custom.location.regija</field> 
@@ -478,9 +477,9 @@
                 </group>
             </form>
         </field>
-    </record>
+    </record>-->
     
-    <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  UPRAVNA ENOTA: FORM  \\\\\\\\\\\\\\\\\\-->
+    <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  UPRAVNA ENOTA: FORM  \\\\\\\\\\\\\\\\\\
     <record id="inventory_ue_config" model="ir.ui.view"> 
         <field name="name">Regija</field> 
         <field name="model">custom.location</field> 
@@ -492,7 +491,7 @@
                 </group>
             </form>
         </field>
-    </record>
+    </record>-->
     
     <!-- TAG: Inventory Meni Filter -->
     <record id="action_open_inventory_tag" model="ir.actions.act_window">
@@ -541,7 +540,9 @@
    </record>
 
     <menuitem id="menu_contact_tags" name='Oznake' parent="stock.menu_stock_root" action='action_open_inventory_tag' sequence="3"/>
+    <!--
     <menuitem id="menu_inventory_location" name='Lokacija' parent="stock.menu_stock_root" sequence="3"/>
     <menuitem id="menu_inventory_location_ue" name='Upravna Enota' parent="menu_inventory_location" action='action_open_inventory_ue'/>
     <menuitem id="menu_inventory_location_regija" name='Regija' parent="menu_inventory_location" action='action_open_inventory_regija'/>
+    -->
 </odoo>

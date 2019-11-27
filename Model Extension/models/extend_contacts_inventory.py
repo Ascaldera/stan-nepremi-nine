@@ -234,6 +234,10 @@ class ExtendContacts(models.Model):
 class ExtendInventory(models.Model):
     _inherit = 'product.template'
     
+    name=fields.Char(track_visibility=True)
+    list_price=fields.Float(track_visibility=True)
+    standard_price=fields.Float(track_visibility=True)
+    
     def _get_default_currency_id_2(self):
         return self.env.user.company_id.currency_id.id
     
@@ -249,10 +253,10 @@ class ExtendInventory(models.Model):
     @api.onchange('nepremicnina_pogodba_datum')
     def calculate_field(self):
         if self.nepremicnina_pogodba_datum:
-            self.nepremicnina_potek_datum = self.nepremicnina_pogodba_datum + relativedelta(months=+1) + relativedelta(days=-1)
+            self.nepremicnina_potek_datum = self.nepremicnina_pogodba_datum + relativedelta(months=+9) + relativedelta(days=-1)
     
-    nepremicnina_pogodba_datum = fields.Date(string = 'Sklenitev pogodbe')
-    nepremicnina_potek_datum = fields.Date(string = 'Potek pogodbe')
+    nepremicnina_pogodba_datum = fields.Date(string = 'Sklenitev pogodbe',track_visibility=True)
+    nepremicnina_potek_datum = fields.Date(string = 'Potek pogodbe',track_visibility=True)
 
     #POSREDOVANJE
     nepremicnina_vrsta_posredovanja=fields.Selection(string="Vrsta posredovanja", 
@@ -273,8 +277,8 @@ class ExtendInventory(models.Model):
                               relation="contact_tag_oznake_nepremicnin_rel",
                               domain="[('tag_type','=','oznake_nepremicnin')]",
                               options="{'color_field': 'color', 'no_create_edit': True}",
-                              track_visibility='onchange')
-    nepremicnina_opis=fields.Html(string="Opis")
+                              track_visibility=True)
+    nepremicnina_opis=fields.Html(string="Opis",track_visibility=True)
     #-----------------------------------------------------------------------------------------
     
     #SISTEM
@@ -319,12 +323,15 @@ class ExtendInventory(models.Model):
         
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name='res.partner',string="Kdo prodaja")
-    nepremicnina_posrednik = fields.Many2one('res.users',string="Posrednik",default=lambda self: self.env.user)
+    nepremicnina_posrednik = fields.Many2one('res.users',
+                                             string="Posrednik",
+                                             default=lambda self: self.env.user,
+                                             track_visibility=True)
     nepremicnina_povrsina = fields.Float(string='Uporabna površina') #m2
     #nepremicnina_zemljisce_pod = fields.Float(string = 'Zemljišče pod stavbo') #m2
     nepremicnina_velikost = fields.Float(string = 'Površina dela stavbe') #m2
-    nepremicnina_cena_min = fields.Float(string = 'Minimalna cena') #EUR
-    nepremicnina_cena_dolgorocno = fields.Float(string = 'Cena / Najemnina') #EUR
+    nepremicnina_cena_min = fields.Float(string = 'Minimalna cena',track_visibility=True) #EUR
+    nepremicnina_cena_dolgorocno = fields.Float(string = 'Cena / Najemnina',track_visibility=True) #EUR
     nepremicnina_cena_dolgorocno_valuta=fields.Selection(string="Valuta", selection=[('e','EUR'),('em2','EUR/m²')])
     
         
@@ -429,7 +436,7 @@ class ExtendInventory(models.Model):
     nepremicnina_lokacija_opombe = fields.Char(string = 'Lokacija/opombe')
     
     #DODATNO O REGIJI IN UPRAVNI ENOTI
-    nepremicnina_upravna_enota_test=fields.Many2one('custom.location', string="Upravna enota - test")
+    #nepremicnina_upravna_enota_test=fields.Many2one('custom.location', string="Upravna enota - test")
     
     nepremicnina_regija=fields.Selection(string ="Regija",
                                          selection=[('dolenjska','Dolenjska'),
@@ -831,7 +838,7 @@ class ExtendInventory(models.Model):
                               relation="contact_tag_obnova_rel",
                               domain="[('tag_type','=','obnova')]",
                               options="{'color_field': 'color', 'no_create_edit': True}",
-                              track_visibility='onchange')
+                              track_visibility=True)
     nepremicnina_streha = fields.Char(string = 'Vrsta kritine')
     nepremicnina_streha_obnova = fields.Char(string = 'Leto obnove strehe')
     nepremicnina_izolacija = fields.Char(string = 'Fasada/izolacija')
@@ -1013,6 +1020,14 @@ class ExtendInventory(models.Model):
     lastnistvo_varstvo = fields.Char(string = 'Varstvo naravne ali kulturne dediščine')
     lastnistvo_prikljucek = fields.Char(string = 'Mestni priključek')
     lastnistvo_vrednost = fields.Char(string = 'GURS vrednost')
+    
+    @api.multi
+    def write(self,vals):
+        if 'nepremicnina_opis' in vals:
+            s2=vals['nepremicnina_opis']
+            custom_msg="Opis: "+str(s2)
+            self.message_post(body=custom_msg)
+        return super(ExtendInventory,self).write(vals)
     
     @api.multi
     def word_count(self, opis):
@@ -1218,7 +1233,500 @@ class ExtendCrm(models.Model):
     _inherit = 'crm.lead'
     
     nepremicnina = fields.Many2one(comodel_name="product.template", string="Nepremičnina")
+    
+    
+    
     tip_priloznosti = fields.Selection(string="Tip priložnosti", 
                                        selection=[('navadno','Navadno'),
                                                   ('zasebno','Zasebno')],
                                        default='navadno')
+    
+    cena_od=fields.Float(string="Cena od")
+    cena_do=fields.Float(string="Cena do")
+    velikost_od=fields.Float(string="Velikost do")
+    velikost_do=fields.Float(string="Velikost do")
+    letnik_od=fields.Char(string="Letnik od")
+    letnik_do=fields.Char(string="Letnik do")
+    
+    regija=fields.Selection(string ="Regija",
+                            selection=[('dolenjska','Dolenjska'),
+                                       ('gorenjska','Gorenjska'),
+                                       ('juzna_primorska','Južna primorska'),
+                                       ('severna_primorska','Severna primorska'),
+                                       ('koroska','Koroška'),
+                                       ('lj_mesto','Lj-mesto'),
+                                       ('lj_okolica','Lj-okolica'),
+                                       ('notranjska','Notranjska'),
+                                       ('podravska','Podravska'),
+                                       ('pomurska','Pomurska'),
+                                       ('posavska','Posavska'),
+                                       ('savinjska','Savinjska'),
+                                       ('zasavska','Zasavska')])
+    upravna_enota=fields.Selection(string="Upravna enota",
+                                   selection=[('crnomelj','Črnomelj'),
+                                              ('kocevje','Kočevje'),
+                                              ('metlika','Metlika'),
+                                              ('novo_mesto','Novo mesto'),
+                                              ('ribnica','Ribnica'),
+                                              ('trebnje','Trebnje'),
+                                              ('jesenice','Jesenice'),
+                                              ('kranj','Kranj'),
+                                              ('radovljica','Radovljica'),
+                                              ('skofja_loka','Škofja loka'),
+                                              ('trzic','Tržič'),
+                                              ('izola','Izola'),
+                                              ('koper','Koper'),
+                                              ('piran','Piran'),
+                                              ('sezana','Sežana'),
+                                              ('ajdovscina','Ajdovščina'),
+                                              ('idrija','Idrija'),
+                                              ('nova_gorica','Nova Gorica'),
+                                              ('tolmin','Tolmin'),
+                                              ('dravograd','Dravograd'),
+                                              ('radlje_ob_dravi','Radlje ob Dravi'),
+                                              ('ravne_na_koroskem','Ravne na Koroškem'),
+                                              ('slovenj_gradec','Slovenj Gradec'),
+                                              ('bezigrad','Lj. Bežigrad'),
+                                              ('center','Lj. Center'),
+                                              ('moste_polje','Lj. Moste-Polje'),
+                                              ('siska','Lj. Šiška'),
+                                              ('vic_rudnik','Lj. Vič-Rudnik'),
+                                              ('domzale','Domžale'),
+                                              ('grosuplje','Grosuplje'),
+                                              ('kamnik','Kamnik'),('litija','Litija'),
+                                              ('lj_j_z','Lj. J&Z (Vič, Rudnik)'),
+                                              ('lj_s_v','Lj. SV del (Bežigrad)'),
+                                              ('lj_s_z','Lj. SZ del (Šiška)'),
+                                              ('lj_v','Lj. V del (Moste-Polje)'),
+                                              ('logatec','Logatec'),
+                                              ('vrhnika','Vrhnika'),
+                                              ('cerknica','Cerknica'),
+                                              ('ilirska_bistrica','Ilirska Bistrica'),
+                                              ('postojna','Postojna'),
+                                              ('lenart','Lenart'),
+                                              ('maribor','Maribor'),
+                                              ('ormoz','Ormož'),
+                                              ('pesnica','Pesnica'),
+                                              ('ptuj','Ptuj'),
+                                              ('ruse','Ruše'),
+                                              ('slovenska_bistrica','Slovenska bistrica'),
+                                              ('gornja_radgona','Gornja Radgona'),
+                                              ('lendava','Lendava'),
+                                              ('ljutomer','Ljutomer'),
+                                              ('murska_sobota','Murska Sobota'),
+                                              ('brezice','Brežice'),
+                                              ('krsko','Krško'),
+                                              ('sevnica','Sevnica'),
+                                              ('celje','Celje'),
+                                              ('lasko','Laško'),
+                                              ('mozirje','Mozirje'),
+                                              ('slovenske_konjica','Slovenske Konjice'),
+                                              ('sentjur','Šentjur'),
+                                              ('smarje_pri_jelsah','Šmarje pri Jelšah'),
+                                              ('velenje','Velenje'),
+                                              ('zalec','Žalec'),
+                                              ('hrastnik','Hrastnik'),
+                                              ('trbovlje','Trbovlje'),
+                                              ('zagorje_ob_savi','Zagorje ob Savi')])
+    upravne_enote_1=fields.Selection(string="Upravna_enota_dolenjska", 
+                                     selection=[('crnomelj','Črnomelj'),
+                                                ('kocevje','Kočevje'),
+                                                ('metlika','Metlika'),
+                                                ('novo_mesto','Novo mesto'),
+                                                ('ribnica','Ribnica'),
+                                                ('trebnje','Trebnje')])
+    upravne_enote_2=fields.Selection(string="Upravna_enota_gorenjska",
+                                     selection=[('jesenice','Jesenice'),
+                                                ('kranj','Kranj'),
+                                                ('radovljica','Radovljica'),
+                                                ('skofja_loka','Škofja loka'),
+                                                ('trzic','Tržič')])
+    upravne_enote_3=fields.Selection(string="Upravna_enota_juzna_primorska",
+                                     selection=[('izola','Izola'),
+                                                ('koper','Koper'),
+                                                ('piran','Piran'),
+                                                ('sezana','Sežana')])
+    upravne_enote_4=fields.Selection(string="Upravna_enota_severna_primorska",
+                                     selection=[('ajdovscina','Ajdovščina'),
+                                                ('idrija','Idrija'),
+                                                ('nova_gorica','Nova Gorica'),
+                                                ('tolmin','Tolmin')])
+    upravne_enote_5=fields.Selection(string="Upravna_enota_koroska",
+                                     selection=[('dravograd','Dravograd'),
+                                                ('radlje_ob_dravi','Radlje ob Dravi'),
+                                                ('ravne_na_koroskem','Ravne na Koroškem'),
+                                                ('slovenj_gradec','Slovenj Gradec')])
+    upravne_enote_6=fields.Selection(string="Upravna_enota_lj_mesto", 
+                                     selection=[('bezigrad','Lj. Bežigrad'),
+                                                ('center','Lj. Center'),
+                                                ('moste_polje','Lj. Moste-Polje'),
+                                                ('siska','Lj. Šiška'),
+                                                ('vic_rudnik','Lj. Vič-Rudnik')])
+    upravne_enote_7=fields.Selection(string="Upravna_enota_lj_okolica", 
+                                     selection=[('domzale','Domžale'),
+                                                ('grosuplje','Grosuplje'),
+                                                ('kamnik','Kamnik'),
+                                                ('litija','Litija'),
+                                                ('lj_j_z','Lj. J&Z (Vič, Rudnik)'),
+                                                ('lj_s_v','Lj. SV del (Bežigrad)'),
+                                                ('lj_s_z','Lj. SZ del (Šiška)'),
+                                                ('lj_v','Lj. V del (Moste-Polje)'),
+                                                ('logatec','Logatec'),
+                                                ('vrhnika','Vrhnika')])
+    upravne_enote_8=fields.Selection(string="Upravna_enota_notranjska",
+                                     selection=[('cerknica','Cerknica'),
+                                                ('ilirska_bistrica','Ilirska Bistrica'),
+                                                ('postojna','Postojna')])
+    upravne_enote_9=fields.Selection(string="Upravna_enota_podravska",
+                                     selection=[('lenart','Lenart'),
+                                                ('maribor','Maribor'),
+                                                ('ormoz','Ormož'),
+                                                ('pesnica','Pesnica'),
+                                                ('ptuj','Ptuj'),
+                                                ('ruse','Ruše'),
+                                                ('slovenska_bistrica','Slovenska bistrica')])
+    upravne_enote_10=fields.Selection(string="Upravna_enota_pomurska",
+                                      selection=[('gornja_radgona','Gornja Radgona'),
+                                                 ('lendava','Lendava'),
+                                                 ('ljutomer','Ljutomer'),
+                                                 ('murska_sobota','Murska Sobota')])
+    upravne_enote_11=fields.Selection(string="Upravna_enota_posavska",
+                                      selection=[('brezice','Brežice'),
+                                                 ('krsko','Krško'),
+                                                 ('sevnica','Sevnica')])
+    upravne_enote_12=fields.Selection(string="Upravna_enota_savinjska", 
+                                      selection=[('celje','Celje'),
+                                                 ('lasko','Laško'),
+                                                 ('mozirje','Mozirje'),
+                                                 ('slovenske_konjica','Slovenske Konjice'),
+                                                 ('sentjur','Šentjur'),
+                                                 ('smarje_pri_jelsah','Šmarje pri Jelšah'),
+                                                 ('velenje','Velenje'),
+                                                 ('zalec','Žalec')])
+    upravne_enote_13=fields.Selection(string="Upravna_enota_zasavska", 
+                                      selection=[('hrastnik','Hrastnik'),
+                                                 ('trbovlje','Trbovlje'),
+                                                 ('zagorje_ob_savi','Zagorje ob Savi')])
+    @api.onchange('regija','upravna_enota','upravne_enote_1','upravne_enote_2','upravne_enote_3','upravne_enote_4','upravne_enote_5','upravne_enote_6','upravne_enote_7','upravne_enote_8','upravne_enote_9','upravne_enote_10','upravne_enote_11','upravne_enote_12','upravne_enote_13',)
+    def enota_selection(self):
+        if self.regija=="dolenjska":
+            self.upravne_enote_2=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_12=[]
+            self.upravne_enote_13=[]
+            if self.upravne_enote_1==False:
+                self.upravna_enota=[]
+        if self.regija=="gorenjska":
+            self.upravne_enote_1=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_12=[]
+            self.upravne_enote_13=[]
+            if self.upravne_enote_2==False:
+                self.upravna_enota=[]
+        if self.regija=="juzna_primorska":
+            self.upravne_enote_1=[]
+            self.upravne_enote_2=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_12=[]
+            self.upravne_enote_13=[]
+            if self.upravne_enote_3==False:
+                self.upravna_enota=[]
+        if self.regija=="severna_primorska":
+            self.upravne_enote_1=[]
+            self.upravne_enote_2=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_12=[]
+            self.upravne_enote_13=[]
+            if self.upravne_enote_4==False:
+                self.upravna_enota=[]
+        if self.regija=="koroska":
+            self.upravne_enote_1=[]
+            self.upravne_enote_2=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_12=[]
+            self.upravne_enote_13=[]
+            if self.upravne_enote_5==False:
+                self.upravna_enota=[]
+        if self.regija=="lj_mesto":
+            self.upravne_enote_1=[]
+            self.upravne_enote_2=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_12=[]
+            self.upravne_enote_13=[]
+            if self.upravne_enote_6==False:
+                self.upravna_enota=[]
+        if self.regija=="lj_okolica":
+            self.upravne_enote_1=[]
+            self.upravne_enote_2=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_12=[]
+            self.upravne_enote_13=[]
+            if self.upravne_enote_7==False:
+                self.upravna_enota=[]
+        if self.regija=="notranjska":
+            self.upravne_enote_1=[]
+            self.upravne_enote_2=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_12=[]
+            self.upravne_enote_13=[]
+            if self.upravne_enote_8==False:
+                self.upravna_enota=[]
+        if self.regija=="podravska":
+            self.upravne_enote_1=[]
+            self.upravne_enote_2=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_12=[]
+            self.upravne_enote_13=[]
+            if self.upravne_enote_9==False:
+                self.upravna_enota=[]
+        if self.regija=="pomurska":
+            self.upravne_enote_1=[]
+            self.upravne_enote_2=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_12=[]
+            self.upravne_enote_13=[]
+            if self.upravne_enote_10==False:
+                self.upravna_enota=[]
+        if self.regija=="posavska":
+            self.upravne_enote_1=[]
+            self.upravne_enote_2=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_12=[]
+            self.upravne_enote_13=[]
+            if self.upravne_enote_11==False:
+                self.upravna_enota=[]
+        if self.regija=="savinjska":
+            self.upravne_enote_1=[]
+            self.upravne_enote_2=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_13=[]
+            if self.upravne_enote_12==False:
+                self.upravna_enota=[]
+        if self.regija=="zasavska":
+            self.upravne_enote_1=[]
+            self.upravne_enote_2=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_12=[]
+            if self.upravne_enote_13==False:
+                self.upravna_enota=[]
+        if self.upravne_enote_1:
+            self.upravna_enota=self.upravne_enote_1
+        if self.upravne_enote_2:
+            self.upravna_enota=self.upravne_enote_2
+        if self.upravne_enote_3:
+            self.upravna_enota=self.upravne_enote_3
+        if self.upravne_enote_4:
+            self.upravna_enota=self.upravne_enote_4
+        if self.upravne_enote_5:
+            self.upravna_enota=self.upravne_enote_5
+        if self.upravne_enote_6:
+            self.upravna_enota=self.upravne_enote_6
+        if self.upravne_enote_7:
+            self.upravna_enota=self.upravne_enote_7
+        if self.upravne_enote_8:
+            self.upravna_enota=self.upravne_enote_8
+        if self.upravne_enote_9:
+            self.upravna_enota=self.upravne_enote_9
+        if self.upravne_enote_10:
+            self.upravna_enota=self.upravne_enote_10
+        if self.upravne_enote_11:
+            self.upravna_enota=self.upravne_enote_11
+        if self.upravne_enote_12:
+            self.upravna_enota=self.upravne_enote_12
+        if self.upravne_enote_13:
+            self.upravna_enota=self.upravne_enote_13
+            
+    vrsta = fields.Selection(string = 'Vrsta nepremičnine', 
+                             selection = [('stanovanje', 'Stanovanje'),
+                                          ('hisa', 'Hiša'),
+                                          ('poslovni', 'Poslovni prostor'),
+                                          ('posest','Posest'),
+                                          ('vikend','Vikend'),
+                                          ('kmetija','Kmetija'),
+                                          ('garaza', 'Garaža'),
+                                          ('drugo', 'Drugo'),])
+    tip=fields.Selection(string="Tip nepremičnine", 
+                         selection=[('apartma','Apartma'),
+                                    ('soba','Soba'),
+                                    ('garsonjera', 'Garsonjera'),
+                                    ('soba1','1-sobno'),
+                                    ('soba1_5', '1,5-sobno'),
+                                    ('soba2','2-sobno'),
+                                    ('soba2_5','2,5-sobno'),
+                                    ('soba3','3-sobno'),
+                                    ('soba3_5','3,5-sobno'),
+                                    ('soba4','4-sobno'),
+                                    ('soba4_5','4,5-sobno'),
+                                    ('soba5','5 in večsobno'),
+                                    ('atrij','Atrij'),
+                                    ('dvojcek','Dvojcek'),
+                                    ('samostojna','Samostojna'),
+                                    ('delavnica','Delavnica'),
+                                    ('gostinskiLokal','Gostinski lokal'),
+                                    ('pisarna','Pisarna'),
+                                    ('prostorZaStoritve','Prostor za storitve'),
+                                    ('skladisce','Skladišče'),
+                                    ('vecjiPoslovniKompleks','Večji poslovni kompleks'),
+                                    ('drugo','Drugo')])
+    tip_1 = fields.Selection(string = 'Tip nepremičnine 1', 
+                             selection=[('apartma','Apartma'),
+                                        ('soba','Soba'),
+                                        ('garsonjera', 'Garsonjera'),
+                                        ('soba1','1-sobno'),
+                                        ('soba1_5', '1,5-sobno'),
+                                        ('soba2','2-sobno'),
+                                        ('soba2_5','2,5-sobno'),
+                                        ('soba3','3-sobno'),
+                                        ('soba3_5','3,5-sobno'),
+                                        ('soba4','4-sobno'),
+                                        ('soba4_5','4,5-sobno'),
+                                        ('soba5','5 in večsobno'),
+                                        ('drugo','Drugo')])
+    tip_2 = fields.Selection(string = 'Tip nepremičnine 2', 
+                             selection=[('atrij','Atrij'),
+                                        ('dvojcek','Dvojcek'),
+                                        ('samostojna','Samostojna'),
+                                        ('drugo','Drugo')])
+    tip_3 = fields.Selection(string = 'Tip nepremičnine 3', 
+                             selection=[('delavnica','Delavnica'),
+                                        ('gostinskiLokal','Gostinski lokal'),
+                                        ('pisarna','Pisarna'),
+                                        ('prostorZaStoritve','Prostor za storitve'),
+                                        ('skladisce','Skladišče'),
+                                        ('vecjiPoslovniKompleks','Večji poslovni kompleks'),
+                                        ('drugo','Drugo')])
+    
+    @api.onchange('vrsta','tip_1','tip_2','tip_3')
+    def prepis_vrednosti(self):
+        if self.vrsta=='stanovanje':
+            self.tip_2=[]
+            self.tip_3=[]
+            if self.tip_1==False:
+                self.tip=[]
+        if self.vrsta=='hisa':
+            self.tip_1=[]
+            self.tip_3=[]
+            if self.tip_2==False:
+                self.tip=[]
+        if self.vrsta=='poslovni':
+            self.tip_1=[]
+            self.tip_2=[]
+            if self.tip_3==False:
+                self.tip=[]
+        if self.vrsta not in ['stanovanje','hisa','poslovni']:
+            self.tip=[]
+            self.tip_1=[]
+            self.tip_2=[]
+            self.tip_3=[]
+        if self.vrsta != 'hisa':
+            self.etaza = ""
+        if self.vrsta not in ['stanovanje', 'poslovni']:              
+            self.nadstropje = 0
+            self.st_nadstropij = 0
+        if self.tip_1:
+            self.tip=self.tip_1
+        if self.tip_2:
+            self.tip=self.tip_2
+        if self.tip_3:
+            self.tip=self.tip_3
+            
+    potencialne_nepremicnine=fields.Many2many(string="Potencialne nepremičnine")
+            
+    @api.model
+    def create(self,vals):
+        
