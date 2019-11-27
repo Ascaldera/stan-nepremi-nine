@@ -1725,8 +1725,62 @@ class ExtendCrm(models.Model):
         if self.tip_3:
             self.tip=self.tip_3
             
-    potencialne_nepremicnine=fields.Many2many(string="Potencialne nepremičnine")
-            
+    domain_test=field.Char(string="TEST")        
+    
+    @api.multi
+    def _dodeli_nepremicnine(self,cmin,cmax,vmin,vmax,lmin,lmax,vrsta,tip,regija,enota):
+        domain_tmp="(cena_od, =>, "+str(cmin)+"),(velikost_od, =>, "+str(vmin)+")"
+        if cmax!=0:
+            domain_tmp=domain_tmp+",(cena_do,<="+str(cmax)+")"
+        if vmax!=0:
+            domain_tmp=domain_tmp+",(velikost_do,<="+str(vmax)+")"
+        if lmin!="0":
+            domain_tmp=domain_tmp+",(letnik_od,<="+str(lmin)+")"
+        if lmax!="0":
+            domain_tmp=domain_tmp+",(letnik_do,<="+str(lmax)+")"
+        if vrsta!=[]:
+            domain_tmp=domain_tmp+",(vrsta,=,"+str(vrsta)+")"
+        if tip!=[]:
+            domain_tmp=domain_tmp+",(tip,=,"+str(tip)+")"
+        if regija!=[]:
+            domain_tmp=domain_tmp+",(regija,="+str(regija)+")"
+        if enota!=[]:
+            domain_tmp=domain_tmp+",(upravna_Enota,=,"+str(enota)+")"
+        domain="(["+domain_tmp+"])"
+        self.domain_test=domain
+        
     @api.model
     def create(self,vals):
-        
+        rec = super(ExtendContactTags,self).create(values)
+        cena_min=0
+        cena_max=0
+        velikost_min=0
+        velikost_max=0
+        letnik_min="0"
+        letnik_max="0"
+        vrsta=[]
+        tip=[]
+        regija=[]
+        enota=[]
+        if 'cena_od' in vals:
+            cena_min=vals['cena_od']
+        if 'cena_do' in vals:
+            cena_max=vals['cena_do']
+        if 'velikost_od' in vals:
+            velikost_min=vals['veliksot_od']
+        if 'velikost_do' in vals:
+            velikost_max=vals['veliksot_do']
+        if 'letnik_od' in vals:
+            letnik_min=vals['letnik_od']
+        if 'letnik_do' in vals:
+            letnik_max=vals['letnik_do']
+        if 'vrsta' in vals:
+            vrsta=vals['vrsta']
+        if 'tip' in vals:
+            tip=vals['tip']
+        if 'regija' in vals:
+            regija=vals['regija']
+        if 'upravna_enota' in vals:
+            enota=vals['upravna_enota']
+        rec._dodeli_nepremicnine(cena_min,cena_max,velikost_min,velikost_max,letnik_min,letnik_max,vrsta,tip,regija,enota)
+        return rec
