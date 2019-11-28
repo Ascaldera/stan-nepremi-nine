@@ -93,6 +93,7 @@
 
                             </div>
                             <field name="nepremicnina_regija" string="Regija" attrs ="{'required':1}"/>
+                            <field name="nepremicnina_upravna_enota" attrs ="{'invisible':1}"/>
                             <field name="nepremicnina_upravne_enote_1" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'dolenjska')]}"/>
                             <field name="nepremicnina_upravne_enote_2" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'gorenjska')]}"/>
                             <field name="nepremicnina_upravne_enote_3" string="Upravna enota" attrs ="{'invisible':[('nepremicnina_regija','!=', 'juzna_primorska')]}"/>
@@ -462,6 +463,24 @@
                     </group>
                 </page>
             </xpath>
+            
+            <!-- CUSTOM TAB - CRM-ji -->
+            <xpath expr="//page[@name='lastnistvo']" position='after'>
+                <page name='crm' string="CRM">
+                    <group>
+                        <field name="nepremicnina_potencialni_crm" nolabel="1">
+                            <tree>
+                                <field name="name"/>
+                                <field name="user_id"/>
+                                <field name="partner_id"/>
+                                <field name="email_from"/>
+                                <field name="phone"/>
+                            </tree>
+                        </field>
+                    </group>
+                </page>
+            </xpath>
+            
         </field>
     </record>
     

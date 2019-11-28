@@ -8,9 +8,59 @@
         <field name="arch" type="xml"> 
             <xpath expr="//field[@name='partner_id']" position="before">
                 <field name="tip_priloznosti"/>
-                <field name="nepremicnina"/> 
-                <field name="domain_test"/>
             </xpath>
+            
+            <xpath expr="//page[@name='lead']" position="before">
+                <page string="Potencialne nepremičnine">
+                    <group>
+                        <group>
+                            <field name="vrsta" attrs ="{'required':1}"/>
+                            <field name="tip" attrs ="{'invisible':1}"/>
+                            <field name="tip_1" string="Tip nepremičnine" attrs ="{'invisible':[('vrsta','!=','stanovanje')],'required':[('vrsta','==','stanovanje')]
+                }"/>
+                            <field name="tip_2" string="Tip nepremičnine" attrs ="{'invisible':[('vrsta','!=','hisa')],'required':[('vrsta','==','hisa')]}"/>
+                            <field name="tip_3" string="Tip nepremičnine" attrs ="{'invisible':[('vrsta','!=','poslovni')],'required':[('vrsta','==','poslovni')]}"/>
+                            <field name="regija" string="Regija" attrs ="{'required':1}"/>
+                            <field name="upravna_enota" attrs ="{'invisible':1}"/>
+                            <field name="upravne_enote_1" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'dolenjska')],'required':[('regija','==','dolenjska')]}"/>
+                            <field name="upravne_enote_2" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'gorenjska')],'required':[('regija','==','gorenjska')]}"/>
+                            <field name="upravne_enote_3" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'juzna_primorska')],'required':[('regija','==','juzna_primorska')]}"/>
+                            <field name="upravne_enote_4" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'severna_primorska')],'required':[('regija','==','severna_primorska')]}"/>
+                            <field name="upravne_enote_5" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'koroska')],'required':[('regija','==','koroska')]}"/>
+                            <field name="upravne_enote_6" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'lj_mesto')],'required':[('regija','==','lj_mesto')]}"/>
+                            <field name="upravne_enote_7" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'lj_okolica')],'required':[('regija','==','lj_okolica')]}"/>
+                            <field name="upravne_enote_8" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'notranjska')],'required':[('regija','==','notranjska')]}"/>
+                            <field name="upravne_enote_9" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'podravska')],'required':[('regija','==','podravska')]}"/>
+                            <field name="upravne_enote_10" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'pomurska')],'required':[('regija','==','pomurska')]}"/>
+                            <field name="upravne_enote_11" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'posavska')],'required':[('regija','==','posavska')]}"/>
+                            <field name="upravne_enote_12" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'savinjska')],'required':[('regija','==','savinjska')]}"/>
+                            <field name="upravne_enote_13" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'zasavska')],'required':[('regija','==','zasavska')]}"/>
+                        </group>
+                        <group>
+                            <field name="cena_od" widget="monetary"/>
+                            <field name="cena_do" wiget="monetary"/>
+                            <field name="velikost_od"/>m^2
+                            <field name="velikost_do"/>m^2
+                            <field name="letnik_od"/>
+                            <field name="letnik_do"/>
+                        </group>
+                        <field name="domain_test"/>
+                    </group>
+                    <field name="potencialne_nepremicnine" nolabel="1">
+                        <tree>
+                            <field name="name"/>
+                            <field name="default_code"/>
+                            <field name="nepremicnina_vrsta_posredovanja"/>
+                            <field name="nepremicnina_cena_min"/>
+                            <field name="nepremicnina_povrsina"/>
+                            <field name="nepremicnina_leto_izgradnje"/>
+                            <field name="nepremicnina_posrednik" string="Lastnik nepremičnine"/>
+                            <field name="contact"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+            
         </field>
     </record>
     
