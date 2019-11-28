@@ -9,7 +9,10 @@
             <xpath expr="//field[@name='partner_id']" position="before">
                 <field name="tip_priloznosti"/>
             </xpath>
-            
+            <xpath expr="//field[@name='partner_id']" position="before">
+                <field name="nepremicnina_oglasevana"/>
+                <field name="nepremicnina_oglasevana_kje" attrs ="{'invisible':[('nepremicnina_oglasevana','=', False)]}"/>
+            </xpath>
             <xpath expr="//page[@name='lead']" position="before">
                 <page string="Potencialne nepremičnine">
                     <group>

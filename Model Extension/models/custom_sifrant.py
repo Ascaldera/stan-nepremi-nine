@@ -9,4 +9,6 @@ class sifrant(models.Model):
     _order = 'name asc'
     
     name=fields.Char(string="Ime oglaševanja")
-    display=fields.One2many(string="Oglaševane nepremičnine", comodel_name="crm.lead")
+    display=fields.One2many(string="Oglaševane nepremičnine", 
+                            comodel_name="crm.lead",
+                            inverse_name="nepremicnina_oglasevana_kje")

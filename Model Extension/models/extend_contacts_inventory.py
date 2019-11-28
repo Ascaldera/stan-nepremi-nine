@@ -1777,7 +1777,7 @@ class ExtendCrm(models.Model):
         return rec
     
     #OGLAŠEVANO KJE
-    nepremicnina_oglasevana=fields.Boolead(string="Oglaševano")
+    nepremicnina_oglasevana=fields.Boolean(string="Oglaševano")
     nepremicnina_oglasevana_kje=fields.Many2one(string="Lokacija oglasa",
                                                 comodel_name="custom.sifrant",
                                                 inverse_name="display")
