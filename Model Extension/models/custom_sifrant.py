@@ -3,12 +3,12 @@
  
 from odoo import fields, api, models, tools
 
-class sifrant(models.Model):
+class custom_sifrant(models.Model):
     _name='custom.sifrant'
     _description='Sifrant izvora oglasa'
     _order = 'name asc'
     
     name=fields.Char(string="Ime oglaševanja")
     display=fields.One2many(string="Oglaševane nepremičnine", 
-                            comodel_name="crm.lead",
+                            comodel_name="product.template",
                             inverse_name="nepremicnina_oglasevana_kje")

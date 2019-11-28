@@ -1198,6 +1198,11 @@ class ExtendInventory(models.Model):
                                                   comodel_name="crm.lead",
                                                   inverse_name="potencialne_nepremicnine",
                                                   options="{create': false, 'create_edit': false}")
+    
+    nepremicnina_oglasevana=fields.Boolean(string="Oglaševano")
+    nepremicnina_oglasevana_kje=fields.Many2one(string="Lokacija oglasa",
+                                                comodel_name="custom.sifrant",
+                                                inverse_name="display")
         
 class ExtendContactTags(models.Model):   
     _inherit = 'res.partner.category'
@@ -1248,7 +1253,7 @@ class ExtendCrm(models.Model):
     
     cena_od=fields.Float(string="Cena od")
     cena_do=fields.Float(string="Cena do")
-    velikost_od=fields.Float(string="Velikost do")
+    velikost_od=fields.Float(string="Velikost oo")
     velikost_do=fields.Float(string="Velikost do")
     letnik_od=fields.Char(string="Letnik od")
     letnik_do=fields.Char(string="Letnik do")
@@ -1730,8 +1735,7 @@ class ExtendCrm(models.Model):
             self.tip=self.tip_2
         if self.tip_3:
             self.tip=self.tip_3
-            
-    domain_test=fields.Char(string="TEST")
+
     potencialne_nepremicnine=fields.Many2many(string="Potencialne nepremičnine",
                                               comodel_name="product.template",
                                               inverse_name="nepremicnina_potencialni_crm",
@@ -1740,10 +1744,10 @@ class ExtendCrm(models.Model):
     @api.one
     def _dodeli_nepremicnine(self):
         domain = []
-        domain.append(('nepremicnina_cena_min','>=',self.cena_od))
+        domain.append(('nepremicnina_cena_dolgorocno','>=',self.cena_od))
         domain.append(('nepremicnina_povrsina','>=',self.velikost_od))
         if self.cena_do and self.cena_do>self.cena_od:
-            domain.append(('nepremicnina_cena_min','<=',self.cena_do))
+            domain.append(('nepremicnina_cena_dolgorocno','<=',self.cena_do))
         if self.velikost_do and self.velikost_do>self.velikost_od:
             domain.append(('nepremicnina_povrsina','<=',self.velikost_do))
         if self.letnik_od:
@@ -1758,26 +1762,21 @@ class ExtendCrm(models.Model):
             domain.append(('nepremicnina_regija','=',self.regija))
         if self.upravna_enota:
             domain.append(('nepremicnina_upravna_enota','=',self.upravna_enota))
-        #self.domain_test=str(domain)
-        self.domain_test=str(self.env['product.template'].search(domain))
         self.potencialne_nepremicnine=self.env['product.template'].search(domain)
 
     @api.model
     def create(self,values):
         rec = super(ExtendCrm,self).create(values)
-        if 'domain_test' not in values or 'potencialne_nepremicnine' not in values:
+        if 'potencialne_nepremicnine' not in values:
             rec._dodeli_nepremicnine()
         return rec
     
     @api.multi
     def write(self,values):
         rec = super(ExtendCrm,self).write(values)
-        if 'potencialne_nepremicnine' not in values and 'domain_test' not in values:
+        if 'potencialne_nepremicnine' not in values:
             self._dodeli_nepremicnine()
         return rec
     
     #OGLAŠEVANO KJE
-    nepremicnina_oglasevana=fields.Boolean(string="Oglaševano")
-    nepremicnina_oglasevana_kje=fields.Many2one(string="Lokacija oglasa",
-                                                comodel_name="custom.sifrant",
-                                                inverse_name="display")
+    

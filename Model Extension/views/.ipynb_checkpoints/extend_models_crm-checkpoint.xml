@@ -9,10 +9,6 @@
             <xpath expr="//field[@name='partner_id']" position="before">
                 <field name="tip_priloznosti"/>
             </xpath>
-            <xpath expr="//field[@name='partner_id']" position="before">
-                <field name="nepremicnina_oglasevana"/>
-                <field name="nepremicnina_oglasevana_kje" attrs ="{'invisible':[('nepremicnina_oglasevana','=', False)]}"/>
-            </xpath>
             <xpath expr="//page[@name='lead']" position="before">
                 <page string="Potencialne nepremičnine">
                     <group>
@@ -42,12 +38,11 @@
                         <group>
                             <field name="cena_od" widget="monetary"/>
                             <field name="cena_do" wiget="monetary"/>
-                            <field name="velikost_od"/>m^2
-                            <field name="velikost_do"/>m^2
+                            <field name="velikost_od"/>
+                            <field name="velikost_do"/>
                             <field name="letnik_od"/>
                             <field name="letnik_do"/>
                         </group>
-                        <field name="domain_test"/>
                     </group>
                     <field name="potencialne_nepremicnine" nolabel="1">
                         <tree>
