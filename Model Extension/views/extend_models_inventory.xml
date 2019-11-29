@@ -71,6 +71,7 @@
                     
                     <field name="nepremicnina_oglasevana"/>
                     <field name="nepremicnina_oglasevana_kje" attrs ="{'invisible':[('nepremicnina_oglasevana','=', False)]}"/>
+                    <field name="nepremicnina_oglasevana_kdaj" force_save="1" attrs ="{'invisible':[('nepremicnina_oglasevana','=', False)]}"/>
                     
                 </group>
             </xpath>

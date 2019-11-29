@@ -3,6 +3,9 @@
  
 from odoo import fields, api, models, tools
 from odoo import exceptions
+from datetime import date
+from datetime import timedelta
+from datetime import datetime
 from dateutil.relativedelta import *
 
 
@@ -1199,10 +1202,21 @@ class ExtendInventory(models.Model):
                                                   inverse_name="potencialne_nepremicnine",
                                                   options="{create': false, 'create_edit': false}")
     
-    nepremicnina_oglasevana=fields.Boolean(string="Oglaševano")
+    nepremicnina_oglasevana=fields.Boolean(string="Oglaševano",
+                                           track_visibility='onchange')
     nepremicnina_oglasevana_kje=fields.Many2one(string="Lokacija oglasa",
                                                 comodel_name="custom.sifrant",
                                                 inverse_name="display")
+    nepremicnina_oglasevana_kdaj=fields.Date(string="Datum oglasa", 
+                                             track_visibility='onchange')
+    
+    @api.onchange('nepremicnina_oglasevana')
+    def datum_oglasa(self):
+        if self.nepremicnina_oglasevana==True:
+            self.nepremicnina_oglasevana_kdaj=date.today()
+        else:
+            self.nepremicnina_oglasevana_kje=[]
+            self.nepremicnina_oglasevana_kdaj=[]
         
 class ExtendContactTags(models.Model):   
     _inherit = 'res.partner.category'
@@ -1777,6 +1791,3 @@ class ExtendCrm(models.Model):
         if 'potencialne_nepremicnine' not in values:
             self._dodeli_nepremicnine()
         return rec
-    
-    #OGLAŠEVANO KJE
-    
