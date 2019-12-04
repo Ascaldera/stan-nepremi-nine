@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+    
+    <record id="notes_edited" model="ir.ui.view"> 
+        <field name="name">notes_edited</field> 
+        <field name="model">note.note</field> 
+        <field name="inherit_id" ref="note.view_note_note_form"/>
+        <field name="arch" type="xml"> 
+            <xpath expr="//field[@name='memo']" position="before">
+                <field name="zaposleni_note"/>
+                <field name="nepremicnina_note"/>
+            </xpath>
+        </field>
+    </record>
+    
+</odoo>

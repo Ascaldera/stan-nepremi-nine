@@ -233,6 +233,11 @@ class ExtendContacts(models.Model):
             self.objava_kje_datum=[]
         if self.prodajalec_ponudbe==False:
             self.prodajalec_ponudbe_info=""
+            
+    zaposleni_porocila=fields.one2Many(string="Poročila", 
+                                       comodel_name="note.note", 
+                                       inverse_name="zaposleni_note", 
+                                       options="{create': false, 'create_edit': false}")
   
 class ExtendInventory(models.Model):
     _inherit = 'product.template'
@@ -1217,6 +1222,11 @@ class ExtendInventory(models.Model):
         else:
             self.nepremicnina_oglasevana_kje=[]
             self.nepremicnina_oglasevana_kdaj=[]
+            
+    nepremicnina_porocila=fields.one2Many(string="Poročila", 
+                                          comodel_name="note.note", 
+                                          inverse_name="nepremicnina_note", 
+                                          options="{create': false, 'create_edit': false}")
         
 class ExtendContactTags(models.Model):   
     _inherit = 'res.partner.category'
@@ -1791,3 +1801,25 @@ class ExtendCrm(models.Model):
         if 'potencialne_nepremicnine' not in values:
             self._dodeli_nepremicnine()
         return rec
+    
+    
+    
+class extendedMemo(models.Model):
+    _inherit='note.note'
+    
+    zaposleni_note=fields.Many2one(string="Ime osebe", 
+                                   comodel_name='res.partner', 
+                                   inverse_name='zaposleni_porocila', 
+                                   compute='_get_partner',
+                                   options="{create': false, 'create_edit': false}")
+    
+    nepremicnina_note=fields.Many2one(string="Nepremičnina", 
+                                      comodel_name='product.template', 
+                                      inverse_name='nepremicnina_porocila', 
+                                      options="{create': false, 'create_edit': false}")
+    
+    @api.depends('zaposleni_note')
+    def _get_partner(self):
+        partner = self.env['res.users'].browse(self.env.uid).partner_id
+        for rec in self:
+            rec.zaposleni_note = partner.id
