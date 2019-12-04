@@ -234,7 +234,7 @@ class ExtendContacts(models.Model):
         if self.prodajalec_ponudbe==False:
             self.prodajalec_ponudbe_info=""
             
-    zaposleni_porocila=fields.one2Many(string="Poročila", 
+    zaposleni_porocila=fields.One2many(string="Poročila", 
                                        comodel_name="note.note", 
                                        inverse_name="zaposleni_note", 
                                        options="{create': false, 'create_edit': false}")
@@ -1223,7 +1223,7 @@ class ExtendInventory(models.Model):
             self.nepremicnina_oglasevana_kje=[]
             self.nepremicnina_oglasevana_kdaj=[]
             
-    nepremicnina_porocila=fields.one2Many(string="Poročila", 
+    nepremicnina_porocila=fields.One2many(string="Poročila", 
                                           comodel_name="note.note", 
                                           inverse_name="nepremicnina_note", 
                                           options="{create': false, 'create_edit': false}")
