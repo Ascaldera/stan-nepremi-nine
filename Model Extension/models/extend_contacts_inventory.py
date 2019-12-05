@@ -1822,7 +1822,6 @@ class extendedMemo(models.Model):
                                            ('navaden','Navaden zapis')],
                                 default='navaden')
     
-    @api.depends('zaposleni_note')
     def _get_partner(self):
         partner = self.env['res.users'].browse(self.env.uid).partner_id
         for rec in self:
