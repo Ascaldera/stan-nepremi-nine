@@ -7,8 +7,11 @@
         <field name="inherit_id" ref="note.view_note_note_form"/>
         <field name="arch" type="xml"> 
             <xpath expr="//field[@name='memo']" position="before">
-                <field name="zaposleni_note"/>
-                <field name="nepremicnina_note"/>
+                <group>
+                    <field name="tip_zapisa"/>
+                    <field name="zaposleni_note"/>
+                    <field name="nepremicnina_note"/>
+                </group>
             </xpath>
         </field>
     </record>

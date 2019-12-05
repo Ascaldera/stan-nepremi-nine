@@ -193,7 +193,21 @@
                         </group>
                     </group>
                 </page>
-            </xpath>           
+            </xpath>   
+            
+            <xpath expr="//page[@name='nepremicnine']" position='after'>
+                <page name="porocila" string="Poročila">
+                    <field name="zaposleni_porocila">
+                        <tree>
+                            <field name="name" string="Ime vnosa"/>
+                            <field name="tip_zapisa"/>
+                            <field name="zaposleni_note"/>
+                            <field name="create_date" string="Čas vnosa"/>
+                        </tree>
+                    </field>
+                </page>
+            </xpath>
+                
         </field>
     </record>
 </odoo>

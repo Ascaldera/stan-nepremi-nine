@@ -1802,15 +1802,13 @@ class ExtendCrm(models.Model):
             self._dodeli_nepremicnine()
         return rec
     
-    
-    
 class extendedMemo(models.Model):
     _inherit='note.note'
     
     zaposleni_note=fields.Many2one(string="Ime osebe", 
                                    comodel_name='res.partner', 
                                    inverse_name='zaposleni_porocila', 
-                                   compute='_get_partner',
+                                   compute='_get_partner', 
                                    options="{create': false, 'create_edit': false}")
     
     nepremicnina_note=fields.Many2one(string="Nepremičnina", 
@@ -1818,8 +1816,25 @@ class extendedMemo(models.Model):
                                       inverse_name='nepremicnina_porocila', 
                                       options="{create': false, 'create_edit': false}")
     
+    tip_zapisa=fields.Selection(string="Tip zapisnika", 
+                                selection=[('tedenski','Tedenski plan'),
+                                           ('mesecni','Mesečni plan'),
+                                           ('navaden','Navaden zapis')],
+                                default='navaden')
+    
     @api.depends('zaposleni_note')
     def _get_partner(self):
         partner = self.env['res.users'].browse(self.env.uid).partner_id
         for rec in self:
             rec.zaposleni_note = partner.id
+            
+    @api.onchange('tip_zapisa')
+    def nastavi_zapisnik(self):
+        if self.tip_zapisa==False:
+            self.memo=""
+        if self.tip_zapisa=='navaden':
+            self.memo=""
+        if self.tip_zapisa=='tedenski':
+            self.memo=""
+        if self.tip_zapisa=='mesecni':
+            self.memo=""
