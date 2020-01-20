@@ -196,7 +196,7 @@
             </xpath>   
             
             <xpath expr="//page[@name='nepremicnine']" position='after'>
-                <page name="podatkiIskanja" string="Podatki o iskanju">
+                <page name="podatkiIskanja" string="Podatki o iskanju" attrs="{'invisible': ['|','|','|',('tip_stranke','=','prodajalec'),('tip_stranke','=','najemodajalec'),('tip_stranke','=',False),('tretja_oseba','=',True)]}">
                     <group>
                         <group>
                             <field name="kupec_najemnik_cena_od"/>
@@ -212,18 +212,15 @@
                     <group>     
                         <!-- VRSTA NEPREMIČNINE -->
                         <field name="kupec_najemnik_nepremicnina_vrsta"/>
-                        <field name="kupec_najemnik_nepremicnina_vrsta_drugo"/>
                         <field name="kupec_najemnik_nepremicnina_tip" attrs ="{'invisible':1}"/>
-                        <field name="kupec_najemnik_nepremicnina_tip_1" string="Tip nepremičnine" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_vrsta','!=','stanovanje')],'required':[('kupec_najemnik_nepremicnina_vrsta','==','stanovanje')]
-}"/>
-                        <field name="kupec_najemnik_nepremicnina_tip_2" string="Tip nepremičnine" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_vrsta','!=','hisa')],'required':[('kupec_najemnik_nepremicnina_vrsta','==','hisa')]
-}"/>
-                        <field name="kupec_najemnik_nepremicnina_tip_3" string="Tip nepremičnine" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_vrsta','!=','poslovni')],'required':[('kupec_najemnik_nepremicnina_vrsta','==','poslovni')]
-}"/>
+                        <field name="kupec_najemnik_nepremicnina_tip_1" string="Tip nepremičnine" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_vrsta','!=','stanovanje')]}"/>
+                        <field name="kupec_najemnik_nepremicnina_tip_2" string="Tip nepremičnine" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_vrsta','!=','hisa')]}"/>
+                        <field name="kupec_najemnik_nepremicnina_tip_3" string="Tip nepremičnine" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_vrsta','!=','poslovni')]}"/>
+                        <field name="kupec_najemnik_nepremicnina_vrsta_drugo" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_tip','!=', 'drugo')]}"/>
                         <!-- REGIJA -->
                         <field name="kupec_najemnik_nepremicnina_regija"/>
                         <field name="kupec_najemnik_nepremicnina_upravna_enota" attrs ="{'invisible':1}"/>
-                        <field name="kupec_najemnik_nepremicnina_upravne_enote_1" string="Upravna enota" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_regija','!=', 'dolenjska')]}"/>/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_1" string="Upravna enota" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_regija','!=', 'dolenjska')]}"/>
                         <field name="kupec_najemnik_nepremicnina_upravne_enote_2" string="Upravna enota" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_regija','!=', 'gorenjska')]}"/>
                         <field name="kupec_najemnik_nepremicnina_upravne_enote_3" string="Upravna enota" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_regija','!=', 'juzna_primorska')]}"/>
                         <field name="kupec_najemnik_nepremicnina_upravne_enote_4" string="Upravna enota" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_regija','!=', 'severna_primorska')]}"/>
@@ -237,16 +234,6 @@
                         <field name="kupec_najemnik_nepremicnina_upravne_enote_12" string="Upravna enota" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_regija','!=', 'savinjska')]}"/>
                         <field name="kupec_najemnik_nepremicnina_upravne_enote_13" string="Upravna enota" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_regija','!=', 'zasavska')]}"/>
                     </group>
-                    
-                    
-                    <!--<field name="zaposleni_porocila">
-                        <tree>
-                            <field name="name" string="Ime vnosa"/>
-                            <field name="tip_zapisa"/>
-                            <field name="zaposleni_note"/>
-                            <field name="create_date" string="Čas vnosa"/>
-                        </tree>
-                    </field>-->
                 </page>
             </xpath>
             

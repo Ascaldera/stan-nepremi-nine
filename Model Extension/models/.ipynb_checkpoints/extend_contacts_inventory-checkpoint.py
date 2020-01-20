@@ -615,7 +615,12 @@ class ExtendContacts(models.Model):
         if self.kupec_najemnik_nepremicnina_upravne_enote_13:
             self.kupec_najemnik_nepremicnina_upravna_enota=self.kupec_najemnik_nepremicnina_upravne_enote_13
     
+    #-----------------------------------------------------------------------------------------------
     
+    oseba_potencialni_crm=fields.Many2many(string="CRM",
+                                           comodel_name="crm.lead",
+                                           inverse_name="potencialne_osebe",
+                                           options="{create': false, 'create_edit': false}")
     
     #-----------------------------------------------------------------------------------------------
     
@@ -717,6 +722,20 @@ class ExtendContacts(models.Model):
             self.povprasevanje=""
             self.mnenje=""
             self.nepremicnine=False
+        if self.tip_stranke=="prodajalec" or self.tip_stranke=="najemodajalec" or self.tretja_oseba==True:
+            #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+            self.kupec_najemnik_cena_od=0
+            self.kupec_najemnik_cena_do=0
+            self.kupec_najemnik_velikost_od=0
+            self.kupec_najemnik_velikost_do=0
+            self.kupec_najemnik_letnik_od=0
+            self.kupec_najemnik_letnik_do=0
+            self.kupec_najemnik_nepremicnina_vrsta=[]
+            self.kupec_najemnik_nepremicnina_tip=[]
+            self.kupec_najemnik_nepremicnina_vrsta_drugo=""
+            self.kupec_najemnik_nepremicnina_regija=[]
+            self.kupec_najemnik_nepremicnina_upravna_enota=[]
+            #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     
     @api.onchange('objava_kje','prodajalec_ponudbe')
     def izbris(self):
@@ -1757,9 +1776,16 @@ class ExtendContactTags(models.Model):
 class ExtendCrm(models.Model):   
     _inherit = 'crm.lead'
     
-    nepremicnina = fields.Many2one(comodel_name="product.template", string="Nepremičnina")
+    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    tip_iskanja=fields.Selection(string="Tip iskanja",
+                                 selection=[('stranka','Stranka'),
+                                            ('nepremicnina','Nepremičnina')])
+    
+    iskane_osebe = fields.Many2one(comodel_name="res.partner", string="Oseba")
+    iskane_nepremicnine = fields.Many2one(comodel_name="product.template", string="Oseba")
     
     
+    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     
     tip_priloznosti = fields.Selection(string="Tip priložnosti", 
                                        selection=[('navadno','Navadno'),
@@ -2256,6 +2282,11 @@ class ExtendCrm(models.Model):
                                               inverse_name="nepremicnina_potencialni_crm",
                                               options="{create': false, 'create_edit': false}")
     
+    potencialne_osebe=fields.Many2many(string="Potencialni kupci/najemniki",
+                                       comodel_name="res.partner",
+                                       inverse_name="oseba_potencialni_crm",
+                                       options="{create': false, 'create_edit': false}")
+    
     @api.one
     def _dodeli_nepremicnine(self):
         domain = []
@@ -2292,6 +2323,8 @@ class ExtendCrm(models.Model):
         if 'potencialne_nepremicnine' not in values:
             self._dodeli_nepremicnine()
         return rec
+    
+    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     
 class extendedMemo(models.Model):
     _inherit='note.note'
