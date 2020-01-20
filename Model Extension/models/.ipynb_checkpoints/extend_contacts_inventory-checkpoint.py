@@ -2312,7 +2312,7 @@ class ExtendCrm(models.Model):
 
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         
-    @api.model
+    @api.one
     def _dodeli_stranke(self):
         domain=[]
         domain.append(('kupec_najemnik_cena_od','>=',self.cena_od))
