@@ -1782,7 +1782,7 @@ class ExtendCrm(models.Model):
                                             ('nepremicnina','Nepremičnina')])
     
     iskane_osebe = fields.Many2one(comodel_name="res.partner", string="Oseba")
-    iskane_nepremicnine = fields.Many2one(comodel_name="product.template", string="Oseba")
+    iskane_nepremicnine = fields.Many2one(comodel_name="product.template", string="Nepremičnina")
     
     
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
@@ -2310,11 +2310,40 @@ class ExtendCrm(models.Model):
             domain.append(('nepremicnina_upravna_enota','=',self.upravna_enota))
         self.potencialne_nepremicnine=self.env['product.template'].search(domain)
 
+    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        
+    @api.one
+    def _dodeli_stranke(self):
+        domain=[]
+        domain.append(('kupec_najemnik_cena_od','>=',self.cena_od))
+        domain.append(('kupec_najemnik_velikost_od','>=',self.velikost_od))
+        if self.cena_do and self.cena_do>self.cena_od:
+            domain.append(('kupec_najemnik_cena_do','<=',self.cena_do))
+        if self.velikost_do and self.velikost_do>self.velikost_od:
+            domain.append(('kupec_najemnik_velikost_do','<=',self.velikost_do))
+        if self.letnik_od:
+            domain.append(('kupec_najemnik_letnik_od','>=',self.letnik_od))
+        if self.letnik_do and self.letnik_do>self.letnik_od:
+            domain.append(('kupec_najemnik_letnik_do','<=',self.letnik_do))
+        if self.vrsta:
+            domain.append(('kupec_najemnik_nepremicnina_vrsta','=',self.vrsta))
+        if self.tip:
+            domain.append(('kupec_najemnik_nepremicnina_tip','=',self.tip))
+        if self.regija:
+            domain.append(('kupec_najemnik_nepremicnina_regija','=',self.regija))
+        if self.upravna_enota:
+            domain.append(('kupec_najemnik_nepremicnina_upravna_enota','=',self.upravna_enota))
+        self.potencialne_osebe=self.env['res.partner'].search(domain)
+
+    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        
     @api.model
     def create(self,values):
         rec = super(ExtendCrm,self).create(values)
         if 'potencialne_nepremicnine' not in values:
             rec._dodeli_nepremicnine()
+        if 'potencialne_osebe' not in values:
+            rec._dodeli_stranke()
         return rec
     
     @api.multi
@@ -2322,6 +2351,8 @@ class ExtendCrm(models.Model):
         rec = super(ExtendCrm,self).write(values)
         if 'potencialne_nepremicnine' not in values:
             self._dodeli_nepremicnine()
+        if 'potencialne_osebe' not in values:
+            rec._dodeli_stranke()
         return rec
     
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
