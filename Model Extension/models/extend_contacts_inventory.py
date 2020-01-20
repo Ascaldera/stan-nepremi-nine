@@ -2346,13 +2346,13 @@ class ExtendCrm(models.Model):
             rec._dodeli_stranke()
         return rec
     
-    @api.multi
+    @api.model
     def write(self,values):
         rec = super(ExtendCrm,self).write(values)
         if 'potencialne_nepremicnine' not in values:
             self._dodeli_nepremicnine()
         if 'potencialne_osebe' not in values:
-            rec._dodeli_stranke()
+            self._dodeli_stranke()
         return rec
     
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
