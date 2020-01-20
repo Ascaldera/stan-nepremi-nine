@@ -196,6 +196,54 @@
             </xpath>   
             
             <xpath expr="//page[@name='nepremicnine']" position='after'>
+                <page name="podatkiIskanja" string="Podatki o iskanju">
+                    <group>
+                        <group>
+                            <field name="kupec_najemnik_cena_od"/>
+                            <field name="kupec_najemnik_cena_do"/>
+                            <field name="kupec_najemnik_velikost_od"/>
+                            <field name="kupec_najemnik_velikost_do"/>
+                            <field name="kupec_najemnik_letnik_od"/>
+                            <field name="kupec_najemnik_letnik_do"/>
+                        </group>
+                    </group>
+                    <group>     
+                        <field name="kupec_najemnik_nepremicnina_vrsta"/>
+                        <field name="kupec_najemnik_nepremicnina_vrsta_drugo"/>
+                        <field name="kupec_najemnik_nepremicnina_tip"/>
+                        <field name="kupec_najemnik_nepremicnina_tip_1"/>
+                        <field name="kupec_najemnik_nepremicnina_tip_2"/>
+                        <field name="kupec_najemnik_nepremicnina_tip_3"/>
+                        <field name="kupec_najemnik_nepremicnina_regija"/>
+                        <field name="kupec_najemnik_nepremicnina_upravna_enota"/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_1"/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_2"/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_3"/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_4"/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_5"/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_6"/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_7"/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_8"/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_9"/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_10"/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_11"/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_12"/>
+                        <field name="kupec_najemnik_nepremicnina_upravne_enote_13"/>
+                    </group>
+                    
+                    
+                    <!--<field name="zaposleni_porocila">
+                        <tree>
+                            <field name="name" string="Ime vnosa"/>
+                            <field name="tip_zapisa"/>
+                            <field name="zaposleni_note"/>
+                            <field name="create_date" string="Čas vnosa"/>
+                        </tree>
+                    </field>-->
+                </page>
+            </xpath>
+            
+            <xpath expr="//page[@name='podatkiIskanja']" position='after'>
                 <page name="porocila" string="Poročila">
                     <field name="zaposleni_porocila">
                         <tree>
@@ -207,7 +255,7 @@
                     </field>
                 </page>
             </xpath>
-                
+            
         </field>
     </record>
 </odoo>
