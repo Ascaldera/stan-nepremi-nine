@@ -2399,7 +2399,7 @@ class ExtendCrm(models.Model):
             if self.tip_iskanja=='nepremicnina':
                 self._dodeli_nepremicnine()
         if 'potencialne_osebe' not in values:
-            if self.tip_iskanja=='stranka:
+            if self.tip_iskanja=='stranka':
                 self._dodeli_stranke()
         return rec
     
