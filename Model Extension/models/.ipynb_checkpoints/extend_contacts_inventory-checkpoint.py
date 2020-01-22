@@ -2289,7 +2289,7 @@ class ExtendCrm(models.Model):
     
     @api.onchange('tip_iskanja')
     def erase_data(self):
-        if self.tip_iskanja='nepremicnina':
+        if self.tip_iskanja=='nepremicnina':
             iskane_osebe=[]
             cena_od=0
             cena_do=0
