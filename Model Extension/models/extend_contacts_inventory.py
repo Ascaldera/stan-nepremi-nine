@@ -762,7 +762,7 @@ class ExtendInventory(models.Model):
     @api.multi
     def _compute_opportunity_count(self):
         for nep in self:
-            nep.opportunity_count=self.env['crm.lead'].search_count([('nepremicnina','=',nep.id), ('type', '=', 'opportunity')])
+            nep.opportunity_count=self.env['crm.lead'].search_count([('iskane_nepremicnine','=',nep.id), ('type', '=', 'opportunity')])
     
     custom_currency_id_2 = fields.Many2one('res.currency', 'Custom Currency', default=_get_default_currency_id_2)
     opportunity_count = fields.Integer("Opportunity", compute='_compute_opportunity_count')
@@ -1709,7 +1709,7 @@ class ExtendInventory(models.Model):
                 'name':"CRM",
                 'type': 'ir.actions.act_window',
                 'context': ctx,
-                'domain':[('nepremicnina','=',self.id)]
+                'domain':[('iskane_nepremicnine','=',self.id)]
                }
             
     nepremicnina_potencialni_crm=fields.Many2many(string="CRM",
@@ -2286,6 +2286,25 @@ class ExtendCrm(models.Model):
                                        comodel_name="res.partner",
                                        inverse_name="oseba_potencialni_crm",
                                        options="{create': false, 'create_edit': false}")
+    
+    @api.onchange('tip_iskanja')
+    def erase_data(self):
+        if self.tip_iskanja='nepremicnina':
+            iskane_osebe=[]
+            cena_od=0
+            cena_do=0
+            velikost_od=0
+            velikost_do=0
+            letnik_od=0
+            letnik_do=0
+        else:
+            iskane_nepremicnine=[]
+            cena_od=0
+            cena_do=0
+            velikost_od=0
+            velikost_do=0
+            letnik_od=0
+            letnik_do=0
     
     @api.one
     def _dodeli_nepremicnine(self):
