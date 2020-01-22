@@ -2350,9 +2350,13 @@ class ExtendCrm(models.Model):
     def write(self,values):
         rec = super(ExtendCrm,self).write(values)
         if 'potencialne_nepremicnine' not in values:
-            self._dodeli_nepremicnine()
+            if 'tip_iskanja' in values:
+                if values['tip_iskanja'] == 'nepremicnina':
+                    self._dodeli_nepremicnine()
         if 'potencialne_osebe' not in values:
-            self._dodeli_stranke()
+            if 'tip_iskanja' in values:
+                if values['tip_iskanja'] == 'stranka':
+                    self._dodeli_stranke()
         return rec
     
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
