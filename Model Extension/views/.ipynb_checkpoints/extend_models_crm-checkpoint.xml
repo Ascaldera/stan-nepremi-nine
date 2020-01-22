@@ -13,7 +13,7 @@
                 <field name="tip_priloznosti"/>
             </xpath>
             <xpath expr="//page[@name='lead']" position="before">
-                <page string="Potencialne nepremičnine" attrs ="{'invisible':[('tip_iskanja','!=','stranka')]}">
+                <page string="Potencialne nepremičnine">
                     <group>
                         <group>
                             <field name="vrsta" attrs ="{'required':1}"/>
@@ -63,9 +63,10 @@
                 
                 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
                 
-                <page string="Potencialne osebe" attrs ="{'invisible':[('tip_iskanja','!=','nepremicnina')]}">
+                <page string="Potencialne osebe" >
                     <group>
                         <group>
+                            <field name="test"/>
                             <field name="vrsta" attrs ="{'required':1}"/>
                             <field name="tip" attrs ="{'invisible':1}"/>
                             <field name="tip_1" string="Tip nepremičnine" attrs ="{'invisible':[('vrsta','!=','stanovanje')],'required':[('vrsta','==','stanovanje')]

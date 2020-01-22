@@ -73,9 +73,9 @@
                             <field name="poizvedba_cena" widget='monetary'/>
                             <field name="poizvedba_kontakt_dan"/>
                             <field name="poizvedba_kontaktiran"/>
-                            <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
+                            <!--<field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
                             <field name="poizvedba_kraj" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
-                            <field name="poizvedba_namen" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
+                            <field name="poizvedba_namen" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>-->
                             <field name="poizvedba_zgodovina" colspan='4'/>
                             <field name="poizvedba_ok" colspan='4'/>
                             <field name="poizvedba_nok" colspan='4'/>
@@ -212,14 +212,14 @@
                     <group>     
                         <!-- VRSTA NEPREMIČNINE -->
                         <field name="kupec_najemnik_nepremicnina_vrsta"/>
-                        <field name="kupec_najemnik_nepremicnina_tip" attrs ="{'invisible':1}"/>
+                        <field name="kupec_najemnik_nepremicnina_tip"/>
                         <field name="kupec_najemnik_nepremicnina_tip_1" string="Tip nepremičnine" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_vrsta','!=','stanovanje')]}"/>
                         <field name="kupec_najemnik_nepremicnina_tip_2" string="Tip nepremičnine" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_vrsta','!=','hisa')]}"/>
                         <field name="kupec_najemnik_nepremicnina_tip_3" string="Tip nepremičnine" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_vrsta','!=','poslovni')]}"/>
                         <field name="kupec_najemnik_nepremicnina_vrsta_drugo" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_tip','!=', 'drugo')]}"/>
                         <!-- REGIJA -->
                         <field name="kupec_najemnik_nepremicnina_regija"/>
-                        <field name="kupec_najemnik_nepremicnina_upravna_enota" attrs ="{'invisible':1}"/>
+                        <field name="kupec_najemnik_nepremicnina_upravna_enota"/>
                         <field name="kupec_najemnik_nepremicnina_upravne_enote_1" string="Upravna enota" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_regija','!=', 'dolenjska')]}"/>
                         <field name="kupec_najemnik_nepremicnina_upravne_enote_2" string="Upravna enota" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_regija','!=', 'gorenjska')]}"/>
                         <field name="kupec_najemnik_nepremicnina_upravne_enote_3" string="Upravna enota" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_regija','!=', 'juzna_primorska')]}"/>

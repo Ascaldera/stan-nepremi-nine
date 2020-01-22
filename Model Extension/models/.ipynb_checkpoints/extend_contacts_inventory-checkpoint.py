@@ -53,7 +53,7 @@ class ExtendContacts(models.Model):
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility='onchange')
     poizvedba_cena = fields.Float(string = 'Cena') #EUR
-    poizvedba_kontakt_dan = fields.Date(string = 'Nazadnje kontaktiral')
+    poizvedba_kontakt_dan =  fields.Many2one(comodel_name="res.users", string = 'Nazadnje kontaktiral')
     poizvedba_zgodovina = fields.Char(string = 'Že ogledano')
     poizvedba_ok = fields.Char(string = 'Kaj jim je bilo všeč')
     poizvedba_nok = fields.Char(string = 'Kaj jim ni bilo všeč')
@@ -782,9 +782,9 @@ class ExtendInventory(models.Model):
                                                                 ('oddamo','Oddamo')])
     nepremicnina_novogradnja=fields.Boolean(string="Novogradnja")
     nepremicnina_etaza=fields.Char(string="Etaža")
-    nepremicnina_se_prodaja=fields.Char(string="Nepremičnina se prodaja")
+    nepremicnina_se_prodaja=fields.Char(string="Razlog prodaje")
     nepremicnina_moznost_vselitve=fields.Char(string="Možnost vselitve")
-    nepremicnina_pogoji_prodaje=fields.Selection(string="Pogoji prodaje", selection = [('1', '1'),
+    nepremicnina_pogoji_prodaje=fields.Selection(string="Dogovorjena provizija", selection = [('1', '1'),
                                                                                       ('2','2'),
                                                                                       ('3','3'),
                                                                                       ('4','4')])
@@ -2290,22 +2290,178 @@ class ExtendCrm(models.Model):
     @api.onchange('tip_iskanja')
     def erase_data(self):
         if self.tip_iskanja=='nepremicnina':
-            iskane_osebe=[]
-            cena_od=0
-            cena_do=0
-            velikost_od=0
-            velikost_do=0
-            letnik_od=0
-            letnik_do=0
+            self.iskane_osebe=[]
+            self.cena_od=0
+            self.cena_do=0
+            self.velikost_od=0
+            self.velikost_do=0
+            self.letnik_od=0
+            self.letnik_do=0
+            self.vrsta=[]
+            self.tip=[]
+            self.tip_1=[]
+            self.tip_2=[]
+            self.tip_3=[]
+            self.regija=[]
+            self.upravna_enota=[]
+            self.upravne_enote_1=[]
+            self.upravne_enote_2=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_12=[]
+            self.upravne_enote_13=[]
         else:
-            iskane_nepremicnine=[]
-            cena_od=0
-            cena_do=0
-            velikost_od=0
-            velikost_do=0
-            letnik_od=0
-            letnik_do=0
-    
+            self.iskane_nepremicnine=[]
+            self.cena_od=0
+            self.cena_do=0
+            self.velikost_od=0
+            self.velikost_do=0
+            self.letnik_od=0
+            self.letnik_do=0
+            self.vrsta=[]
+            self.tip=[]
+            self.tip_1=[]
+            self.tip_2=[]
+            self.tip_3=[]
+            self.regija=[]
+            self.upravna_enota=[]
+            self.upravne_enote_1=[]
+            self.upravne_enote_2=[]
+            self.upravne_enote_3=[]
+            self.upravne_enote_4=[]
+            self.upravne_enote_5=[]
+            self.upravne_enote_6=[]
+            self.upravne_enote_7=[]
+            self.upravne_enote_8=[]
+            self.upravne_enote_9=[]
+            self.upravne_enote_10=[]
+            self.upravne_enote_11=[]
+            self.upravne_enote_12=[]
+            self.upravne_enote_13=[]
+        
+    @api.onchange('iskane_osebe','iskane_nepremicnine')
+    def _auto_populate(self):
+        if self.tip_iskanja=='nepremicnina':
+            if self.iskane_osebe:
+                self.cena_od=self.iskane_osebe.kupec_najemnik_cena_od
+                self.cena_do=self.iskane_osebe.kupec_najemnik_cena_do
+                self.velikost_od=self.iskane_osebe.kupec_najemnik_velikost_od
+                self.velikost_do=self.iskane_osebe.kupec_najemnik_velikost_do
+                self.letnik_od=self.iskane_osebe.kupec_najemnik_letnik_od
+                self.letnik_do=self.iskane_osebe.kupec_najemnik_letnik_do
+                self.vrsta=self.iskane_osebe.kupec_najemnik_nepremicnina_vrsta 
+                self.tip=self.iskane_osebe.kupec_najemnik_nepremicnina_tip
+                self.tip_1=self.iskane_osebe.kupec_najemnik_nepremicnina_tip_1
+                self.tip_2=self.iskane_osebe.kupec_najemnik_nepremicnina_tip_2
+                self.tip_3=self.iskane_osebe.kupec_najemnik_nepremicnina_tip_3
+                self.regija=self.iskane_osebe.kupec_najemnik_nepremicnina_regija
+                self.upravna_enota=self.iskane_osebe.kupec_najemnik_nepremicnina_upravna_enota
+                self.upravne_enote_1=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_1
+                self.upravne_enote_2=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_2
+                self.upravne_enote_3=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_3
+                self.upravne_enote_4=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_4
+                self.upravne_enote_5=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_5
+                self.upravne_enote_6=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_6
+                self.upravne_enote_7=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_7
+                self.upravne_enote_8=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_8
+                self.upravne_enote_9=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_9
+                self.upravne_enote_10=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_10
+                self.upravne_enote_11=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_11
+                self.upravne_enote_12=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_12
+                self.upravne_enote_13=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_13
+            else:
+                self.cena_od=0
+                self.cena_do=0
+                self.velikost_od=0
+                self.velikost_do=0
+                self.letnik_od=0
+                self.letnik_do=0
+                self.vrsta=[]
+                self.tip=[]
+                self.tip_1=[]
+                self.tip_2=[]
+                self.tip_3=[]
+                self.regija=[]
+                self.upravna_enota=[]
+                self.upravne_enote_1=[]
+                self.upravne_enote_2=[]
+                self.upravne_enote_3=[]
+                self.upravne_enote_4=[]
+                self.upravne_enote_5=[]
+                self.upravne_enote_6=[]
+                self.upravne_enote_7=[]
+                self.upravne_enote_8=[]
+                self.upravne_enote_9=[]
+                self.upravne_enote_10=[]
+                self.upravne_enote_11=[]
+                self.upravne_enote_12=[]
+                self.upravne_enote_13=[]
+        else:
+            if self.iskane_nepremicnine:
+                self.cena_od=self.iskane_nepremicnine.nepremicnina_cena_dolgorocno
+                self.cena_do=self.iskane_nepremicnine.nepremicnina_cena_dolgorocno
+                self.velikost_od=self.iskane_nepremicnine.nepremicnina_povrsina
+                self.velikost_do=self.iskane_nepremicnine.nepremicnina_povrsina
+                self.letnik_od=self.iskane_nepremicnine.nepremicnina_leto_izgradnje
+                self.letnik_do=self.iskane_nepremicnine.nepremicnina_leto_izgradnje
+                self.vrsta=self.iskane_nepremicnine.nepremicnina_vrsta
+                self.tip=self.iskane_nepremicnine.nepremicnina_tip
+                self.tip_1=self.iskane_nepremicnine.nepremicnina_tip_1
+                self.tip_2=self.iskane_nepremicnine.nepremicnina_tip_2
+                self.tip_3=self.iskane_nepremicnine.nepremicnina_tip_3
+                self.regija=self.iskane_nepremicnine.nepremicnina_regija
+                self.upravna_enota=self.iskane_nepremicnine.nepremicnina_upravna_enota
+                self.upravne_enote_1=self.iskane_nepremicnine.nepremicnina_upravne_enote_1
+                self.upravne_enote_2=self.iskane_nepremicnine.nepremicnina_upravne_enote_2
+                self.upravne_enote_3=self.iskane_nepremicnine.nepremicnina_upravne_enote_3
+                self.upravne_enote_4=self.iskane_nepremicnine.nepremicnina_upravne_enote_4
+                self.upravne_enote_5=self.iskane_nepremicnine.nepremicnina_upravne_enote_5
+                self.upravne_enote_6=self.iskane_nepremicnine.nepremicnina_upravne_enote_6
+                self.upravne_enote_7=self.iskane_nepremicnine.nepremicnina_upravne_enote_7
+                self.upravne_enote_8=self.iskane_nepremicnine.nepremicnina_upravne_enote_8
+                self.upravne_enote_9=self.iskane_nepremicnine.nepremicnina_upravne_enote_9
+                self.upravne_enote_10=self.iskane_nepremicnine.nepremicnina_upravne_enote_10
+                self.upravne_enote_11=self.iskane_nepremicnine.nepremicnina_upravne_enote_11
+                self.upravne_enote_12=self.iskane_nepremicnine.nepremicnina_upravne_enote_12
+                self.upravne_enote_13=self.iskane_nepremicnine.nepremicnina_upravne_enote_13
+
+            else:
+                self.cena_od=0
+                self.cena_do=0
+                self.velikost_od=0
+                self.velikost_do=0
+                self.letnik_od=0
+                self.letnik_do=0
+                self.vrsta=[]
+                self.tip=[]
+                self.tip_1=[]
+                self.tip_2=[]
+                self.tip_3=[]
+                self.regija=[]
+                self.upravna_enota=[]
+                self.upravne_enote_1=[]
+                self.upravne_enote_2=[]
+                self.upravne_enote_3=[]
+                self.upravne_enote_4=[]
+                self.upravne_enote_5=[]
+                self.upravne_enote_6=[]
+                self.upravne_enote_7=[]
+                self.upravne_enote_8=[]
+                self.upravne_enote_9=[]
+                self.upravne_enote_10=[]
+                self.upravne_enote_11=[]
+                self.upravne_enote_12=[]
+                self.upravne_enote_13=[]
+ 
+    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        
     @api.one
     def _dodeli_nepremicnine(self):
         domain = []
@@ -2328,8 +2484,11 @@ class ExtendCrm(models.Model):
         if self.upravna_enota:
             domain.append(('nepremicnina_upravna_enota','=',self.upravna_enota))
         self.potencialne_nepremicnine=self.env['product.template'].search(domain)
+        self.test=str(domain)
 
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+        
+    test=fields.Char(string="test")
         
     @api.one
     def _dodeli_stranke(self):
@@ -2355,51 +2514,26 @@ class ExtendCrm(models.Model):
         self.potencialne_osebe=self.env['res.partner'].search(domain)
 
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        
-    @api.onchange('iskane_osebe','iskane_nepremicnine')
-    def _auto_populate(self):
-        if self.iskane_osebe:
-            self.cena_od=iskane_osebe.kupec_najemnik_cena_od
-            self.cena_do=iskane_osebe.kupec_najemnik_cena_do
-            self.velikost_od=iskane_osebe.kupec_najemnik_velikost_od
-            self.velikost_do=iskane_osebe.kupec_najemnik_velikost_do
-            self.letnik_od=iskane_osebe.kupec_najemnik_letnik_od
-            self.letnik_do=iskane_osebe.kupec_najemnik_letnik_do
-            self.vrsta=iskane_osebe.kupec_najemnik_nepremicnina_vrsta
-            self.tip=iskane_osebe.kupec_najemnik_nepremicnina_tip
-            self.regija=iskane_osebe.kupec_najemnik_regija
-            self.upravna_enota=iskane_osebe.kupec_najemnik_nepremicnina_upravna_enota
-        if self.iskane_nepremicnine:
-            self.cena_od=iskane_nepremicnine.nepremicnina_cena_dolgorocno
-            self.cena_do=iskane_nepremicnine.nepremicnina_cena_dolgorocno
-            self.velikost_od=iskane_nepremicnine.nepremicnina_povrsina
-            self.velikost_do=iskane_nepremicnine.nepremicnina_povrsina
-            self.letnik_od=iskane_nepremicnine.nepremicnina_leto_izgradnje
-            self.letnik_do=iskane_nepremicnine.nepremicnina_leto_izgradnje
-            self.vrsta=iskane_nepremicnine.nepremicnina_vrsta
-            self.tip=iskane_nepremicnine.nepremicnina_tip
-            self.regija=iskane_nepremicnine.nepremicnina_regija
-            self.upravna_enota=iskane_nepremicnine.nepremicnina_upravna_enota
- 
+
     @api.model
     def create(self,values):
         rec = super(ExtendCrm,self).create(values)
         if 'potencialne_nepremicnine' not in values:
-            if values['tip_iskanja'] == 'nepremicnina':
+            if values['tip_iskanja'] == 'stranka':
                 rec._dodeli_nepremicnine()
         if 'potencialne_osebe' not in values:
-            if values['tip_iskanja'] == 'stranka':
+            if values['tip_iskanja'] == 'nepremicnina':
                 rec._dodeli_stranke()
         return rec
     
     @api.multi
     def write(self,values):
         rec = super(ExtendCrm,self).write(values)
-        if 'potencialne_nepremicnine' not in values:
-            if self.tip_iskanja=='nepremicnina':
-                self._dodeli_nepremicnine()
-        if 'potencialne_osebe' not in values:
+        if 'potencialne_nepremicnine' not in values and 'test' not in values:
             if self.tip_iskanja=='stranka':
+                self._dodeli_nepremicnine()
+        if 'potencialne_osebe' not in values and 'test' not in values:
+            if self.tip_iskanja=='nepremicnina':
                 self._dodeli_stranke()
         return rec
     
