@@ -8,10 +8,12 @@
         <field name="arch" type="xml"> 
             <xpath expr="//field[@name='partner_id']" position="before">
                 <field name="tip_iskanja" attrs ="{'required':1}"/>
+                <field name="iskane_osebe" attrs ="{'invisible':[('tip_iskanja','!=','nepremicnina')]}"/>
+                <field name="iskane_nepremicnine" attrs ="{'invisible':[('tip_iskanja','!=','stranka')]}"/>
                 <field name="tip_priloznosti"/>
             </xpath>
             <xpath expr="//page[@name='lead']" position="before">
-                <page string="Potencialne nepremičnine" attrs ="{'invisible':[('tip_iskanja','!=','nepremicnina')]}">
+                <page string="Potencialne nepremičnine" attrs ="{'invisible':[('tip_iskanja','!=','stranka')]}">
                     <group>
                         <group>
                             <field name="vrsta" attrs ="{'required':1}"/>
@@ -61,7 +63,7 @@
                 
                 <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
                 
-                <page string="Potencialne osebe" attrs ="{'invisible':[('tip_iskanja','!=','stranka')]}">
+                <page string="Potencialne osebe" attrs ="{'invisible':[('tip_iskanja','!=','nepremicnina')]}">
                     <group>
                         <group>
                             <field name="vrsta" attrs ="{'required':1}"/>
@@ -70,7 +72,7 @@
                 }"/>
                             <field name="tip_2" string="Tip nepremičnine" attrs ="{'invisible':[('vrsta','!=','hisa')],'required':[('vrsta','==','hisa')]}"/>
                             <field name="tip_3" string="Tip nepremičnine" attrs ="{'invisible':[('vrsta','!=','poslovni')],'required':[('vrsta','==','poslovni')]}"/>
-                            <field name="regija" string="Regija" attrs ="{'required':1}"/>
+                            <field name="regija" string="Regija"/>
                             <field name="upravna_enota" attrs ="{'invisible':1}"/>
                             <field name="upravne_enote_1" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'dolenjska')],'required':[('regija','==','dolenjska')]}"/>
                             <field name="upravne_enote_2" string="Upravna enota" attrs ="{'invisible':[('regija','!=', 'gorenjska')],'required':[('regija','==','gorenjska')]}"/>

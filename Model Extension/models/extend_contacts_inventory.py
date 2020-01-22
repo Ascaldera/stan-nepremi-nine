@@ -2356,26 +2356,51 @@ class ExtendCrm(models.Model):
 
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         
+    @api.onchange('iskane_osebe','iskane_nepremicnine')
+    def _auto_populate(self):
+        if self.iskane_osebe:
+            self.cena_od=iskane_osebe.kupec_najemnik_cena_od
+            self.cena_do=iskane_osebe.kupec_najemnik_cena_do
+            self.velikost_od=iskane_osebe.kupec_najemnik_velikost_od
+            self.velikost_do=iskane_osebe.kupec_najemnik_velikost_do
+            self.letnik_od=iskane_osebe.kupec_najemnik_letnik_od
+            self.letnik_do=iskane_osebe.kupec_najemnik_letnik_do
+            self.vrsta=iskane_osebe.kupec_najemnik_nepremicnina_vrsta
+            self.tip=iskane_osebe.kupec_najemnik_nepremicnina_tip
+            self.regija=iskane_osebe.kupec_najemnik_regija
+            self.upravna_enota=iskane_osebe.kupec_najemnik_nepremicnina_upravna_enota
+        if self.iskane_nepremicnine:
+            self.cena_od=iskane_nepremicnine.nepremicnina_cena_dolgorocno
+            self.cena_do=iskane_nepremicnine.nepremicnina_cena_dolgorocno
+            self.velikost_od=iskane_nepremicnine.nepremicnina_povrsina
+            self.velikost_do=iskane_nepremicnine.nepremicnina_povrsina
+            self.letnik_od=iskane_nepremicnine.nepremicnina_leto_izgradnje
+            self.letnik_do=iskane_nepremicnine.nepremicnina_leto_izgradnje
+            self.vrsta=iskane_nepremicnine.nepremicnina_vrsta
+            self.tip=iskane_nepremicnine.nepremicnina_tip
+            self.regija=iskane_nepremicnine.nepremicnina_regija
+            self.upravna_enota=iskane_nepremicnine.nepremicnina_upravna_enota
+ 
     @api.model
     def create(self,values):
         rec = super(ExtendCrm,self).create(values)
         if 'potencialne_nepremicnine' not in values:
-            rec._dodeli_nepremicnine()
+            if values['tip_iskanja'] == 'nepremicnina':
+                rec._dodeli_nepremicnine()
         if 'potencialne_osebe' not in values:
-            rec._dodeli_stranke()
+            if values['tip_iskanja'] == 'stranka':
+                rec._dodeli_stranke()
         return rec
     
     @api.multi
     def write(self,values):
         rec = super(ExtendCrm,self).write(values)
         if 'potencialne_nepremicnine' not in values:
-            if 'tip_iskanja' in values:
-                if values['tip_iskanja'] == 'nepremicnina':
-                    self._dodeli_nepremicnine()
+            if self.tip_iskanja=='nepremicnina':
+                self._dodeli_nepremicnine()
         if 'potencialne_osebe' not in values:
-            if 'tip_iskanja' in values:
-                if values['tip_iskanja'] == 'stranka':
-                    self._dodeli_stranke()
+            if self.tip_iskanja=='stranka:
+                self._dodeli_stranke()
         return rec
     
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
