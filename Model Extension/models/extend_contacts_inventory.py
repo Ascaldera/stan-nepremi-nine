@@ -2512,7 +2512,7 @@ class ExtendCrm(models.Model):
         if self.cena_od:
             domain.append(('nepremicnina_cena_dolgorocno','<=',self.cena_od))
         if self.velikost_od:
-        domain.append(('nepremicnina_povrsina','>=',self.velikost_od))
+            domain.append(('nepremicnina_povrsina','>=',self.velikost_od))
         if self.cena_do and self.cena_do>self.cena_od:
             domain.append(('nepremicnina_cena_dolgorocno','<=',self.cena_do))
         if self.velikost_do and self.velikost_do>self.velikost_od:
