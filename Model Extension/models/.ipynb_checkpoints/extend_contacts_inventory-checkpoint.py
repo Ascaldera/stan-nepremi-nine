@@ -2461,6 +2461,15 @@ class ExtendCrm(models.Model):
                 self.upravne_enote_13=[]
  
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    
+    @api.onchange('cena_od','cena_do','velikost_od','velikost_do','letnik_od','letnik_do','vrsta','tip','regija','upravna_enota')
+    def _dodeli_os_ne(self):
+        if self.tip_iskanja=='stranka':
+            self._dodeli_stranke()
+        else:
+            self._dodeli_nepremicnine()
+    
+    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         
     @api.one
     def _dodeli_nepremicnine(self):
@@ -2515,27 +2524,27 @@ class ExtendCrm(models.Model):
 
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
-    @api.model
-    def create(self,values):
-        rec = super(ExtendCrm,self).create(values)
-        if 'potencialne_nepremicnine' not in values:
-            if values['tip_iskanja'] == 'stranka':
-                rec._dodeli_nepremicnine()
-        if 'potencialne_osebe' not in values:
-            if values['tip_iskanja'] == 'nepremicnina':
-                rec._dodeli_stranke()
-        return rec
+    #@api.model
+    #def create(self,values):
+    #    rec = super(ExtendCrm,self).create(values)
+    #    if 'potencialne_nepremicnine' not in values:
+    #        if values['tip_iskanja'] == 'stranka':
+    #            rec._dodeli_nepremicnine()
+    #    if 'potencialne_osebe' not in values:
+    #        if values['tip_iskanja'] == 'nepremicnina':
+    #            rec._dodeli_stranke()
+    #    return rec
     
-    @api.multi
-    def write(self,values):
-        rec = super(ExtendCrm,self).write(values)
-        if 'potencialne_nepremicnine' not in values and 'test' not in values:
-            if self.tip_iskanja=='stranka':
-                self._dodeli_nepremicnine()
-        if 'potencialne_osebe' not in values and 'test' not in values:
-            if self.tip_iskanja=='nepremicnina':
-                self._dodeli_stranke()
-        return rec
+    #@api.multi
+    #def write(self,values):
+    #    rec = super(ExtendCrm,self).write(values)
+    #    if 'potencialne_nepremicnine' not in values and 'test' not in values:
+    #        if self.tip_iskanja=='stranka':
+    #            self._dodeli_nepremicnine()
+    #    if 'potencialne_osebe' not in values and 'test' not in values:
+    #        if self.tip_iskanja=='nepremicnina':
+    #            self._dodeli_stranke()
+    #    return rec
     
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     
