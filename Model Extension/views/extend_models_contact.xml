@@ -14,7 +14,10 @@
                     <field name="zakaj_kupuje"/>
                 </group>
             </xpath>
-
+            
+            <xpath expr="//page[@name='sales_purchases']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
             
             <!-- Contact TAB: Info o nepremičninah -->
             <xpath expr="//page[@name='sales_purchases']" position='after'>
@@ -212,14 +215,14 @@
                     <group>     
                         <!-- VRSTA NEPREMIČNINE -->
                         <field name="kupec_najemnik_nepremicnina_vrsta"/>
-                        <field name="kupec_najemnik_nepremicnina_tip"/>
+                        <field name="kupec_najemnik_nepremicnina_tip" attrs="{'invisible':1}"/>
                         <field name="kupec_najemnik_nepremicnina_tip_1" string="Tip nepremičnine" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_vrsta','!=','stanovanje')]}"/>
                         <field name="kupec_najemnik_nepremicnina_tip_2" string="Tip nepremičnine" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_vrsta','!=','hisa')]}"/>
                         <field name="kupec_najemnik_nepremicnina_tip_3" string="Tip nepremičnine" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_vrsta','!=','poslovni')]}"/>
                         <field name="kupec_najemnik_nepremicnina_vrsta_drugo" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_tip','!=', 'drugo')]}"/>
                         <!-- REGIJA -->
                         <field name="kupec_najemnik_nepremicnina_regija"/>
-                        <field name="kupec_najemnik_nepremicnina_upravna_enota"/>
+                        <field name="kupec_najemnik_nepremicnina_upravna_enota" attrs="{'invisible':1}"/>
                         <field name="kupec_najemnik_nepremicnina_upravne_enote_1" string="Upravna enota" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_regija','!=', 'dolenjska')]}"/>
                         <field name="kupec_najemnik_nepremicnina_upravne_enote_2" string="Upravna enota" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_regija','!=', 'gorenjska')]}"/>
                         <field name="kupec_najemnik_nepremicnina_upravne_enote_3" string="Upravna enota" attrs ="{'invisible':[('kupec_najemnik_nepremicnina_regija','!=', 'juzna_primorska')]}"/>
@@ -237,6 +240,7 @@
                 </page>
             </xpath>
             
+            <!--
             <xpath expr="//page[@name='podatkiIskanja']" position='after'>
                 <page name="porocila" string="Poročila">
                     <field name="zaposleni_porocila">
@@ -249,7 +253,7 @@
                     </field>
                 </page>
             </xpath>
-            
+            -->
         </field>
     </record>
 </odoo>

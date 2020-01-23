@@ -40,13 +40,56 @@
         </field>
     </record>
 
+    <record id="res_product_form_inherited_hide" model="ir.ui.view"> 
+        <field name="name">Inherited Product Template hidden</field> 
+        <field name="model">product.template</field> 
+        <field name="inherit_id" ref="product.product_template_only_form_view"/> 
+        <field name="arch" type="xml"> 
+            <xpath expr="//field[@name='default_code']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='barcode']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='barcode']" position="after">
+                <field name="nepremicnina_vrsta_posredovanja"/>
+                <field name="nepremicnina_novogradnja"/>
+                <field name="nepremicnina_za_investicijo"/>
+                <field name="nepremicnina_oglasevana"/>
+                <field name="nepremicnina_oglasevana_kje" attrs ="{'invisible':[('nepremicnina_oglasevana','=', False)]}"/>
+                <field name="nepremicnina_oglasevana_kdaj" force_save="1" attrs ="{'invisible':[('nepremicnina_oglasevana','=', False)]}"/>
+            </xpath>
+        </field>
+    </record>
+    
     <!--\\\\\\\\\\\\\\\\\\\\\\\\\\  INVENTORY: dodaja polj  \\\\\\\\\\\\\\\\\\-->
     <record id="res_product_form_inherited" model="ir.ui.view"> 
         <field name="name">Inherited Product Template</field> 
         <field name="model">product.template</field> 
         <field name="inherit_id" ref="product.product_template_form_view"/> 
         <field name="arch" type="xml"> 
-    
+            
+            <label for="name" position="replace">
+                <label string="Nepremičnina" for="name"/>
+            </label>
+            
+            <xpath expr="//div[@name='options']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//group[@name='group_standard_price']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            
+            <xpath expr="//field[@name='type']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//field[@name='categ_id']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <xpath expr="//page[@name='sales']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+
             <!-- NEW CRM LINK BUTTON-->
             <xpath expr="//button[@name='toggle_active']" position="before">
                 <button class="oe_stat_button o_res_partner_tip_opp" name="crm_link" type="object" icon="fa-star">
@@ -239,7 +282,7 @@
                 </page>
             </xpath>
             
-            <!-- SLIKE 2 -->
+            <!-- SLIKE 2 
             <xpath expr="//page[@name='general_information']" position='after'>
                 <page name="slike" string="Slike 2">
                     <group name="slike" string="Slike 2">
@@ -273,7 +316,7 @@
                         <field name='slike_attachments' nolabel='1' widget='many2many_binary'/>
                     </group>
                 </page>
-            </xpath>
+            </xpath>-->
             
             <!-- CUSTOM TAB - Opis -->
             <xpath expr="//page[@name='general_information']" position='after'>
@@ -282,7 +325,7 @@
                     <group string='Opis nepremičnine' col="4" colspan="2">
                         <field name="nepremicnina_leto_izgradnje"/>
                         <field name="nepremicnina_adaptacija" widget="boolean_toggle"/>
-                        <field name="nepremicnina_streha"/>
+                        <field name="nepremicnina_streha" attrs ="{'invisible':[('nepremicnina_vrsta','!=','hisa')]}"/>
                         <field name="nepremicnina_leto_adaptacija" attrs ="{'invisible':[('nepremicnina_adaptacija','!=', True)],'required':[('nepremicnina_adaptacija','=',True)]}"/>
                         <field name="nepremicnina_izolacija"/>
                         <field name="nepremicnina_adaptacija_info" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" attrs ="{'invisible':[('nepremicnina_adaptacija','!=', True)]}"/>
@@ -485,11 +528,6 @@
                     </group>
                 </page>
             </xpath>
-            
-            
-            
-            
-            
         </field>
     </record>
     

@@ -1719,7 +1719,7 @@ class ExtendInventory(models.Model):
     
     nepremicnina_oglasevana=fields.Boolean(string="Oglaševano",
                                            track_visibility='onchange')
-    nepremicnina_oglasevana_kje=fields.Many2one(string="Lokacija oglasa",
+    nepremicnina_oglasevana_kje=fields.Many2many(string="Lokacija oglasa",
                                                 comodel_name="custom.sifrant",
                                                 inverse_name="display")
     nepremicnina_oglasevana_kdaj=fields.Date(string="Datum oglasa", 
@@ -2494,8 +2494,6 @@ class ExtendCrm(models.Model):
                 self.upravne_enote_13=[]
  
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    
-    test=fields.Char(string="test")
     @api.onchange('cena_od','cena_do','velikost_od','velikost_do','letnik_od','letnik_do','vrsta','tip','regija','upravna_enota')
     def _dodeli_os_ne(self):
         if self.tip_iskanja=='stranka':
@@ -2509,57 +2507,104 @@ class ExtendCrm(models.Model):
     @api.one
     def _dodeli_nepremicnine(self):
         domain = []
-        if self.cena_od:
-            domain.append(('nepremicnina_cena_dolgorocno','<=',self.cena_od))
-        if self.velikost_od:
-            domain.append(('nepremicnina_povrsina','>=',self.velikost_od))
-        if self.cena_do and self.cena_do>self.cena_od:
-            domain.append(('nepremicnina_cena_dolgorocno','<=',self.cena_do))
-        if self.velikost_do and self.velikost_do>self.velikost_od:
-            domain.append(('nepremicnina_povrsina','<=',self.velikost_do))
-        if self.letnik_od:
-            domain.append(('nepremicnina_leto_izgradnje','>=',self.letnik_od))
-        if self.letnik_do and self.letnik_do>self.letnik_od:
-            domain.append(('nepremicnina_leto_izgradnje','<=',self.letnik_do))
-        if self.vrsta:
-            domain.append(('nepremicnina_vrsta','=',self.vrsta))
-        if self.tip:
-            domain.append(('nepremicnina_tip','=',self.tip))
-        if self.regija:
-            domain.append(('nepremicnina_regija','=',self.regija))
-        if self.upravna_enota:
-            domain.append(('nepremicnina_upravna_enota','=',self.upravna_enota))
-        self.potencialne_nepremicnine=self.env['product.template'].search(domain)
-        self.test=str(domain)
+        if self.iskane_osebe:
+            if self.cena_od:
+                domain.append(('nepremicnina_cena_dolgorocno','>=',self.cena_od))
+            if self.velikost_od:
+                domain.append(('nepremicnina_povrsina','>=',self.velikost_od))
+            if self.cena_do and self.cena_do>self.cena_od:
+                domain.append(('nepremicnina_cena_dolgorocno','<=',self.cena_do))
+            if self.velikost_do and self.velikost_do>self.velikost_od:
+                domain.append(('nepremicnina_povrsina','<=',self.velikost_do))
+            if self.letnik_od:
+                domain.append(('nepremicnina_leto_izgradnje','>=',self.letnik_od))
+            if self.letnik_do and self.letnik_do>self.letnik_od:
+                domain.append(('nepremicnina_leto_izgradnje','<=',self.letnik_do))
+            if self.vrsta:
+                domain.append(('nepremicnina_vrsta','=',self.vrsta))
+            if self.tip:
+                domain.append(('nepremicnina_tip','=',self.tip))
+            if self.regija:
+                domain.append(('nepremicnina_regija','=',self.regija))
+            if self.upravna_enota:
+                domain.append(('nepremicnina_upravna_enota','=',self.upravna_enota))
+            self.potencialne_nepremicnine=self.env['product.template'].search(domain)
+        else:
+            if not(self.cena_od or self.cena_do or self.velikost_od or self.velikost_do or self.letnik_od or self.letnik_do or self.vrsta or self.tip or self.regija or self.upravna_enota):
+                domain.append(('nepremicnina_cena_dolgorocno','=',-999999999999999999))
+            else:
+                if self.cena_od:
+                    domain.append(('nepremicnina_cena_dolgorocno','>=',self.cena_od))
+                if self.velikost_od:
+                    domain.append(('nepremicnina_povrsina','>=',self.velikost_od))
+                if self.cena_do and self.cena_do>self.cena_od:
+                    domain.append(('nepremicnina_cena_dolgorocno','<=',self.cena_do))
+                if self.velikost_do and self.velikost_do>self.velikost_od:
+                    domain.append(('nepremicnina_povrsina','<=',self.velikost_do))
+                if self.letnik_od:
+                    domain.append(('nepremicnina_leto_izgradnje','>=',self.letnik_od))
+                if self.letnik_do and self.letnik_do>self.letnik_od:
+                    domain.append(('nepremicnina_leto_izgradnje','<=',self.letnik_do))
+                if self.vrsta:
+                    domain.append(('nepremicnina_vrsta','=',self.vrsta))
+                if self.tip:
+                    domain.append(('nepremicnina_tip','=',self.tip))
+                if self.regija:
+                    domain.append(('nepremicnina_regija','=',self.regija))
+                if self.upravna_enota:
+                    domain.append(('nepremicnina_upravna_enota','=',self.upravna_enota))
+            self.potencialne_nepremicnine=self.env['product.template'].search(domain)
 
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         
     @api.one
     def _dodeli_stranke(self):
         domain=[]
-        if self.cena_od:
-            domain.append(('kupec_najemnik_cena_od','>=',self.cena_od))
-        if self.velikost_od:
-            domain.append(('kupec_najemnik_velikost_od','>=',self.velikost_od))
-        if self.cena_do and self.cena_do>self.cena_od:
-            domain.append(('kupec_najemnik_cena_do','<=',self.cena_do))
-        if self.velikost_do and self.velikost_do>self.velikost_od:
-            domain.append(('kupec_najemnik_velikost_do','<=',self.velikost_do))
-        if self.letnik_od:
-            domain.append(('kupec_najemnik_letnik_od','>=',self.letnik_od))
-        if self.letnik_do and self.letnik_do>self.letnik_od:
-            domain.append(('kupec_najemnik_letnik_do','<=',self.letnik_do))
-        if self.vrsta:
-            domain.append(('kupec_najemnik_nepremicnina_vrsta','=',self.vrsta))
-        if self.tip:
-            domain.append(('kupec_najemnik_nepremicnina_tip','=',self.tip))
-        if self.regija:
-            domain.append(('kupec_najemnik_nepremicnina_regija','=',self.regija))
-        if self.upravna_enota:
-            domain.append(('kupec_najemnik_nepremicnina_upravna_enota','=',self.upravna_enota))
-        self.potencialne_osebe=self.env['res.partner'].search(domain)
-        self.test=str(domain)
-
+        if self.iskane_nepremicnine:
+            if self.vrsta:
+                domain.append(('kupec_najemnik_nepremicnina_vrsta','=',self.vrsta))
+            if self.tip:
+                domain.append(('kupec_najemnik_nepremicnina_tip','=',self.tip))
+            if self.regija:
+                domain.append(('kupec_najemnik_nepremicnina_regija','=',self.regija))
+            if self.upravna_enota:
+                domain.append(('kupec_najemnik_nepremicnina_upravna_enota','=',self.upravna_enota))
+            if self.cena_do and self.cena_do>self.cena_od:
+                domain.append(('kupec_najemnik_cena_od','<=',self.cena_do))
+            if self.velikost_do and self.velikost_do>self.velikost_od:
+                domain.append(('kupec_najemnik_velikost_do','<=',self.velikost_do))
+            if self.velikost_od:
+                domain.append(('kupec_najemnik_velikost_od','>=',self.velikost_od))
+            if self.letnik_od:
+                domain.append(('kupec_najemnik_letnik_od','>=',self.letnik_od))
+            if self.letnik_do and self.letnik_do>self.letnik_od:
+                domain.append(('kupec_najemnik_letnik_do','<=',self.letnik_do))
+            self.potencialne_osebe=self.env['res.partner'].search(domain)
+        else:
+            if not(self.cena_do or self.velikost_od or self.velikost_do or self.letnik_od or self.letnik_do or self.vrsta or self.tip or self.regija or self.upravna_enota):
+                domain.append(('kupec_najemnik_cena_od','=',-999999999999999999))
+            else:
+                if self.vrsta:
+                    domain.append(('kupec_najemnik_nepremicnina_vrsta','=',self.vrsta))
+                if self.tip:
+                    domain.append(('kupec_najemnik_nepremicnina_tip','=',self.tip))
+                if self.regija:
+                    domain.append(('kupec_najemnik_nepremicnina_regija','=',self.regija))
+                if self.upravna_enota:
+                    domain.append(('kupec_najemnik_nepremicnina_upravna_enota','=',self.upravna_enota))
+                if self.cena_do and self.cena_do>self.cena_od:
+                    domain.append(('kupec_najemnik_cena_od','<=',self.cena_do))
+                    domain.append(('kupec_najemnik_cena_od','>',0))
+                if self.velikost_do and self.velikost_do>self.velikost_od:
+                    domain.append(('kupec_najemnik_velikost_do','<=',self.velikost_do))
+                if self.velikost_od:
+                    domain.append(('kupec_najemnik_velikost_od','>=',self.velikost_od))
+                if self.letnik_od:
+                    domain.append(('kupec_najemnik_letnik_od','>=',self.letnik_od))
+                if self.letnik_do and self.letnik_do>self.letnik_od:
+                    domain.append(('kupec_najemnik_letnik_do','<=',self.letnik_do))
+            self.potencialne_osebe=self.env['res.partner'].search(domain)
+        
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
     #@api.model
