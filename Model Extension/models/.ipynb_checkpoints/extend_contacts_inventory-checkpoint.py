@@ -1794,7 +1794,7 @@ class ExtendCrm(models.Model):
     
     cena_od=fields.Float(string="Cena od")
     cena_do=fields.Float(string="Cena do")
-    velikost_od=fields.Float(string="Velikost oo")
+    velikost_od=fields.Float(string="Velikost od")
     velikost_do=fields.Float(string="Velikost do")
     letnik_od=fields.Char(string="Letnik od")
     letnik_do=fields.Char(string="Letnik do")
@@ -2291,12 +2291,12 @@ class ExtendCrm(models.Model):
     def erase_data(self):
         if self.tip_iskanja=='nepremicnina':
             self.iskane_osebe=[]
-            self.cena_od=0
-            self.cena_do=0
-            self.velikost_od=0
-            self.velikost_do=0
-            self.letnik_od=0
-            self.letnik_do=0
+            self.cena_od=False
+            self.cena_do=False
+            self.velikost_od=False
+            self.velikost_do=False
+            self.letnik_od=False
+            self.letnik_do=False
             self.vrsta=[]
             self.tip=[]
             self.tip_1=[]
@@ -2348,14 +2348,32 @@ class ExtendCrm(models.Model):
         
     @api.onchange('iskane_osebe','iskane_nepremicnine')
     def _auto_populate(self):
-        if self.tip_iskanja=='nepremicnina':
+        if self.tip_iskanja=='stranka':
             if self.iskane_osebe:
-                self.cena_od=self.iskane_osebe.kupec_najemnik_cena_od
-                self.cena_do=self.iskane_osebe.kupec_najemnik_cena_do
-                self.velikost_od=self.iskane_osebe.kupec_najemnik_velikost_od
-                self.velikost_do=self.iskane_osebe.kupec_najemnik_velikost_do
-                self.letnik_od=self.iskane_osebe.kupec_najemnik_letnik_od
-                self.letnik_do=self.iskane_osebe.kupec_najemnik_letnik_do
+                if self.iskane_osebe.kupec_najemnik_cena_od!=0:
+                    self.cena_od=self.iskane_osebe.kupec_najemnik_cena_od
+                else:
+                    self.cena_od=False
+                if self.iskane_osebe.kupec_najemnik_cena_do!=0:    
+                    self.cena_do=self.iskane_osebe.kupec_najemnik_cena_do
+                else:
+                    self.cena_do=False
+                if self.iskane_osebe.kupec_najemnik_velikost_od!=0:
+                    self.velikost_od=self.iskane_osebe.kupec_najemnik_velikost_od
+                else:
+                    self.velikost_od=False
+                if self.iskane_osebe.kupec_najemnik_velikost_do!=0:
+                    self.velikost_do=self.iskane_osebe.kupec_najemnik_velikost_do
+                else:
+                    self.velikost_do=False
+                if self.iskane_osebe.kupec_najemnik_letnik_od!=0:
+                    self.letnik_od=self.iskane_osebe.kupec_najemnik_letnik_od
+                else:
+                    self.letnik_od=False
+                if self.iskane_osebe.kupec_najemnik_letnik_do!=0:
+                    self.letnik_do=self.iskane_osebe.kupec_najemnik_letnik_do
+                else:
+                    self.letnik_do=False
                 self.vrsta=self.iskane_osebe.kupec_najemnik_nepremicnina_vrsta 
                 self.tip=self.iskane_osebe.kupec_najemnik_nepremicnina_tip
                 self.tip_1=self.iskane_osebe.kupec_najemnik_nepremicnina_tip_1
@@ -2377,12 +2395,12 @@ class ExtendCrm(models.Model):
                 self.upravne_enote_12=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_12
                 self.upravne_enote_13=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_13
             else:
-                self.cena_od=0
-                self.cena_do=0
-                self.velikost_od=0
-                self.velikost_do=0
-                self.letnik_od=0
-                self.letnik_do=0
+                self.cena_od=False
+                self.cena_do=False
+                self.velikost_od=False
+                self.velikost_do=False
+                self.letnik_od=False
+                self.letnik_do=False
                 self.vrsta=[]
                 self.tip=[]
                 self.tip_1=[]
@@ -2405,12 +2423,27 @@ class ExtendCrm(models.Model):
                 self.upravne_enote_13=[]
         else:
             if self.iskane_nepremicnine:
-                self.cena_od=self.iskane_nepremicnine.nepremicnina_cena_dolgorocno
-                self.cena_do=self.iskane_nepremicnine.nepremicnina_cena_dolgorocno
-                self.velikost_od=self.iskane_nepremicnine.nepremicnina_povrsina
-                self.velikost_do=self.iskane_nepremicnine.nepremicnina_povrsina
-                self.letnik_od=self.iskane_nepremicnine.nepremicnina_leto_izgradnje
-                self.letnik_do=self.iskane_nepremicnine.nepremicnina_leto_izgradnje
+                if self.iskane_nepremicnine.nepremicnina_cena_dolgorocno != 0:
+                    self.cena_od=self.iskane_nepremicnine.nepremicnina_cena_dolgorocno
+                    self.cena_do=self.iskane_nepremicnine.nepremicnina_cena_dolgorocno
+                else:
+                    self.cena_od=False
+                    self.cena_do=False
+                    
+                if self.iskane_nepremicnine.nepremicnina_povrsina!=0:
+                    self.velikost_od=self.iskane_nepremicnine.nepremicnina_povrsina
+                    self.velikost_do=self.iskane_nepremicnine.nepremicnina_povrsina
+                else:
+                    self.velikost_od=False
+                    self.velikost_do=False
+                    
+                if self.iskane_nepremicnine.nepremicnina_leto_izgradnje!=0:
+                    self.letnik_od=self.iskane_nepremicnine.nepremicnina_leto_izgradnje
+                    self.letnik_do=self.iskane_nepremicnine.nepremicnina_leto_izgradnje
+                else:
+                    self.letnik_od=False
+                    self.letnik_do=False
+                    
                 self.vrsta=self.iskane_nepremicnine.nepremicnina_vrsta
                 self.tip=self.iskane_nepremicnine.nepremicnina_tip
                 self.tip_1=self.iskane_nepremicnine.nepremicnina_tip_1
@@ -2433,12 +2466,12 @@ class ExtendCrm(models.Model):
                 self.upravne_enote_13=self.iskane_nepremicnine.nepremicnina_upravne_enote_13
 
             else:
-                self.cena_od=0
-                self.cena_do=0
-                self.velikost_od=0
-                self.velikost_do=0
-                self.letnik_od=0
-                self.letnik_do=0
+                self.cena_od=False
+                self.cena_do=False
+                self.velikost_od=False
+                self.velikost_do=False
+                self.letnik_od=False
+                self.letnik_do=False
                 self.vrsta=[]
                 self.tip=[]
                 self.tip_1=[]
@@ -2462,19 +2495,23 @@ class ExtendCrm(models.Model):
  
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     
+    test=fields.Char(string="test")
     @api.onchange('cena_od','cena_do','velikost_od','velikost_do','letnik_od','letnik_do','vrsta','tip','regija','upravna_enota')
     def _dodeli_os_ne(self):
         if self.tip_iskanja=='stranka':
-            self._dodeli_stranke()
-        else:
             self._dodeli_nepremicnine()
+        else:
+            self._dodeli_stranke()
+            
     
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         
     @api.one
     def _dodeli_nepremicnine(self):
         domain = []
-        domain.append(('nepremicnina_cena_dolgorocno','>=',self.cena_od))
+        if self.cena_od:
+            domain.append(('nepremicnina_cena_dolgorocno','<=',self.cena_od))
+        if self.velikost_od:
         domain.append(('nepremicnina_povrsina','>=',self.velikost_od))
         if self.cena_do and self.cena_do>self.cena_od:
             domain.append(('nepremicnina_cena_dolgorocno','<=',self.cena_do))
@@ -2497,13 +2534,13 @@ class ExtendCrm(models.Model):
 
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
         
-    test=fields.Char(string="test")
-        
     @api.one
     def _dodeli_stranke(self):
         domain=[]
-        domain.append(('kupec_najemnik_cena_od','>=',self.cena_od))
-        domain.append(('kupec_najemnik_velikost_od','>=',self.velikost_od))
+        if self.cena_od:
+            domain.append(('kupec_najemnik_cena_od','>=',self.cena_od))
+        if self.velikost_od:
+            domain.append(('kupec_najemnik_velikost_od','>=',self.velikost_od))
         if self.cena_do and self.cena_do>self.cena_od:
             domain.append(('kupec_najemnik_cena_do','<=',self.cena_do))
         if self.velikost_do and self.velikost_do>self.velikost_od:
@@ -2521,6 +2558,7 @@ class ExtendCrm(models.Model):
         if self.upravna_enota:
             domain.append(('kupec_najemnik_nepremicnina_upravna_enota','=',self.upravna_enota))
         self.potencialne_osebe=self.env['res.partner'].search(domain)
+        self.test=str(domain)
 
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 

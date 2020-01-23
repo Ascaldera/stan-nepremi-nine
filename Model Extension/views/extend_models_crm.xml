@@ -102,7 +102,8 @@
                         <tree>
                             <field name="name"/>
                             <field name="tip_stranke"/>
-                            <field name="tretja_oseba"/>
+                            <field name="kupec_najemnik_cena_od"/>
+                            <field name="kupec_najemnik_cena_do"/>
                             <field name="phone"/>
                             <field name="mobile"/>
                             <field name="email"/>
@@ -144,8 +145,8 @@
         <field name="arch" type="xml">
 		<xpath expr="//field[@name='partner_id']" position="after">
             <field name="tip_iskanja" attrs ="{'required':1}"/>
-            <field name="iskane_osebe" attrs ="{'invisible':[('tip_iskanja','!=','nepremicnina')]}"/>
-            <field name="iskane_nepremicnine" attrs ="{'invisible':[('tip_iskanja','!=','stranka')]}"/>
+            <field name="iskane_osebe" attrs ="{'invisible':[('tip_iskanja','!=','stranka')]}"/>
+            <field name="iskane_nepremicnine" attrs ="{'invisible':[('tip_iskanja','!=','nepremicnina')]}"/>
 			<field name="tip_priloznosti"/>
             <field name="vrsta" attrs ="{'required':1}"/>
             <field name="tip" attrs ="{'invisible':1}"/>
