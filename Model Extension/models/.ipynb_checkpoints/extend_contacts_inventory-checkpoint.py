@@ -743,12 +743,7 @@ class ExtendContacts(models.Model):
             self.objava_kje_datum=[]
         if self.prodajalec_ponudbe==False:
             self.prodajalec_ponudbe_info=""
-            
-    zaposleni_porocila=fields.One2many(string="Poročila", 
-                                       comodel_name="note.note", 
-                                       inverse_name="zaposleni_note", 
-                                       options="{create': false, 'create_edit': false}")
-  
+
 class ExtendInventory(models.Model):
     _inherit = 'product.template'
     
@@ -1737,11 +1732,6 @@ class ExtendInventory(models.Model):
         else:
             self.nepremicnina_oglasevana_kje=[]
             self.nepremicnina_oglasevana_kdaj=[]
-            
-    nepremicnina_porocila=fields.One2many(string="Poročila", 
-                                          comodel_name="note.note", 
-                                          inverse_name="nepremicnina_note", 
-                                          options="{create': false, 'create_edit': false}")
         
 class ExtendContactTags(models.Model):   
     _inherit = 'res.partner.category'
@@ -2635,39 +2625,3 @@ class ExtendCrm(models.Model):
     #    return rec
     
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    
-class extendedMemo(models.Model):
-    _inherit='note.note'
-    
-    zaposleni_note=fields.Many2one(string="Ime osebe", 
-                                   comodel_name='res.partner', 
-                                   inverse_name='zaposleni_porocila', 
-                                   compute='_get_partner', 
-                                   options="{create': false, 'create_edit': false}")
-    
-    nepremicnina_note=fields.Many2one(string="Nepremičnina", 
-                                      comodel_name='product.template', 
-                                      inverse_name='nepremicnina_porocila', 
-                                      options="{create': false, 'create_edit': false}")
-    
-    tip_zapisa=fields.Selection(string="Tip zapisnika", 
-                                selection=[('tedenski','Tedenski plan'),
-                                           ('mesecni','Mesečni plan'),
-                                           ('navaden','Navaden zapis')],
-                                default='navaden')
-    
-    def _get_partner(self):
-        partner = self.env['res.users'].browse(self.env.uid).partner_id
-        for rec in self:
-            rec.zaposleni_note = partner.id
-            
-    @api.onchange('tip_zapisa')
-    def nastavi_zapisnik(self):
-        if self.tip_zapisa==False:
-            self.memo=""
-        if self.tip_zapisa=='navaden':
-            self.memo=""
-        if self.tip_zapisa=='tedenski':
-            self.memo=""
-        if self.tip_zapisa=='mesecni':
-            self.memo=""

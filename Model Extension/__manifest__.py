@@ -11,8 +11,7 @@
         'base',
         'stock',
         'website',
-        'crm',
-        'note'
+        'crm'
     ],
     'data': [
         'security/ir.model.access.csv',
