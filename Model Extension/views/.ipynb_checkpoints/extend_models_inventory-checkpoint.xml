@@ -163,7 +163,7 @@
                     </group>
                     <group string='Osnovne informacije' col="4" colspan="2">
                         <field name="create_uid"/>      
-                        <field name="contact" string = 'Lastnik nepremičnine'/>
+                        <field name="nep_contact" string = 'Lastnik/i nepremičnine' widget="many2many_tags"/>
                         <field name="nepremicnina_posrednik" attrs ="{'required':1}"/>
                         <span colspan='4'/>
                             
@@ -323,24 +323,25 @@
                 <page name='opis' string="Nepremičnina / Opis">
                     <field name="custom_currency_id_2" invisible="1"/>
                     <group string='Opis nepremičnine' col="4" colspan="2">
-                        <field name="nepremicnina_leto_izgradnje"/>
+                        <field name="nepremicnina_leto_izgradnje" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
                         <field name="nepremicnina_adaptacija" widget="boolean_toggle"/>
-                        <field name="nepremicnina_streha" attrs ="{'invisible':[('nepremicnina_vrsta','!=','hisa')]}"/>
+                        <field name="nepremicnina_streha" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
                         <field name="nepremicnina_leto_adaptacija" attrs ="{'invisible':[('nepremicnina_adaptacija','!=', True)],'required':[('nepremicnina_adaptacija','=',True)]}"/>
-                        <field name="nepremicnina_izolacija"/>
+                        <field name="nepremicnina_izolacija" 
+attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
                         <field name="nepremicnina_adaptacija_info" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" attrs ="{'invisible':[('nepremicnina_adaptacija','!=', True)]}"/>
-                        <field name="nepremicnina_okna"/>
+                        <field name="nepremicnina_okna" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
                         <field name="nepremicnina_streha_obnova" attrs ="{'invisible':[('nepremicnina_adaptacija','!=', True)]}"/>
-                        <field name="nepremicnina_materiali"/>
+                        <field name="nepremicnina_materiali" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa')]}"/>
                         <field name="nepremicnina_izolacija_obnova" attrs ="{'invisible':[('nepremicnina_adaptacija','!=', True)]}"/>
-                        <field name="nepremicnina_vrsta_ogrevanja"/>
+                        <field name="nepremicnina_vrsta_ogrevanja" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
                         <field name="nepremicnina_okna_obnova" attrs ="{'invisible':[('nepremicnina_adaptacija','!=', True)]}"/>
-                        <field name="nepremicnina_upravnik"/>
+                        <field name="nepremicnina_upravnik" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
                         <span colspan='4'/>
-                        <field name="nepremicnina_stroski_poleti" widget='monetary' options="{'currency_field': 'custom_currency_id_2'}"/> 
-                        <field name="nepremicnina_stroski_sklada" widget='monetary' options="{'currency_field': 'custom_currency_id_2'}"/>
-                        <field name="nepremicnina_stroski_pozimi" widget='monetary' options="{'currency_field': 'custom_currency_id_2'}"/> 
-                        <field name="nepremicnina_stanje_sklada"/>
+                        <field name="nepremicnina_stroski_poleti" widget='monetary' options="{'currency_field': 'custom_currency_id_2'}" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/> 
+                        <field name="nepremicnina_stroski_sklada" widget='monetary' options="{'currency_field': 'custom_currency_id_2'}" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
+                        <field name="nepremicnina_stroski_pozimi" widget='monetary' options="{'currency_field': 'custom_currency_id_2'}" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/> 
+                        <field name="nepremicnina_stanje_sklada" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
                         <field name="nepremicnina_energetski_razred"/>
                     </group>
                     <group string='Dodatki' col="8" colspan="2">
@@ -491,23 +492,28 @@
                 <page name='lastnistvo' string="Nepremičnina / Lastništvo">
                     <field name="currency_id" invisible="1"/>
                     <group string='Lastništvo' col="4" colspan="2">
-                        <field name="lastnistvo_podlaga"/>  
-                        <field name="lastnistvo_dan"/>  
-                        <field name="lastnistvo_plombe"/>  
-                        <field name="lastnistvo_hipoteke"/>
-                        <field name="lastnistvo_solastnina"/>
-                        <field name="lastnistvo_prepoved"/>
-                        <field name="lastnistvo_predkupna_pravica"/>
-                        <field name="lastnistvo_parcelne_st"/>
-                        <field name="lastnistvo_omejitve"/>
+                        <field name="lastnistvo_podlaga" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>  
+                        <field name="lastnistvo_dan" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>  
+                        <field name="lastnistvo_plombe" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>  
+                        <field name="lastnistvo_hipoteke" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
+                        <field name="lastnistvo_solastnina" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
+                        <field name="lastnistvo_prepoved" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
+                        <field name="lastnistvo_predkupna_pravica" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
+                        <field name="lastnistvo_parcelne_st" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
+                        <field name="lastnistvo_omejitve" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa')]}"/>
                     </group>
                     <group string='Predkupne pravice' col="4" colspan="2">
-                        <field name="lastnistvo_potrdilo"/>  
-                        <field name="lastnistvo_pravica"/>  
-                        <field name="lastnistvo_soglasje"/>  
-                        <field name="lastnistvo_varstvo"/>
-                        <field name="lastnistvo_prikljucek"/>
-                        <field name="lastnistvo_vrednost"/>
+                        <field name="lastnistvo_potrdilo" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa')]}"/>  
+                        <field name="lastnistvo_pravica" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>  
+                        <field name="lastnistvo_soglasje" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa')]}"/>  
+                        <field name="lastnistvo_varstvo" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa')]}"/>
+                        <field name="lastnistvo_prikljucek" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa')]}"/>
+                        <field name="lastnistvo_vrednost" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
+                    </group>
+                    <group>
+                        <field name="lastnistvo_gradbeno_dovoljenje" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
+                        <field name="lastnistvo_uporabno_dovoljenje" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
+                        <field name="lastnistvo_investitor" attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'stanovanje')]}"/>
                     </group>
                 </page>
             </xpath>

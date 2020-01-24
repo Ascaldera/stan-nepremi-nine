@@ -840,7 +840,8 @@ class ExtendInventory(models.Model):
         return rec
         
     #OSNOVNI PODATKI
-    contact = fields.Many2one(comodel_name='res.partner',string="Kdo prodaja")
+    contact = fields.Many2one(comodel_name='res.partner', string="Kdo prodaja")
+    nep_contact=fields.Many2many(comodel_name='res.partner', string="Lastnik nepremičnine")
     nepremicnina_posrednik = fields.Many2one('res.users',
                                              string="Posrednik",
                                              default=lambda self: self.env.user,
@@ -1538,6 +1539,10 @@ class ExtendInventory(models.Model):
     lastnistvo_varstvo = fields.Char(string = 'Varstvo naravne ali kulturne dediščine')
     lastnistvo_prikljucek = fields.Char(string = 'Mestni priključek')
     lastnistvo_vrednost = fields.Char(string = 'GURS vrednost')
+    
+    lastnistvo_gradbeno_dovoljenje = fields.Char(string="Gradbeno dovoljenje")
+    lastnistvo_uporabno_dovoljenje = fields.Char(string="Uporabno dovoljenje")
+    lastnistvo_investitor = fields.Char(string="Investitor")
     
     @api.multi
     def write(self,vals):
