@@ -513,7 +513,7 @@
             </xpath>
             
             <!-- CUSTOM TAB - CRM-ji -->
-            <xpath expr="//page[@name='lastnistvo']" position='after'>
+            <!--<xpath expr="//page[@name='lastnistvo']" position='after'>
                 <page name='crm' string="CRM">
                     <group>
                         <field name="nepremicnina_potencialni_crm" nolabel="1">
@@ -527,7 +527,7 @@
                         </field>
                     </group>
                 </page>
-            </xpath>
+            </xpath>-->
         </field>
     </record>
     
