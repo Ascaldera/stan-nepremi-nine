@@ -278,11 +278,12 @@
                     </group>
                     <group name="slike_več" string="Naloži več slik" class="oe_edit_only">
                         <field name='slike_attachments' nolabel='1' widget='many2many_binary'/>
+                        <!--<field name='help_tekst'/>-->
                     </group>
                 </page>
             </xpath>
             
-            <!-- SLIKE 2 
+            <!--
             <xpath expr="//page[@name='general_information']" position='after'>
                 <page name="slike" string="Slike 2">
                     <group name="slike" string="Slike 2">

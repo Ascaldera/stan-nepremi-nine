@@ -812,6 +812,7 @@ class ExtendInventory(models.Model):
         
     @api.multi
     def write(self,values):
+        values['help_tekst'] = 'test 2'
         if 'slike_attachments' in values:
             ids = values['slike_attachments'][0][2]
             for id in ids:
@@ -820,6 +821,10 @@ class ExtendInventory(models.Model):
                     self.env['custom.image'].create({'name':record.name, 'image':record.datas, 'product_tmpl_id':self.id})
             values['help_tekst'] = ids
             values['slike_attachments'] = [(5,)]
+        if 'nepremicnina_opis' in values:
+            s2=values['nepremicnina_opis']
+            custom_msg="Opis: "+str(s2)
+            self.message_post(body=custom_msg)
         rec = super(ExtendInventory,self).write(values)
         return rec
     
@@ -1539,13 +1544,6 @@ class ExtendInventory(models.Model):
     lastnistvo_uporabno_dovoljenje = fields.Char(string="Uporabno dovoljenje")
     lastnistvo_investitor = fields.Char(string="Investitor")
     
-    @api.multi
-    def write(self,vals):
-        if 'nepremicnina_opis' in vals:
-            s2=vals['nepremicnina_opis']
-            custom_msg="Opis: "+str(s2)
-            self.message_post(body=custom_msg)
-        return super(ExtendInventory,self).write(vals)
     
     @api.multi
     def word_count(self, opis):
