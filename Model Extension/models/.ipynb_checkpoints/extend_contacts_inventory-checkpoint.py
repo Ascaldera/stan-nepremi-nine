@@ -628,7 +628,7 @@ class ExtendContacts(models.Model):
     def check_mail(self):
         if self.email:
             contact=self.env['res.partner'].search([('email','=',self.email)])
-            if len(contact)==0:
+            if len(contact)!=0:
                 return {'warning':{'title':'Opozorilo!','message':"E-mail naslov je že v uporabi."}}
     
     @api.onchange('mobile','phone')
