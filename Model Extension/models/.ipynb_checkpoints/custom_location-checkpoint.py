@@ -22,13 +22,13 @@ class custom_nepremicnina_vrsta(models.Model):
     _name = 'custom.vrsta'
     _description = 'Config - Vrsta nepremičnine'
     
-    name = fields.Char('')
+    name = fields.Char('Vrsta nepremičnine')
     code = fields.Char('Iskalno polje')
     
 class custom_nepremicnina_tip(models.Model):
     _name = 'custom.tip'
     _description = 'Config - Tip nepremičnine'
     
-    vrsta = fields.Many2one('custom.vrsta', string='Vrsta nepremicnine')
+    vrsta = fields.Many2one('custom.vrsta', string='Vrsta nepremičnine')
     name = fields.Char('Tip nepremičnine')
     code = fields.Char('Iskalno polje')
