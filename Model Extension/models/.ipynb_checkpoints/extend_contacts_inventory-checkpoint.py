@@ -144,17 +144,40 @@ class ExtendContacts(models.Model):
                                  options="{'color_field': 'color', 'no_create_edit': True}",
                                  track_visibility=True)
     kupec_najemnik_tip = fields.Many2many(string="Tip nepremičnine", 
-                               comodel_name="custom.tip",
-                               track_visibility=True)
+                                          comodel_name="custom.tip",
+                                          domain="[('vrsta','in',kupec_najemnik_vrsta)]",
+                                          track_visibility=True)
     kupec_najemnik_regija = fields.Many2many(string="Regija",
                                              comodel_name="custom.location.regija",
                                              track_visibility=True)
     kupec_najemnik_upravna_enota = fields.Many2many(string="Upravna enota",
                                                     comodel_name="custom.location",
+                                                    domain="[('regija','in',kupec_najemnik_regija)]",
                                                     track_visibility=True)
 
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     
+    @api.onchange('kupec_najemnik_vrsta')
+    def delete_extra_type(self):
+        if self.kupec_najemnik_vrsta!=False and self.kupec_najemnik_tip!=False:
+            for tip in self.kupec_najemnik_tip:
+                if tip.vrsta not in self.kupec_najemnik_vrsta:
+                    self.kupec_najemnik_tip = [(3,tip.id)] 
+        return
+
+    
+                    
+    @api.onchange('kupec_najemnik_regija')
+    def delete_extra_region(self):
+        if self.kupec_najemnik_regija!=False and self.kupec_najemnik_upravna_enota!=False:
+            for ue in self.kupec_najemnik_upravna_enota:
+                if ue.regija not in self.kupec_najemnik_regija:
+                    self.kupec_najemnik_upravna_enota = [(3,ue.id)] 
+        return
+    
+    
+    
+    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     
     #-----------------------------------------------------------------------------------------------
     
@@ -1335,483 +1358,128 @@ class ExtendCrm(models.Model):
     letnik_od=fields.Char(string="Letnik od")
     letnik_do=fields.Char(string="Letnik do")
     
-    regija=fields.Selection(string ="Regija",
-                            selection=[('dolenjska','Dolenjska'),
-                                       ('gorenjska','Gorenjska'),
-                                       ('juzna_primorska','Južna primorska'),
-                                       ('severna_primorska','Severna primorska'),
-                                       ('koroska','Koroška'),
-                                       ('lj_mesto','Lj-mesto'),
-                                       ('lj_okolica','Lj-okolica'),
-                                       ('notranjska','Notranjska'),
-                                       ('podravska','Podravska'),
-                                       ('pomurska','Pomurska'),
-                                       ('posavska','Posavska'),
-                                       ('savinjska','Savinjska'),
-                                       ('zasavska','Zasavska')])
-    upravna_enota=fields.Selection(string="Upravna enota",
-                                   selection=[('crnomelj','Črnomelj'),
-                                              ('kocevje','Kočevje'),
-                                              ('metlika','Metlika'),
-                                              ('novo_mesto','Novo mesto'),
-                                              ('ribnica','Ribnica'),
-                                              ('trebnje','Trebnje'),
-                                              ('jesenice','Jesenice'),
-                                              ('kranj','Kranj'),
-                                              ('radovljica','Radovljica'),
-                                              ('skofja_loka','Škofja loka'),
-                                              ('trzic','Tržič'),
-                                              ('izola','Izola'),
-                                              ('koper','Koper'),
-                                              ('piran','Piran'),
-                                              ('sezana','Sežana'),
-                                              ('ajdovscina','Ajdovščina'),
-                                              ('idrija','Idrija'),
-                                              ('nova_gorica','Nova Gorica'),
-                                              ('tolmin','Tolmin'),
-                                              ('dravograd','Dravograd'),
-                                              ('radlje_ob_dravi','Radlje ob Dravi'),
-                                              ('ravne_na_koroskem','Ravne na Koroškem'),
-                                              ('slovenj_gradec','Slovenj Gradec'),
-                                              ('bezigrad','Lj. Bežigrad'),
-                                              ('center','Lj. Center'),
-                                              ('moste_polje','Lj. Moste-Polje'),
-                                              ('siska','Lj. Šiška'),
-                                              ('vic_rudnik','Lj. Vič-Rudnik'),
-                                              ('domzale','Domžale'),
-                                              ('grosuplje','Grosuplje'),
-                                              ('kamnik','Kamnik'),('litija','Litija'),
-                                              ('lj_j_z','Lj. J&Z (Vič, Rudnik)'),
-                                              ('lj_s_v','Lj. SV del (Bežigrad)'),
-                                              ('lj_s_z','Lj. SZ del (Šiška)'),
-                                              ('lj_v','Lj. V del (Moste-Polje)'),
-                                              ('logatec','Logatec'),
-                                              ('vrhnika','Vrhnika'),
-                                              ('cerknica','Cerknica'),
-                                              ('ilirska_bistrica','Ilirska Bistrica'),
-                                              ('postojna','Postojna'),
-                                              ('lenart','Lenart'),
-                                              ('maribor','Maribor'),
-                                              ('ormoz','Ormož'),
-                                              ('pesnica','Pesnica'),
-                                              ('ptuj','Ptuj'),
-                                              ('ruse','Ruše'),
-                                              ('slovenska_bistrica','Slovenska bistrica'),
-                                              ('gornja_radgona','Gornja Radgona'),
-                                              ('lendava','Lendava'),
-                                              ('ljutomer','Ljutomer'),
-                                              ('murska_sobota','Murska Sobota'),
-                                              ('brezice','Brežice'),
-                                              ('krsko','Krško'),
-                                              ('sevnica','Sevnica'),
-                                              ('celje','Celje'),
-                                              ('lasko','Laško'),
-                                              ('mozirje','Mozirje'),
-                                              ('slovenske_konjica','Slovenske Konjice'),
-                                              ('sentjur','Šentjur'),
-                                              ('smarje_pri_jelsah','Šmarje pri Jelšah'),
-                                              ('velenje','Velenje'),
-                                              ('zalec','Žalec'),
-                                              ('hrastnik','Hrastnik'),
-                                              ('trbovlje','Trbovlje'),
-                                              ('zagorje_ob_savi','Zagorje ob Savi')])
-    upravne_enote_1=fields.Selection(string="Upravna_enota_dolenjska", 
-                                     selection=[('crnomelj','Črnomelj'),
-                                                ('kocevje','Kočevje'),
-                                                ('metlika','Metlika'),
-                                                ('novo_mesto','Novo mesto'),
-                                                ('ribnica','Ribnica'),
-                                                ('trebnje','Trebnje')])
-    upravne_enote_2=fields.Selection(string="Upravna_enota_gorenjska",
-                                     selection=[('jesenice','Jesenice'),
-                                                ('kranj','Kranj'),
-                                                ('radovljica','Radovljica'),
-                                                ('skofja_loka','Škofja loka'),
-                                                ('trzic','Tržič')])
-    upravne_enote_3=fields.Selection(string="Upravna_enota_juzna_primorska",
-                                     selection=[('izola','Izola'),
-                                                ('koper','Koper'),
-                                                ('piran','Piran'),
-                                                ('sezana','Sežana')])
-    upravne_enote_4=fields.Selection(string="Upravna_enota_severna_primorska",
-                                     selection=[('ajdovscina','Ajdovščina'),
-                                                ('idrija','Idrija'),
-                                                ('nova_gorica','Nova Gorica'),
-                                                ('tolmin','Tolmin')])
-    upravne_enote_5=fields.Selection(string="Upravna_enota_koroska",
-                                     selection=[('dravograd','Dravograd'),
-                                                ('radlje_ob_dravi','Radlje ob Dravi'),
-                                                ('ravne_na_koroskem','Ravne na Koroškem'),
-                                                ('slovenj_gradec','Slovenj Gradec')])
-    upravne_enote_6=fields.Selection(string="Upravna_enota_lj_mesto", 
-                                     selection=[('bezigrad','Lj. Bežigrad'),
-                                                ('center','Lj. Center'),
-                                                ('moste_polje','Lj. Moste-Polje'),
-                                                ('siska','Lj. Šiška'),
-                                                ('vic_rudnik','Lj. Vič-Rudnik')])
-    upravne_enote_7=fields.Selection(string="Upravna_enota_lj_okolica", 
-                                     selection=[('domzale','Domžale'),
-                                                ('grosuplje','Grosuplje'),
-                                                ('kamnik','Kamnik'),
-                                                ('litija','Litija'),
-                                                ('lj_j_z','Lj. J&Z (Vič, Rudnik)'),
-                                                ('lj_s_v','Lj. SV del (Bežigrad)'),
-                                                ('lj_s_z','Lj. SZ del (Šiška)'),
-                                                ('lj_v','Lj. V del (Moste-Polje)'),
-                                                ('logatec','Logatec'),
-                                                ('vrhnika','Vrhnika')])
-    upravne_enote_8=fields.Selection(string="Upravna_enota_notranjska",
-                                     selection=[('cerknica','Cerknica'),
-                                                ('ilirska_bistrica','Ilirska Bistrica'),
-                                                ('postojna','Postojna')])
-    upravne_enote_9=fields.Selection(string="Upravna_enota_podravska",
-                                     selection=[('lenart','Lenart'),
-                                                ('maribor','Maribor'),
-                                                ('ormoz','Ormož'),
-                                                ('pesnica','Pesnica'),
-                                                ('ptuj','Ptuj'),
-                                                ('ruse','Ruše'),
-                                                ('slovenska_bistrica','Slovenska bistrica')])
-    upravne_enote_10=fields.Selection(string="Upravna_enota_pomurska",
-                                      selection=[('gornja_radgona','Gornja Radgona'),
-                                                 ('lendava','Lendava'),
-                                                 ('ljutomer','Ljutomer'),
-                                                 ('murska_sobota','Murska Sobota')])
-    upravne_enote_11=fields.Selection(string="Upravna_enota_posavska",
-                                      selection=[('brezice','Brežice'),
-                                                 ('krsko','Krško'),
-                                                 ('sevnica','Sevnica')])
-    upravne_enote_12=fields.Selection(string="Upravna_enota_savinjska", 
-                                      selection=[('celje','Celje'),
-                                                 ('lasko','Laško'),
-                                                 ('mozirje','Mozirje'),
-                                                 ('slovenske_konjica','Slovenske Konjice'),
-                                                 ('sentjur','Šentjur'),
-                                                 ('smarje_pri_jelsah','Šmarje pri Jelšah'),
-                                                 ('velenje','Velenje'),
-                                                 ('zalec','Žalec')])
-    upravne_enote_13=fields.Selection(string="Upravna_enota_zasavska", 
-                                      selection=[('hrastnik','Hrastnik'),
-                                                 ('trbovlje','Trbovlje'),
-                                                 ('zagorje_ob_savi','Zagorje ob Savi')])
-    @api.onchange('regija','upravna_enota','upravne_enote_1','upravne_enote_2','upravne_enote_3','upravne_enote_4','upravne_enote_5','upravne_enote_6','upravne_enote_7','upravne_enote_8','upravne_enote_9','upravne_enote_10','upravne_enote_11','upravne_enote_12','upravne_enote_13',)
-    def enota_selection(self):
-        if self.regija=="dolenjska":
-            self.upravne_enote_2=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_12=[]
-            self.upravne_enote_13=[]
-            if self.upravne_enote_1==False:
-                self.upravna_enota=[]
-        if self.regija=="gorenjska":
-            self.upravne_enote_1=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_12=[]
-            self.upravne_enote_13=[]
-            if self.upravne_enote_2==False:
-                self.upravna_enota=[]
-        if self.regija=="juzna_primorska":
-            self.upravne_enote_1=[]
-            self.upravne_enote_2=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_12=[]
-            self.upravne_enote_13=[]
-            if self.upravne_enote_3==False:
-                self.upravna_enota=[]
-        if self.regija=="severna_primorska":
-            self.upravne_enote_1=[]
-            self.upravne_enote_2=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_12=[]
-            self.upravne_enote_13=[]
-            if self.upravne_enote_4==False:
-                self.upravna_enota=[]
-        if self.regija=="koroska":
-            self.upravne_enote_1=[]
-            self.upravne_enote_2=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_12=[]
-            self.upravne_enote_13=[]
-            if self.upravne_enote_5==False:
-                self.upravna_enota=[]
-        if self.regija=="lj_mesto":
-            self.upravne_enote_1=[]
-            self.upravne_enote_2=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_12=[]
-            self.upravne_enote_13=[]
-            if self.upravne_enote_6==False:
-                self.upravna_enota=[]
-        if self.regija=="lj_okolica":
-            self.upravne_enote_1=[]
-            self.upravne_enote_2=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_12=[]
-            self.upravne_enote_13=[]
-            if self.upravne_enote_7==False:
-                self.upravna_enota=[]
-        if self.regija=="notranjska":
-            self.upravne_enote_1=[]
-            self.upravne_enote_2=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_12=[]
-            self.upravne_enote_13=[]
-            if self.upravne_enote_8==False:
-                self.upravna_enota=[]
-        if self.regija=="podravska":
-            self.upravne_enote_1=[]
-            self.upravne_enote_2=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_12=[]
-            self.upravne_enote_13=[]
-            if self.upravne_enote_9==False:
-                self.upravna_enota=[]
-        if self.regija=="pomurska":
-            self.upravne_enote_1=[]
-            self.upravne_enote_2=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_12=[]
-            self.upravne_enote_13=[]
-            if self.upravne_enote_10==False:
-                self.upravna_enota=[]
-        if self.regija=="posavska":
-            self.upravne_enote_1=[]
-            self.upravne_enote_2=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_12=[]
-            self.upravne_enote_13=[]
-            if self.upravne_enote_11==False:
-                self.upravna_enota=[]
-        if self.regija=="savinjska":
-            self.upravne_enote_1=[]
-            self.upravne_enote_2=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_13=[]
-            if self.upravne_enote_12==False:
-                self.upravna_enota=[]
-        if self.regija=="zasavska":
-            self.upravne_enote_1=[]
-            self.upravne_enote_2=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_12=[]
-            if self.upravne_enote_13==False:
-                self.upravna_enota=[]
-        if self.upravne_enote_1:
-            self.upravna_enota=self.upravne_enote_1
-        if self.upravne_enote_2:
-            self.upravna_enota=self.upravne_enote_2
-        if self.upravne_enote_3:
-            self.upravna_enota=self.upravne_enote_3
-        if self.upravne_enote_4:
-            self.upravna_enota=self.upravne_enote_4
-        if self.upravne_enote_5:
-            self.upravna_enota=self.upravne_enote_5
-        if self.upravne_enote_6:
-            self.upravna_enota=self.upravne_enote_6
-        if self.upravne_enote_7:
-            self.upravna_enota=self.upravne_enote_7
-        if self.upravne_enote_8:
-            self.upravna_enota=self.upravne_enote_8
-        if self.upravne_enote_9:
-            self.upravna_enota=self.upravne_enote_9
-        if self.upravne_enote_10:
-            self.upravna_enota=self.upravne_enote_10
-        if self.upravne_enote_11:
-            self.upravna_enota=self.upravne_enote_11
-        if self.upravne_enote_12:
-            self.upravna_enota=self.upravne_enote_12
-        if self.upravne_enote_13:
-            self.upravna_enota=self.upravne_enote_13
-            
-    vrsta = fields.Selection(string = 'Vrsta nepremičnine', 
-                             selection = [('stanovanje', 'Stanovanje'),
-                                          ('hisa', 'Hiša'),
-                                          ('poslovni', 'Poslovni prostor'),
-                                          ('posest','Posest'),
-                                          ('vikend','Vikend'),
-                                          ('kmetija','Kmetija'),
-                                          ('garaza', 'Garaža'),
-                                          ('drugo', 'Drugo'),])
-    tip=fields.Selection(string="Tip nepremičnine", 
-                         selection=[('apartma','Apartma'),
-                                    ('soba','Soba'),
-                                    ('garsonjera', 'Garsonjera'),
-                                    ('soba1','1-sobno'),
-                                    ('soba1_5', '1,5-sobno'),
-                                    ('soba2','2-sobno'),
-                                    ('soba2_5','2,5-sobno'),
-                                    ('soba3','3-sobno'),
-                                    ('soba3_5','3,5-sobno'),
-                                    ('soba4','4-sobno'),
-                                    ('soba4_5','4,5-sobno'),
-                                    ('soba5','5 in večsobno'),
-                                    ('atrij','Atrij'),
-                                    ('dvojcek','Dvojcek'),
-                                    ('samostojna','Samostojna'),
-                                    ('delavnica','Delavnica'),
-                                    ('gostinskiLokal','Gostinski lokal'),
-                                    ('pisarna','Pisarna'),
-                                    ('prostorZaStoritve','Prostor za storitve'),
-                                    ('skladisce','Skladišče'),
-                                    ('vecjiPoslovniKompleks','Večji poslovni kompleks'),
-                                    ('drugo','Drugo')])
-    tip_1 = fields.Selection(string = 'Tip nepremičnine 1', 
-                             selection=[('apartma','Apartma'),
-                                        ('soba','Soba'),
-                                        ('garsonjera', 'Garsonjera'),
-                                        ('soba1','1-sobno'),
-                                        ('soba1_5', '1,5-sobno'),
-                                        ('soba2','2-sobno'),
-                                        ('soba2_5','2,5-sobno'),
-                                        ('soba3','3-sobno'),
-                                        ('soba3_5','3,5-sobno'),
-                                        ('soba4','4-sobno'),
-                                        ('soba4_5','4,5-sobno'),
-                                        ('soba5','5 in večsobno'),
-                                        ('drugo','Drugo')])
-    tip_2 = fields.Selection(string = 'Tip nepremičnine 2', 
-                             selection=[('atrij','Atrij'),
-                                        ('dvojcek','Dvojcek'),
-                                        ('samostojna','Samostojna'),
-                                        ('drugo','Drugo')])
-    tip_3 = fields.Selection(string = 'Tip nepremičnine 3', 
-                             selection=[('delavnica','Delavnica'),
-                                        ('gostinskiLokal','Gostinski lokal'),
-                                        ('pisarna','Pisarna'),
-                                        ('prostorZaStoritve','Prostor za storitve'),
-                                        ('skladisce','Skladišče'),
-                                        ('vecjiPoslovniKompleks','Večji poslovni kompleks'),
-                                        ('drugo','Drugo')])
+    crm_vrsta = fields.Many2many(string="Vrsta nepremičnine",
+                                 comodel_name="custom.vrsta",
+                                 options="{'color_field': 'color', 'no_create_edit': True}",
+                                 track_visibility=True)
+    crm_tip = fields.Many2many(string="Tip nepremičnine",
+                               comodel_name="custom.tip",
+                               domain="[('vrsta','in',crm_vrsta)]",
+                               track_visibility=True)
+    crm_regija = fields.Many2many(string="Regija",
+                                  comodel_name="custom.location.regija",
+                                  track_visibility=True)
+    crm_upravna_enota = fields.Many2many(string="Upravna enota",
+                                         comodel_name="custom.location",
+                                         domain="[('regija','in',crm_regija)]",
+                                         track_visibility=True)
+
+    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     
+    @api.onchange('crm_vrsta')
+    def delete_extra_type(self):
+        if self.crm_vrsta!=False and self.crm_tip!=False:
+            for tip in self.crm_tip:
+                if tip.vrsta not in self.crm_vrsta:
+                    self.crm_tip = [(3,tip.id)] 
+        return
+      
+    @api.onchange('crm_regija')
+    def delete_extra_region(self):
+        if self.crm_regija!=False and self.crm_upravna_enota!=False:
+            for ue in self.crm_upravna_enota:
+                if ue.regija not in self.crm_regija:
+                    self.crm_upravna_enota = [(3,ue.id)] 
+        return
     
-    @api.onchange('vrsta','tip_1','tip_2','tip_3')
-    def prepis_vrednosti(self):
-        if self.vrsta=='stanovanje':
-            self.tip_2=[]
-            self.tip_3=[]
-            if self.tip_1==False:
-                self.tip=[]
-        if self.vrsta=='hisa':
-            self.tip_1=[]
-            self.tip_3=[]
-            if self.tip_2==False:
-                self.tip=[]
-        if self.vrsta=='poslovni':
-            self.tip_1=[]
-            self.tip_2=[]
-            if self.tip_3==False:
-                self.tip=[]
-        if self.vrsta not in ['stanovanje','hisa','poslovni']:
-            self.tip=[]
-            self.tip_1=[]
-            self.tip_2=[]
-            self.tip_3=[]
-        if self.vrsta != 'hisa':
-            self.etaza = ""
-        if self.vrsta not in ['stanovanje', 'poslovni']:              
-            self.nadstropje = 0
-            self.st_nadstropij = 0
-        if self.tip_1:
-            self.tip=self.tip_1
-        if self.tip_2:
-            self.tip=self.tip_2
-        if self.tip_3:
-            self.tip=self.tip_3
+    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    #Funkcije za autopopulate field
+    #Customer
+    
+    @api.onchange('tip_iskanja')
+    def erase_all_data(self):
+        self.iskane_osebe=[]
+        self.iskane_nepremicnine=[]
+    
+    @api.onchange('iskane_osebe')
+    def auto_populate_customer(self):
+        self.cena_od=0;
+        self.cena_do=0;
+        self.velikost_od=0;
+        self.velikost_do=0;
+        self.letnik_od=0;
+        self.letnik_do=0;
+        if self.iskane_osebe!=False:
+            if self.iskane_osebe.kupec_najemnik_vrsta!=False:
+                self.crm_vrsta=self.iskane_osebe.kupec_najemnik_vrsta
+            if self.iskane_osebe.kupec_najemnik_tip!=False:
+                self.crm_tip=self.iskane_osebe.kupec_najemnik_tip
+            if self.iskane_osebe.kupec_najemnik_regija!=False:
+                self.crm_regija=self.iskane_osebe.kupec_najemnik_regija
+            if self.iskane_osebe.kupec_najemnik_upravna_enota!=False:
+                self.crm_upravna_enota=self.iskane_osebe.kupec_najemnik_upravna_enota
+            if self.iskane_osebe.kupec_najemnik_cena_od!=0 or False:
+                self.cena_od=self.iskane_osebe.kupec_najemnik_cena_od
+            if self.iskane_osebe.kupec_najemnik_cena_do!=0 or False:
+                self.cena_do=self.iskane_osebe.kupec_najemnik_cena_do
+            if self.iskane_osebe.kupec_najemnik_velikost_od!=0 or False:
+                self.velikost_od=self.iskane_osebe.kupec_najemnik_velikost_od
+            if self.iskane_osebe.kupec_najemnik_velikost_od!=0 or False:
+                self.velikost_do=self.iskane_osebe.kupec_najemnik_velikost_do
+            if self.iskane_osebe.kupec_najemnik_letnik_od!=0 or False:
+                self.letnik_od=self.iskane_osebe.kupec_najemnik_letnik_od
+            if self.iskane_osebe.kupec_najemnik_letnik_od!=0 or False:
+                self.letnik_do=self.iskane_osebe.kupec_najemnik_letnik_do
+        return
+    
+    #Estate
+    @api.onchange('iskane_nepremicnine')
+    def auto_populate_estate(self):
+        self.cena_od=0;
+        self.cena_do=0;
+        self.velikost_od=0;
+        self.velikost_do=0;
+        self.letnik_od=0;
+        self.letnik_do=0;
+        if self.crm_vrsta!=False or []:
+            for w in self.crm_vrsta:
+                self.crm_vrsta=[(3,w.id)]
+        if self.crm_tip!=False or []:
+            for x in self.crm_tip:
+                self.crm_tip=[(3,x.id)]
+        if self.crm_regija!=False or []:
+            for y in self.crm_regija:
+                self.crm_regija=[(3,y.id)]
+        if self.crm_upravna_enota!=False or []:
+            for z in self.crm_upravna_enota:
+                self.crm_upravna_enota=[(3,z.id)]
+        if self.iskane_nepremicnine.nepremicnina_vrsta!=False:
+            crm_vrsta=self.env['custom.vrsta'].search([('code','=',self.iskane_nepremicnine.nepremicnina_vrsta)])
+            if len(crm_vrsta)!=0:
+                self.crm_vrsta=crm_vrsta
+        if self.iskane_nepremicnine.nepremicnina_vrsta!=False:
+            crm_tip=self.env['custom.tip'].search([('code','=',self.iskane_nepremicnine.nepremicnina_tip)])
+            if len(crm_tip)!=0:
+                self.crm_tip=crm_tip
+        if self.iskane_nepremicnine.nepremicnina_regija!=False:
+            crm_regija=self.env['custom.location.regija'].search([('code','=',self.iskane_nepremicnine.nepremicnina_regija)])
+            if len(crm_regija)!=0:
+                self.crm_regija=crm_regija
+        if self.iskane_nepremicnine.nepremicnina_upravna_enota!=False:
+            crm_upravna_enota=self.env['custom.location'].search([('code','=',self.iskane_nepremicnine.nepremicnina_upravna_enota)])
+            if len(crm_upravna_enota)!=0:
+                self.crm_upravna_enota=crm_upravna_enota
+            #ŠE ZA CENO, VELIKOST IN LETNIK
+        if self.iskane_nepremicnine.nepremicnina_cena_min:
+            self.cena_od=self.iskane_nepremicnine.nepremicnina_cena_min
+            self.cena_do=self.iskane_nepremicnine.nepremicnina_cena_min
+        if self.iskane_nepremicnine.nepremicnina_povrsina:
+            self.velikost_od=self.iskane_nepremicnine.nepremicnina_povrsina
+            self.velikost_do=self.iskane_nepremicnine.nepremicnina_povrsina
+        if self.iskane_nepremicnine.nepremicnina_leto_izgradnje:
+            self.letnik_od=self.iskane_nepremicnine.nepremicnina_leto_izgradnje
+            self.letnik_do=self.iskane_nepremicnine.nepremicnina_leto_izgradnje
+        return
 
     potencialne_nepremicnine=fields.Many2many(string="Potencialne nepremičnine",
                                               comodel_name="product.template",
@@ -1821,326 +1489,13 @@ class ExtendCrm(models.Model):
     potencialne_osebe=fields.Many2many(string="Potencialni kupci/najemniki",
                                        comodel_name="res.partner",
                                        inverse_name="oseba_potencialni_crm",
-                                       options="{create': false, 'create_edit': false}")
-    
-    @api.onchange('tip_iskanja')
-    def erase_data(self):
-        if self.tip_iskanja=='nepremicnina':
-            self.iskane_osebe=[]
-            self.cena_od=False
-            self.cena_do=False
-            self.velikost_od=False
-            self.velikost_do=False
-            self.letnik_od=False
-            self.letnik_do=False
-            self.vrsta=[]
-            self.tip=[]
-            self.tip_1=[]
-            self.tip_2=[]
-            self.tip_3=[]
-            self.regija=[]
-            self.upravna_enota=[]
-            self.upravne_enote_1=[]
-            self.upravne_enote_2=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_12=[]
-            self.upravne_enote_13=[]
-        else:
-            self.iskane_nepremicnine=[]
-            self.cena_od=0
-            self.cena_do=0
-            self.velikost_od=0
-            self.velikost_do=0
-            self.letnik_od=0
-            self.letnik_do=0
-            self.vrsta=[]
-            self.tip=[]
-            self.tip_1=[]
-            self.tip_2=[]
-            self.tip_3=[]
-            self.regija=[]
-            self.upravna_enota=[]
-            self.upravne_enote_1=[]
-            self.upravne_enote_2=[]
-            self.upravne_enote_3=[]
-            self.upravne_enote_4=[]
-            self.upravne_enote_5=[]
-            self.upravne_enote_6=[]
-            self.upravne_enote_7=[]
-            self.upravne_enote_8=[]
-            self.upravne_enote_9=[]
-            self.upravne_enote_10=[]
-            self.upravne_enote_11=[]
-            self.upravne_enote_12=[]
-            self.upravne_enote_13=[]
-        
-    @api.onchange('iskane_osebe','iskane_nepremicnine')
-    def _auto_populate(self):
-        if self.tip_iskanja=='stranka':
-            if self.iskane_osebe:
-                if self.iskane_osebe.kupec_najemnik_cena_od!=0:
-                    self.cena_od=self.iskane_osebe.kupec_najemnik_cena_od
-                else:
-                    self.cena_od=False
-                if self.iskane_osebe.kupec_najemnik_cena_do!=0:    
-                    self.cena_do=self.iskane_osebe.kupec_najemnik_cena_do
-                else:
-                    self.cena_do=False
-                if self.iskane_osebe.kupec_najemnik_velikost_od!=0:
-                    self.velikost_od=self.iskane_osebe.kupec_najemnik_velikost_od
-                else:
-                    self.velikost_od=False
-                if self.iskane_osebe.kupec_najemnik_velikost_do!=0:
-                    self.velikost_do=self.iskane_osebe.kupec_najemnik_velikost_do
-                else:
-                    self.velikost_do=False
-                if self.iskane_osebe.kupec_najemnik_letnik_od!=0:
-                    self.letnik_od=self.iskane_osebe.kupec_najemnik_letnik_od
-                else:
-                    self.letnik_od=False
-                if self.iskane_osebe.kupec_najemnik_letnik_do!=0:
-                    self.letnik_do=self.iskane_osebe.kupec_najemnik_letnik_do
-                else:
-                    self.letnik_do=False
-                self.vrsta=self.iskane_osebe.kupec_najemnik_nepremicnina_vrsta 
-                self.tip=self.iskane_osebe.kupec_najemnik_nepremicnina_tip
-                self.tip_1=self.iskane_osebe.kupec_najemnik_nepremicnina_tip_1
-                self.tip_2=self.iskane_osebe.kupec_najemnik_nepremicnina_tip_2
-                self.tip_3=self.iskane_osebe.kupec_najemnik_nepremicnina_tip_3
-                self.regija=self.iskane_osebe.kupec_najemnik_nepremicnina_regija
-                self.upravna_enota=self.iskane_osebe.kupec_najemnik_nepremicnina_upravna_enota
-                self.upravne_enote_1=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_1
-                self.upravne_enote_2=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_2
-                self.upravne_enote_3=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_3
-                self.upravne_enote_4=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_4
-                self.upravne_enote_5=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_5
-                self.upravne_enote_6=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_6
-                self.upravne_enote_7=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_7
-                self.upravne_enote_8=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_8
-                self.upravne_enote_9=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_9
-                self.upravne_enote_10=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_10
-                self.upravne_enote_11=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_11
-                self.upravne_enote_12=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_12
-                self.upravne_enote_13=self.iskane_osebe.kupec_najemnik_nepremicnina_upravne_enote_13
-            else:
-                self.cena_od=False
-                self.cena_do=False
-                self.velikost_od=False
-                self.velikost_do=False
-                self.letnik_od=False
-                self.letnik_do=False
-                self.vrsta=[]
-                self.tip=[]
-                self.tip_1=[]
-                self.tip_2=[]
-                self.tip_3=[]
-                self.regija=[]
-                self.upravna_enota=[]
-                self.upravne_enote_1=[]
-                self.upravne_enote_2=[]
-                self.upravne_enote_3=[]
-                self.upravne_enote_4=[]
-                self.upravne_enote_5=[]
-                self.upravne_enote_6=[]
-                self.upravne_enote_7=[]
-                self.upravne_enote_8=[]
-                self.upravne_enote_9=[]
-                self.upravne_enote_10=[]
-                self.upravne_enote_11=[]
-                self.upravne_enote_12=[]
-                self.upravne_enote_13=[]
-        else:
-            if self.iskane_nepremicnine:
-                if self.iskane_nepremicnine.nepremicnina_cena_dolgorocno != 0:
-                    self.cena_od=self.iskane_nepremicnine.nepremicnina_cena_dolgorocno
-                    self.cena_do=self.iskane_nepremicnine.nepremicnina_cena_dolgorocno
-                else:
-                    self.cena_od=False
-                    self.cena_do=False
-                    
-                if self.iskane_nepremicnine.nepremicnina_povrsina!=0:
-                    self.velikost_od=self.iskane_nepremicnine.nepremicnina_povrsina
-                    self.velikost_do=self.iskane_nepremicnine.nepremicnina_povrsina
-                else:
-                    self.velikost_od=False
-                    self.velikost_do=False
-                    
-                if self.iskane_nepremicnine.nepremicnina_leto_izgradnje!=0:
-                    self.letnik_od=self.iskane_nepremicnine.nepremicnina_leto_izgradnje
-                    self.letnik_do=self.iskane_nepremicnine.nepremicnina_leto_izgradnje
-                else:
-                    self.letnik_od=False
-                    self.letnik_do=False
-                    
-                self.vrsta=self.iskane_nepremicnine.nepremicnina_vrsta
-                self.tip=self.iskane_nepremicnine.nepremicnina_tip
-                self.tip_1=self.iskane_nepremicnine.nepremicnina_tip_1
-                self.tip_2=self.iskane_nepremicnine.nepremicnina_tip_2
-                self.tip_3=self.iskane_nepremicnine.nepremicnina_tip_3
-                self.regija=self.iskane_nepremicnine.nepremicnina_regija
-                self.upravna_enota=self.iskane_nepremicnine.nepremicnina_upravna_enota
-                self.upravne_enote_1=self.iskane_nepremicnine.nepremicnina_upravne_enote_1
-                self.upravne_enote_2=self.iskane_nepremicnine.nepremicnina_upravne_enote_2
-                self.upravne_enote_3=self.iskane_nepremicnine.nepremicnina_upravne_enote_3
-                self.upravne_enote_4=self.iskane_nepremicnine.nepremicnina_upravne_enote_4
-                self.upravne_enote_5=self.iskane_nepremicnine.nepremicnina_upravne_enote_5
-                self.upravne_enote_6=self.iskane_nepremicnine.nepremicnina_upravne_enote_6
-                self.upravne_enote_7=self.iskane_nepremicnine.nepremicnina_upravne_enote_7
-                self.upravne_enote_8=self.iskane_nepremicnine.nepremicnina_upravne_enote_8
-                self.upravne_enote_9=self.iskane_nepremicnine.nepremicnina_upravne_enote_9
-                self.upravne_enote_10=self.iskane_nepremicnine.nepremicnina_upravne_enote_10
-                self.upravne_enote_11=self.iskane_nepremicnine.nepremicnina_upravne_enote_11
-                self.upravne_enote_12=self.iskane_nepremicnine.nepremicnina_upravne_enote_12
-                self.upravne_enote_13=self.iskane_nepremicnine.nepremicnina_upravne_enote_13
-
-            else:
-                self.cena_od=False
-                self.cena_do=False
-                self.velikost_od=False
-                self.velikost_do=False
-                self.letnik_od=False
-                self.letnik_do=False
-                self.vrsta=[]
-                self.tip=[]
-                self.tip_1=[]
-                self.tip_2=[]
-                self.tip_3=[]
-                self.regija=[]
-                self.upravna_enota=[]
-                self.upravne_enote_1=[]
-                self.upravne_enote_2=[]
-                self.upravne_enote_3=[]
-                self.upravne_enote_4=[]
-                self.upravne_enote_5=[]
-                self.upravne_enote_6=[]
-                self.upravne_enote_7=[]
-                self.upravne_enote_8=[]
-                self.upravne_enote_9=[]
-                self.upravne_enote_10=[]
-                self.upravne_enote_11=[]
-                self.upravne_enote_12=[]
-                self.upravne_enote_13=[]
- 
-    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-    @api.onchange('cena_od','cena_do','velikost_od','velikost_do','letnik_od','letnik_do','vrsta','tip','regija','upravna_enota')
-    def _dodeli_os_ne(self):
-        if self.tip_iskanja=='stranka':
-            self._dodeli_nepremicnine()
-        else:
-            self._dodeli_stranke()
-            
-    
-    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        
-    @api.one
-    def _dodeli_nepremicnine(self):
-        domain = []
-        if self.iskane_osebe:
-            if self.cena_od:
-                domain.append(('nepremicnina_cena_dolgorocno','>=',self.cena_od))
-            if self.velikost_od:
-                domain.append(('nepremicnina_povrsina','>=',self.velikost_od))
-            if self.cena_do and self.cena_do>self.cena_od:
-                domain.append(('nepremicnina_cena_dolgorocno','<=',self.cena_do))
-            if self.velikost_do and self.velikost_do>self.velikost_od:
-                domain.append(('nepremicnina_povrsina','<=',self.velikost_do))
-            if self.letnik_od:
-                domain.append(('nepremicnina_leto_izgradnje','>=',self.letnik_od))
-            if self.letnik_do and self.letnik_do>self.letnik_od:
-                domain.append(('nepremicnina_leto_izgradnje','<=',self.letnik_do))
-            if self.vrsta:
-                domain.append(('nepremicnina_vrsta','=',self.vrsta))
-            if self.tip:
-                domain.append(('nepremicnina_tip','=',self.tip))
-            if self.regija:
-                domain.append(('nepremicnina_regija','=',self.regija))
-            if self.upravna_enota:
-                domain.append(('nepremicnina_upravna_enota','=',self.upravna_enota))
-            self.potencialne_nepremicnine=self.env['product.template'].search(domain)
-        else:
-            if not(self.cena_od or self.cena_do or self.velikost_od or self.velikost_do or self.letnik_od or self.letnik_do or self.vrsta or self.tip or self.regija or self.upravna_enota):
-                domain.append(('nepremicnina_cena_dolgorocno','=',-999999999999999999))
-            else:
-                if self.cena_od:
-                    domain.append(('nepremicnina_cena_dolgorocno','>=',self.cena_od))
-                if self.velikost_od:
-                    domain.append(('nepremicnina_povrsina','>=',self.velikost_od))
-                if self.cena_do and self.cena_do>self.cena_od:
-                    domain.append(('nepremicnina_cena_dolgorocno','<=',self.cena_do))
-                if self.velikost_do and self.velikost_do>self.velikost_od:
-                    domain.append(('nepremicnina_povrsina','<=',self.velikost_do))
-                if self.letnik_od:
-                    domain.append(('nepremicnina_leto_izgradnje','>=',self.letnik_od))
-                if self.letnik_do and self.letnik_do>self.letnik_od:
-                    domain.append(('nepremicnina_leto_izgradnje','<=',self.letnik_do))
-                if self.vrsta:
-                    domain.append(('nepremicnina_vrsta','=',self.vrsta))
-                if self.tip:
-                    domain.append(('nepremicnina_tip','=',self.tip))
-                if self.regija:
-                    domain.append(('nepremicnina_regija','=',self.regija))
-                if self.upravna_enota:
-                    domain.append(('nepremicnina_upravna_enota','=',self.upravna_enota))
-            self.potencialne_nepremicnine=self.env['product.template'].search(domain)
+                                       options="{create': false, 'create_edit': false}")     
 
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-        
-    @api.one
-    def _dodeli_stranke(self):
-        domain=[]
-        if self.iskane_nepremicnine:
-            if self.vrsta:
-                domain.append(('kupec_najemnik_nepremicnina_vrsta','=',self.vrsta))
-            if self.tip:
-                domain.append(('kupec_najemnik_nepremicnina_tip','=',self.tip))
-            if self.regija:
-                domain.append(('kupec_najemnik_nepremicnina_regija','=',self.regija))
-            if self.upravna_enota:
-                domain.append(('kupec_najemnik_nepremicnina_upravna_enota','=',self.upravna_enota))
-            if self.cena_do and self.cena_do>self.cena_od:
-                domain.append(('kupec_najemnik_cena_od','<=',self.cena_do))
-            if self.velikost_do and self.velikost_do>self.velikost_od:
-                domain.append(('kupec_najemnik_velikost_do','<=',self.velikost_do))
-            if self.velikost_od:
-                domain.append(('kupec_najemnik_velikost_od','>=',self.velikost_od))
-            if self.letnik_od:
-                domain.append(('kupec_najemnik_letnik_od','>=',self.letnik_od))
-            if self.letnik_do and self.letnik_do>self.letnik_od:
-                domain.append(('kupec_najemnik_letnik_do','<=',self.letnik_do))
-            self.potencialne_osebe=self.env['res.partner'].search(domain)
-        else:
-            if not(self.cena_do or self.velikost_od or self.velikost_do or self.letnik_od or self.letnik_do or self.vrsta or self.tip or self.regija or self.upravna_enota):
-                domain.append(('kupec_najemnik_cena_od','=',-999999999999999999))
-            else:
-                if self.vrsta:
-                    domain.append(('kupec_najemnik_nepremicnina_vrsta','=',self.vrsta))
-                if self.tip:
-                    domain.append(('kupec_najemnik_nepremicnina_tip','=',self.tip))
-                if self.regija:
-                    domain.append(('kupec_najemnik_nepremicnina_regija','=',self.regija))
-                if self.upravna_enota:
-                    domain.append(('kupec_najemnik_nepremicnina_upravna_enota','=',self.upravna_enota))
-                if self.cena_do and self.cena_do>self.cena_od:
-                    domain.append(('kupec_najemnik_cena_od','<=',self.cena_do))
-                    domain.append(('kupec_najemnik_cena_od','>',0))
-                if self.velikost_do and self.velikost_do>self.velikost_od:
-                    domain.append(('kupec_najemnik_velikost_do','<=',self.velikost_do))
-                if self.velikost_od:
-                    domain.append(('kupec_najemnik_velikost_od','>=',self.velikost_od))
-                if self.letnik_od:
-                    domain.append(('kupec_najemnik_letnik_od','>=',self.letnik_od))
-                if self.letnik_do and self.letnik_do>self.letnik_od:
-                    domain.append(('kupec_najemnik_letnik_do','<=',self.letnik_do))
-            self.potencialne_osebe=self.env['res.partner'].search(domain)
-        
+    #ISKALNE FUNKCIJE
+    
+    
+    
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
 
     #@api.model

@@ -91,7 +91,7 @@
         </record>
         
         <record model="custom.location" id="siska">
-            <field name="name">Lj. Šiška'</field>
+            <field name="name">Lj. Šiška</field>
             <field name="code">siska</field>
             <field name="regija">1</field>
         </record>
