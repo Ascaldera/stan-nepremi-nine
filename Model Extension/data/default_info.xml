@@ -5,54 +5,67 @@
         
         <record model="custom.location.regija" id="dolenjska">
             <field name="name">Dolenjska</field>
+            <field name="code">dolenjska</field>
         </record>
         
         <record model="custom.location.regija" id="gorenjska">
             <field name="name">Gorenjska</field>
+            <field name="code">gorenjska</field>
         </record>
         
         <record model="custom.location.regija" id="juzna_primorska">
             <field name="name">Južna primorska</field>
+            <field name="code">juzna_primorska</field>
         </record>
         
         <record model="custom.location.regija" id="severna_primorska">
             <field name="name">Severna primorska</field>
+            <field name="code">severna_primorska</field>
         </record>
         
         <record model="custom.location.regija" id="koroska">
             <field name="name">Koroška</field>
+            <field name="code">koroska</field>
         </record>
         
         <record model="custom.location.regija" id="lj_mesto">
             <field name="name">Lj-mesto</field>
+            <field name="code">lj_mesto</field>
         </record>
         
         <record model="custom.location.regija" id="lj_okolica">
             <field name="name">Lj-okolica</field>
+            <field name="code">lj_okolica</field>
         </record>
         
         <record model="custom.location.regija" id="notranjska">
             <field name="name">Notranjska</field>
+            <field name="code">notranjska</field>
         </record>
         
         <record model="custom.location.regija" id="podravska">
             <field name="name">Podravska</field>
+            <field name="code">podravska</field>
         </record>
         
         <record model="custom.location.regija" id="pomurska">
             <field name="name">Pomurska</field>
+            <field name="code">pomurska</field>
         </record>
         
         <record model="custom.location.regija" id="posavska">
             <field name="name">Posavska</field>
+            <field name="code">posavska</field>
         </record>
         
         <record model="custom.location.regija" id="savinjska">
             <field name="name">Savinjska</field>
+            <field name="code">savinjska</field>
         </record>
         
-        <record model="custom.location.regija" id="regija">
+        <record model="custom.location.regija" id="zasavska">
             <field name="name">Zasavska</field>
+            <field name="code">zasavska</field>
         </record>
     </data>
     
@@ -388,4 +401,198 @@
             <field name="regija">13</field>
         </record>
     </data>
+    
+    <!-- Podatki o vrsti nepremičnine -->
+    <data noupdate="1">
+        
+        <record model="custom.vrsta" id="stanovanje">
+            <field name="name">Stanovanje</field>
+            <field name="code">stanovanje</field>
+        </record>
+        
+        <record model="custom.vrsta" id="hisa">
+            <field name="name">Hiša</field>
+            <field name="code">hisa</field>
+        </record>
+        
+        <record model="custom.vrsta" id="poslovni">
+            <field name="name">Poslovni prostor</field>
+            <field name="code">poslovni</field>
+        </record>
+        
+        <record model="custom.vrsta" id="posest">
+            <field name="name">Posest</field>
+            <field name="code">posest</field>
+        </record>
+        
+        <record model="custom.vrsta" id="vikend">
+            <field name="name">Vikend</field>
+            <field name="code">vikend</field>
+        </record>
+        
+        <record model="custom.vrsta" id="kmetija">
+            <field name="name">Kmetija</field>
+            <field name="code">kmetija</field>
+        </record>
+        
+        <record model="custom.vrsta" id="garaza">
+            <field name="name">Garaža</field>
+            <field name="code">garaza</field>
+        </record>
+        
+        <record model="custom.vrsta" id="drugo">
+            <field name="name">Drugo</field>
+            <field name="code">drugo</field>
+        </record>
+        
+    </data>
+    
+    <!-- Podatki o tipu nepremičnine -->
+    <data noupdate="1">
+        
+        <record model="custom.tip" id="apartma">
+            <field name="name">Apartma</field>
+            <field name="code">apartma</field>
+            <field name="vrsta">1</field>
+        </record>
+      
+        <record model="custom.tip" id="soba">
+            <field name="name">Soba</field>
+            <field name="code">soba</field>
+            <field name="vrsta">1</field>
+        </record>
+      
+        <record model="custom.tip" id="garsonjera">
+            <field name="name">Garsonjera</field>
+            <field name="code">garsonjera</field>
+            <field name="vrsta">1</field>
+        </record>
+      
+        <record model="custom.tip" id="soba1">
+            <field name="name">1-sobno</field>
+            <field name="code">soba1</field>
+            <field name="vrsta">1</field>
+        </record>
+      
+        <record model="custom.tip" id="soba1_5">
+            <field name="name">1,5-sobno</field>
+            <field name="code">soba1_5</field>
+            <field name="vrsta">1</field>
+        </record>
+      
+        <record model="custom.tip" id="soba2">
+            <field name="name">2-sobno</field>
+            <field name="code">soba2</field>
+            <field name="vrsta">1</field>
+        </record>
+      
+        <record model="custom.tip" id="soba2_5">
+            <field name="name">2,5-sobno</field>
+            <field name="code">soba2_5</field>
+            <field name="vrsta">1</field>
+        </record>
+      
+        <record model="custom.tip" id="soba3">
+            <field name="name">3-sobno</field>
+            <field name="code">soba3</field>
+            <field name="vrsta">1</field>
+        </record>
+      
+        <record model="custom.tip" id="soba3_5">
+            <field name="name">3,5-sobno</field>
+            <field name="code">soba3_5</field>
+            <field name="vrsta">1</field>
+        </record>
+      
+        <record model="custom.tip" id="soba4">
+            <field name="name">4-sobno</field>
+            <field name="code">soba4</field>
+            <field name="vrsta">1</field>
+        </record>
+      
+        <record model="custom.tip" id="soba4_5">
+            <field name="name">4,5-sobno</field>
+            <field name="code">soba4_5</field>
+            <field name="vrsta">1</field>
+        </record>
+      
+        <record model="custom.tip" id="soba5">
+            <field name="name">5-sobno</field>
+            <field name="code">soba5</field>
+            <field name="vrsta">1</field>
+        </record>
+        
+        <record model="custom.tip" id="drugo">
+            <field name="name">Drugo</field>
+            <field name="code">drugo</field>
+            <field name="vrsta">1</field>
+        </record>
+      
+        <record model="custom.tip" id="atrij">
+            <field name="name">Atrij</field>
+            <field name="code">atrij</field>
+            <field name="vrsta">2</field>
+        </record>
+      
+        <record model="custom.tip" id="dvojcek">
+            <field name="name">Dvojček</field>
+            <field name="code">dvojcek</field>
+            <field name="vrsta">2</field>
+        </record>
+      
+        <record model="custom.tip" id="samostojna">
+            <field name="name">Samostojna</field>
+            <field name="code">samostojna</field>
+            <field name="vrsta">2</field>
+        </record>
+        
+        <record model="custom.tip" id="drugo">
+            <field name="name">Drugo</field>
+            <field name="code">drugo</field>
+            <field name="vrsta">2</field>
+        </record>
+      
+        <record model="custom.tip" id="delavnica">
+            <field name="name">Delavnica</field>
+            <field name="code">delavnica</field>
+            <field name="vrsta">3</field>
+        </record>
+      
+        <record model="custom.tip" id="gostinskiLokal">
+            <field name="name">Gostinski lokal</field>
+            <field name="code">gostinskiLokal</field>
+            <field name="vrsta">3</field>
+        </record>
+      
+        <record model="custom.tip" id="pisarna">
+            <field name="name">Pisarna</field>
+            <field name="code">pisarna</field>
+            <field name="vrsta">3</field>
+        </record>
+      
+        <record model="custom.tip" id="prostorZaStoritve">
+            <field name="name">Prostor za storitve</field>
+            <field name="code">prostorZaStoritve</field>
+            <field name="vrsta">3</field>
+        </record>
+      
+        <record model="custom.tip" id="skladisce">
+            <field name="name">Skladišče</field>
+            <field name="code">skladisce</field>
+            <field name="vrsta">3</field>
+        </record>
+      
+        <record model="custom.tip" id="vecjiPoslovniKompleks">
+            <field name="name">Večji poslovni kompleks</field>
+            <field name="code">vecjiPoslovniKompleks</field>
+            <field name="vrsta">3</field>
+        </record>
+      
+        <record model="custom.tip" id="drugo">
+            <field name="name">Drugo</field>
+            <field name="code">drugo</field>
+            <field name="vrsta">3</field>
+        </record>
+    </data>
+    
 </odoo>

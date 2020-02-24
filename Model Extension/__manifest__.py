@@ -19,7 +19,7 @@
         'views/extend_models_inventory.xml',
         'views/extend_models_crm.xml',
         'views/hide_default.xml',
-        'data/default_regija.xml',
+        'data/default_info.xml',        
     ],
     'installable': True,
 }
