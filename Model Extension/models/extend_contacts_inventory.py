@@ -1396,6 +1396,10 @@ class ExtendCrm(models.Model):
     #Funkcije za autopopulate field
     #Customer
     
+    @api.onchange('cena_od','cena_do','velikost_od','velikost_do','letnik_od','letnik_do','crm_vrsta','crm_tip','crm_regija','crm_upravna_enota')
+    def set_to_false(self):
+        self.search_estates()
+    
     @api.onchange('tip_iskanja')
     def erase_all_data(self):
         self.iskane_osebe=[]
@@ -1457,7 +1461,7 @@ class ExtendCrm(models.Model):
             crm_vrsta=self.env['custom.vrsta'].search([('code','=',self.iskane_nepremicnine.nepremicnina_vrsta)])
             if len(crm_vrsta)!=0:
                 self.crm_vrsta=crm_vrsta
-        if self.iskane_nepremicnine.nepremicnina_vrsta!=False:
+        if self.iskane_nepremicnine.nepremicnina_tip!=False:
             crm_tip=self.env['custom.tip'].search([('code','=',self.iskane_nepremicnine.nepremicnina_tip)])
             if len(crm_tip)!=0:
                 self.crm_tip=crm_tip
@@ -1469,7 +1473,6 @@ class ExtendCrm(models.Model):
             crm_upravna_enota=self.env['custom.location'].search([('code','=',self.iskane_nepremicnine.nepremicnina_upravna_enota)])
             if len(crm_upravna_enota)!=0:
                 self.crm_upravna_enota=crm_upravna_enota
-            #ŠE ZA CENO, VELIKOST IN LETNIK
         if self.iskane_nepremicnine.nepremicnina_cena_min:
             self.cena_od=self.iskane_nepremicnine.nepremicnina_cena_min
             self.cena_do=self.iskane_nepremicnine.nepremicnina_cena_min
@@ -1494,30 +1497,96 @@ class ExtendCrm(models.Model):
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     #ISKALNE FUNKCIJE
     
-    
-    
-    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
-
-    #@api.model
-    #def create(self,values):
-    #    rec = super(ExtendCrm,self).create(values)
-    #    if 'potencialne_nepremicnine' not in values:
-    #        if values['tip_iskanja'] == 'stranka':
-    #            rec._dodeli_nepremicnine()
-    #    if 'potencialne_osebe' not in values:
-    #        if values['tip_iskanja'] == 'nepremicnina':
-    #            rec._dodeli_stranke()
-    #    return rec
-    
-    #@api.multi
-    #def write(self,values):
-    #    rec = super(ExtendCrm,self).write(values)
-    #    if 'potencialne_nepremicnine' not in values and 'test' not in values:
-    #        if self.tip_iskanja=='stranka':
-    #            self._dodeli_nepremicnine()
-    #    if 'potencialne_osebe' not in values and 'test' not in values:
-    #        if self.tip_iskanja=='nepremicnina':
-    #            self._dodeli_stranke()
-    #    return rec
-    
-    #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
+    @api.multi
+    def search_estates(self):
+        self.potencialne_nepremicnine=[]
+        self.potencialne_nepremicnine=self.env['product.template'].search([])
+        for x in self.potencialne_nepremicnine:
+            
+            #POGOJI ZA CENO NEPREMIČNIN:
+            if not(self.cena_od==0 or False) and not(self.cena_do==0 or False):
+                if not(self.cena_od<=x.nepremicnina_cena_min<=self.cena_do):
+                    self.potencialne_nepremicnine=[(3,x.id)]
+                    continue
+            if (self.cena_od==0 or False) and not(self.cena_do==0 or False):
+                if self.cena_do>x.nepremicnina_cena_min:
+                    self.potencialne_nepremicnine=[(3,x.id)]
+                    continue
+            if not(self.cena_od==0 or False) and (self.cena_do==0 or False):
+                if self.cena_od<x.nepremicnina_cena_min:
+                    self.potencialne_nepremicnine=[(3,x.id)]
+                    continue
+            
+            #POGOJI ZA VELIKOST NEPREMIČNINE
+            
+            if not(self.velikost_od==0 or False) and not(self.velikost_do==0 or False):
+                if not(self.velikost_od<=x.nepremicnina_povrsina<=self.velikost_do):
+                    self.potencialne_nepremicnine=[(3,x.id)]
+                    continue
+            if (self.velikost_od==0 or False) and not(self.velikost_do==0 or False):
+                if self.velikost_do>x.nepremicnina_povrsina:
+                    self.potencialne_nepremicnine=[(3,x.id)]
+                    continue
+            if not(self.velikost_od==0 or False) and (self.velikost_do==0 or False):
+                if self.velikost_od<x.nepremicnina_povrsina:
+                    self.potencialne_nepremicnine=[(3,x.id)]
+                    continue
+                
+            #POGOJI ZA LETNIK NEPREMIČNINE
+            
+            if not(self.letnik_od=="0" or False) and not(self.letnik_do=="0" or False):
+                if x.nepremicnina_leto_izgradnje and not(int(self.letnik_od)<=int(x.nepremicnina_leto_izgradnje)<=int(self.letnik_do)):
+                    self.potencialne_nepremicnine=[(3,x.id)]
+                    continue
+            if (self.letnik_od=="0" or False) and not(self.letnik_do=="0" or False):
+                if x.nepremicnina_leto_izgradnje and int(self.velikost_do)>int(x.nepremicnina_leto_izgradnje):
+                    self.potencialne_nepremicnine=[(3,x.id)]
+                    continue
+            if not(self.letnik_od=="0" or False) and (self.letnik_do=="0" or False):
+                if x.nepremicnina_leto_izgradnje and int(self.velikost_do)<int(x.nepremicnina_leto_izgradnje):
+                    self.potencialne_nepremicnine=[(3,x.id)]
+                    continue
+                
+            #POGOJI ZA VRSTO
+            
+            if not x.nepremicnina_vrsta:
+                self.potencialne_nepremicnine=[(3,x.id)]
+                continue
+            if self.crm_vrsta:
+                temp=[i for i in self.crm_vrsta if x.nepremicnina_vrsta in i.code]
+                if len(temp)==0:
+                    self.potencialne_nepremicnine=[(3,x.id)]
+                    continue
+                    
+            #POGOJI ZA TIP 
+                    
+            if not(x.nepremicnina_tip):
+                self.potencialne_nepremicnine=[(3,x.id)]
+                continue
+            if self.crm_tip and x.nepremicnina_tip:
+                temp=[i for i in self.crm_tip if x.nepremicnina_tip in i.code]
+                if len(temp)==0:
+                    self.potencialne_nepremicnine=[(3,x.id)]
+                    continue
+            
+            #POGOJI ZA REGIJO
+            
+            if not(x.nepremicnina_regija):
+                self.potencialne_nepremicnine=[(3,x.id)]
+                continue
+            if self.crm_regija and x.nepremicnina_regija:
+                temp=[i for i in self.crm_regija if x.nepremicnina_regija in i.code]
+                if len(temp)==0:
+                    self.potencialne_nepremicnine=[(3,x.id)]
+                    continue
+                    
+            #POGOJI ZA UPRAVNO ENOTO
+                    
+            if not(x.nepremicnina_upravna_enota):
+                self.potencialne_nepremicnine=[(3,x.id)]
+                continue
+            if self.crm_upravna_enota and x.nepremicnina_upravna_enota:
+                temp=[i for i in self.crm_upravna_enota if x.nepremicnina_upravna_enota in i.code]
+                if len(temp)==0:
+                    self.potencialne_nepremicnine=[(3,x.id)]
+                    continue
