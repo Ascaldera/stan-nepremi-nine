@@ -4,7 +4,8 @@
     <record id="crm_lead_edited" model="ir.ui.view"> 
         <field name="name">crm_lead_edited</field> 
         <field name="model">crm.lead</field> 
-        <field name="inherit_id" ref="crm.crm_case_form_view_oppor"/> 
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <!--<field name="inherit_id" ref="crm.crm_case_form_view_oppor"/>-->
         <field name="arch" type="xml"> 
             <xpath expr="//field[@name='partner_id']" position="before">
                 <field name="tip_iskanja" attrs ="{'required':1}"/>

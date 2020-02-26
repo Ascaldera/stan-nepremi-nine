@@ -91,20 +91,24 @@
             </xpath>
 
             <!-- NEW CRM LINK BUTTON-->
+            <!--
             <xpath expr="//button[@name='toggle_active']" position="before">
                 <button class="oe_stat_button o_res_partner_tip_opp" name="crm_link" type="object" icon="fa-star">
                     <field string="CRM vnos" name="opportunity_count" widget="statinfo"/>
                 </button>
             </xpath>
-
+            -->
+            
             <!-- NEW PUBLISH BUTTON -->
+            <!--
             <xpath expr="//button[@name='toggle_active']" position="before">
                 <button class="oe_stat_button" name="check_publish_info" type="object" icon="fa-globe" attrs="{'invisible': [('sale_ok','=',False)]}">
                     <field name="website_published" widget="website_button"/>
                     <field name="is_published" invisible="1"/>
                 </button>
             </xpath>
-            
+            -->
+
             <!-- NOVA POLJA V GLAVNEM ODDELKU-->
             <xpath expr="//field[@name='sale_ok']" position="before">
                 <group>
@@ -570,7 +574,7 @@ attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta',
     <record id="action_open_inventory_tag" model="ir.actions.act_window">
         <field name="name">oznake</field>
         <field name="res_model">res.partner.category</field>
-        <field name="view_type">form</field>
+        <!--<field name="view_type">form</field>-->
         <field name="view_mode">tree,form</field>
         <field name="domain"></field>
     </record>
@@ -579,7 +583,7 @@ attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta',
     <record id="action_open_inventory_ue" model="ir.actions.act_window">
         <field name="name">Upravna Enota</field>
         <field name="res_model">custom.location</field>
-        <field name="view_type">form</field>
+        <!--<field name="view_type">form</field>-->
         <field name="view_mode">tree,form</field>
         <field name="domain"></field>
     </record>
@@ -588,7 +592,7 @@ attrs ="{'invisible':[('nepremicnina_vrsta','!=', 'hisa'),('nepremicnina_vrsta',
     <record id="action_open_inventory_regija" model="ir.actions.act_window">
         <field name="name">Regija</field>
         <field name="res_model">custom.location.regija</field>
-        <field name="view_type">form</field>
+        <!--<field name="view_type">form</field>-->
         <field name="view_mode">tree,form</field>
         <field name="domain"></field>
     </record>
