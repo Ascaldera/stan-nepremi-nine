@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<odoo>
+
+    <record id="crm_lead_edited" model="ir.ui.view"> 
+        <field name="name">crm_lead_edited</field> 
+        <field name="model">crm.lead</field> 
+        <field name="inherit_id" ref="crm.crm_lead_view_form"/>
+        <field name="arch" type="xml">
+            <field name="partner_id" position="before">
+                <field name="tip_iskanja" attrs ="{'required':1}"/>
+                <field name="iskane_osebe" attrs ="{'invisible':[('tip_iskanja','!=','stranka')]}"/>
+                <field name="iskane_nepremicnine" attrs ="{'invisible':[('tip_iskanja','!=','nepremicnina')]}"/>
+                <field name="tip_priloznosti"/>
+            </field>
+<!--            <xpath expr="//field[@name='partner_id']" position="before">-->
+<!--                <field name="tip_iskanja" attrs ="{'required':1}"/>-->
+<!--                <field name="iskane_osebe" attrs ="{'invisible':[('tip_iskanja','!=','stranka')]}"/>-->
+<!--                <field name="iskane_nepremicnine" attrs ="{'invisible':[('tip_iskanja','!=','nepremicnina')]}"/>-->
+<!--                <field name="tip_priloznosti"/>-->
+<!--            </xpath>-->
+
+            <xpath expr="//form/sheet/notebook/page[2]" position="before">
+                <page string="Potencialne nepremičnine" attrs ="{'invisible':[('tip_iskanja','!=','stranka')]}">
+                    <group>
+                        <group>
+                            <field name="crm_vrsta" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                            <field name="crm_tip" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                            <field name="crm_regija" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                            <field name="crm_upravna_enota" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                        </group>
+                        <group>
+                            <field name="cena_od" widget="monetary"/>
+                            <field name="cena_do" wiget="monetary"/>
+                            <field name="velikost_od"/>
+                            <field name="velikost_do"/>
+                            <field name="letnik_od"/>
+                            <field name="letnik_do"/>
+                        </group>
+                    </group>
+                    <field name="potencialne_nepremicnine" nolabel="1">
+                        <tree>
+                            <field name="name"/>
+                            <field name="default_code"/>
+                            <field name="nepremicnina_vrsta_posredovanja"/>
+                            <field name="nepremicnina_cena_min"/>
+                            <field name="nepremicnina_povrsina"/>
+                            <field name="nepremicnina_leto_izgradnje"/>
+                            <field name="nepremicnina_posrednik" string="Lastnik nepremičnine"/>
+                            <field name="contact"/>
+                        </tree>
+                    </field>
+                </page>
+                
+                <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+                
+                <page string="Potencialne osebe" attrs ="{'invisible':[('tip_iskanja','!=','nepremicnina')]}">
+                    <group>
+                        <group>
+                            <field name="crm_vrsta" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                            <field name="crm_tip" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                            <field name="crm_regija" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                            <field name="crm_upravna_enota" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                        </group>
+                        <group>
+                            <field name="cena_od" widget="monetary"/>
+                            <field name="cena_do" wiget="monetary"/>
+                            <field name="velikost_od"/>
+                            <field name="velikost_do"/>
+                            <field name="letnik_od"/>
+                            <field name="letnik_do"/>
+                        </group>
+                    </group>
+                    <field name="potencialne_osebe" nolabel="1">
+                        <tree>
+                            <field name="name"/>
+                            <field name="tip_stranke"/>
+                            <field name="kupec_najemnik_cena_od"/>
+                            <field name="kupec_najemnik_cena_do"/>
+                            <field name="phone"/>
+                            <field name="mobile"/>
+                            <field name="email"/>
+                        </tree>
+                    </field>
+                </page>
+                
+                <!-- XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX -->
+                
+            </xpath>
+            
+        </field>
+    </record>
+    
+    <record id="crm_lead_edited_kanban" model="ir.ui.view">
+        <field name="name">crm_lead_edited_kanban</field>
+        <field name="model">crm.lead</field>
+        <field name="inherit_id" ref="crm.crm_case_kanban_view_leads"/>
+        <field name="arch" type="xml">
+            <field name="tag_ids" position="before">
+                <field name="partner_id"/>
+                <br></br>
+                <field name="tip_iskanja"/>
+                <field name="tip_priloznosti"/>
+            </field>
+<!--            <xpath expr="//field[@name='tag_ids']" position="before">-->
+<!--                <field name="partner_id"/>-->
+<!--                <br></br>-->
+<!--                <field name="tip_iskanja"/>-->
+<!--                <field name="tip_priloznosti"/>-->
+<!--            </xpath>-->
+            <xpath expr="//div[@class='text-muted o_kanban_record_subtitle']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
+            <field name="tag_ids" position="after">
+                <field name="planned_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/>
+            </field>
+<!--            <xpath expr="//field[@name='tag_ids']" position="after">-->
+<!--                <field name="planned_revenue" widget="monetary" options="{'currency_field': 'company_currency'}"/>          -->
+<!--            </xpath>-->
+        </field>
+    </record>
+    
+    <record id="crm_quick_create_edit" model="ir.ui.view"> 
+        <field name="name">Crm quick create edited</field> 
+        <field name="model">crm.lead</field> 
+        <field name="inherit_id" ref="crm.quick_create_opportunity_form"/> 
+        <field name="arch" type="xml">
+            <field name="partner_id" position="after">
+                <field name="tip_iskanja" attrs ="{'required':1}"/>
+            <field name="iskane_osebe" attrs ="{'invisible':[('tip_iskanja','!=','stranka')]}"/>
+            <field name="iskane_nepremicnine" attrs ="{'invisible':[('tip_iskanja','!=','nepremicnina')]}"/>
+			<field name="tip_priloznosti"/>
+            <!-- Vrsta, tipi, regije, upravne enote -->
+            <field name="crm_vrsta" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+            <field name="crm_tip" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+            <field name="crm_regija" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+            <field name="crm_upravna_enota" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+            <!-- Vrsta, tipi, regije, upravne enote -->
+
+            <field name="cena_od"/>
+            <field name="cena_do"/>
+            <field name="velikost_od"/>
+            <field name="velikost_do"/>
+            <field name="letnik_od"/>
+            <field name="letnik_do"/>
+
+
+            </field>
+<!--		<xpath expr="//field[@name='partner_id']" position="after">-->
+<!--            <field name="tip_iskanja" attrs ="{'required':1}"/>-->
+<!--            <field name="iskane_osebe" attrs ="{'invisible':[('tip_iskanja','!=','stranka')]}"/>-->
+<!--            <field name="iskane_nepremicnine" attrs ="{'invisible':[('tip_iskanja','!=','nepremicnina')]}"/>-->
+<!--			<field name="tip_priloznosti"/>-->
+<!--            &lt;!&ndash; Vrsta, tipi, regije, upravne enote &ndash;&gt;-->
+<!--            <field name="crm_vrsta" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>-->
+<!--            <field name="crm_tip" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>-->
+<!--            <field name="crm_regija" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>-->
+<!--            <field name="crm_upravna_enota" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>-->
+<!--            &lt;!&ndash; Vrsta, tipi, regije, upravne enote &ndash;&gt;-->
+<!--            -->
+<!--            <field name="cena_od"/>-->
+<!--            <field name="cena_do"/>-->
+<!--            <field name="velikost_od"/>-->
+<!--            <field name="velikost_do"/>-->
+<!--            <field name="letnik_od"/>-->
+<!--            <field name="letnik_do"/>-->
+<!--            -->
+<!--		</xpath>-->
+            <field name="partner_id" position='attributes'>
+                <attribute name="invisible">1</attribute>
+            </field>
+<!--        <xpath expr="//field[@name='partner_id']" position='attributes'> -->
+<!--                <attribute name="invisible">1</attribute>-->
+<!--        </xpath>-->
+        </field>
+    </record>
+    
+</odoo>
