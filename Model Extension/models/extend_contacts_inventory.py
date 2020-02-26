@@ -157,12 +157,15 @@ class ExtendContacts(models.Model):
 
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     
+    test=fields.Char('TEST')
+    
     @api.onchange('kupec_najemnik_vrsta')
     def delete_extra_type(self):
+        test=""
         if self.kupec_najemnik_vrsta!=False and self.kupec_najemnik_tip!=False:
             for tip in self.kupec_najemnik_tip:
-                if tip.vrsta not in self.kupec_najemnik_vrsta:
-                    self.kupec_najemnik_tip = [(3,tip.id)] 
+                if tip.vrsta not in self.kupec_najemnik_vrsta._origin:
+                    self.kupec_najemnik_tip = [(3,tip.id)]
         return
 
     
@@ -171,7 +174,7 @@ class ExtendContacts(models.Model):
     def delete_extra_region(self):
         if self.kupec_najemnik_regija!=False and self.kupec_najemnik_upravna_enota!=False:
             for ue in self.kupec_najemnik_upravna_enota:
-                if ue.regija not in self.kupec_najemnik_regija:
+                if ue.regija not in self.kupec_najemnik_regija._origin:
                     self.kupec_najemnik_upravna_enota = [(3,ue.id)] 
         return
     
@@ -372,8 +375,39 @@ class ExtendInventory(models.Model):
     slike_attachments = fields.Many2many('ir.attachment', string='Dodaj več')
     slike_kanban = fields.One2many(comodel_name='custom.image',  inverse_name="product_tmpl_id", string='Dodaj')
     help_tekst = fields.Char(string='Debugg')
-        
+       
     def write(self,values):
+        values['help_tekst'] = 'test 2'
+        if 'slike_attachments' in values:
+            ids = []
+            if values.get('slike_attachments', []):
+                ids = values['slike_attachments'][0]
+            for id in ids:
+                record = self.env['ir.attachment'].browse(id)
+                print("recorddddddddddddddddddddddd",record, record.mimetype)
+                if record.mimetype and 'image' in record.mimetype:
+                    self.env['custom.image'].create({'name':record.name, 'image':record.datas, 'product_tmpl_id':self.id})
+            values['help_tekst'] = ids
+            values['slike_attachments'] = [(5,)]
+        if 'nepremicnina_opis' in values:
+            s2=values['nepremicnina_opis']
+            custom_msg="Opis: "+str(s2)
+            self.message_post(body=custom_msg)
+        rec = super(ExtendInventory,self).write(values)
+        return rec
+    
+    @api.model
+    def create(self,values):
+        rec = super(ExtendInventory,self).create(values)
+        records = rec['slike_attachments']
+        for record in records:
+            if 'image' in record.mimetype:
+                self.env['custom.image'].create({'name':record.name, 'image':record.datas, 'product_tmpl_id':rec.id})
+        rec['help_tekst'] = records
+        rec['slike_attachments'] = False
+        return rec
+        
+    """def write(self,values):
         values['help_tekst'] = 'test 2'
         if 'slike_attachments' in values:
             ids = values['slike_attachments'][0][2]
@@ -399,7 +433,7 @@ class ExtendInventory(models.Model):
                 self.env['custom.image'].create({'name':record.name, 'image':record.datas, 'product_tmpl_id':rec.id})
         rec['help_tekst'] = records
         rec['slike_attachments'] = False
-        return rec
+        return rec"""
         
     #OSNOVNI PODATKI
     contact = fields.Many2one(comodel_name='res.partner', string="Kdo prodaja")
@@ -1374,7 +1408,7 @@ class ExtendCrm(models.Model):
     def delete_extra_type(self):
         if self.crm_vrsta!=False and self.crm_tip!=False:
             for tip in self.crm_tip:
-                if tip.vrsta not in self.crm_vrsta:
+                if tip.vrsta not in self.crm_vrsta._origin:
                     self.crm_tip = [(3,tip.id)] 
         return
       
@@ -1382,7 +1416,7 @@ class ExtendCrm(models.Model):
     def delete_extra_region(self):
         if self.crm_regija!=False and self.crm_upravna_enota!=False:
             for ue in self.crm_upravna_enota:
-                if ue.regija not in self.crm_regija:
+                if ue.regija not in self.crm_regija._origin:
                     self.crm_upravna_enota = [(3,ue.id)] 
         return
     
