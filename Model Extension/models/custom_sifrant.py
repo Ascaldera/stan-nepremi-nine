@@ -9,6 +9,6 @@ class custom_sifrant(models.Model):
     _order = 'name asc'
     
     name=fields.Char(string="Ime oglaševanja")
-    display=fields.One2many(string="Oglaševane nepremičnine", 
+    display=fields.One2many(string="Oglaševane nepremičnine",
                             comodel_name="product.template",
                             inverse_name="nepremicnina_oglasevana_kje")
