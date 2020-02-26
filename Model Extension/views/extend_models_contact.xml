@@ -11,9 +11,13 @@
                 <group col='2'>
                     <field name="tip_stranke"/>
                     <field name="tretja_oseba"/>
+                    <field name="zakaj_kupuje"/>
                 </group>
             </xpath>
-
+            
+            <xpath expr="//page[@name='sales_purchases']" position="attributes">
+                <attribute name="invisible">1</attribute>
+            </xpath>
             
             <!-- Contact TAB: Info o nepremičninah -->
             <xpath expr="//page[@name='sales_purchases']" position='after'>
@@ -34,7 +38,7 @@
                                 <field name="currency_id" invisible="1"/>
                                 <field name='name' string='Nepremičnina'/>
                                 <field name='type' string='Tip'/>
-                                <field name='list_price' string = 'Cena' widget='monetary' options="{'currency_field': 'currency_id'}"/>
+                                <field name='list_price' string = 'Cena' widget='monetary'/>
                             </tree>
                         </field>  
                     </group>
@@ -54,20 +58,10 @@
                         </group>
                     </group>
                     <group string='Prodajalec'>        
-                        <group col='4' colspan='2'>
+                        <group>
                             <field name="create_uid" string='Osebo vnesla'/>
-                            <field name="custom_currency_id" invisible="1"/>
-                            <field name="prodajalec_koliko" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
-                            <field name="prodajalec_ponudbe" widget="boolean_toggle"/>
-                            
-                            <label for='prodajalec_procent'/>
-                            <div class="o_row" name="procent">
-                                <field name="prodajalec_procent"/>
-                                    <span>%</span>
-                            </div>                        
-                            
+                            <field name="prodajalec_ponudbe" widget="boolean_toggle"/>                           
                             <field name="prodajalec_ponudbe_info" attrs ="{'readonly':[('prodajalec_ponudbe','=', False)]}"/>
-                            <field name="prodajalec_datum_pogodbe"/>
                             <field name="prodajalec_komunikacija"/>
                         </group>
                     </group>
@@ -79,13 +73,12 @@
                 <page name='kupec' string="Kupec" attrs="{'invisible': [('tip_stranke','!=','kupec')]}">     
                     <group string='Iskalni podatki'>
                         <group col='4' colspan='2'>
-                            <field name="poizvedba_cena" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
-                            <field name="custom_currency_id" invisible="1"/>
+                            <field name="poizvedba_cena" widget='monetary'/>
                             <field name="poizvedba_kontakt_dan"/>
                             <field name="poizvedba_kontaktiran"/>
-                            <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
+                            <!--<field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
                             <field name="poizvedba_kraj" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
-                            <field name="poizvedba_namen" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
+                            <field name="poizvedba_namen" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>-->
                             <field name="poizvedba_zgodovina" colspan='4'/>
                             <field name="poizvedba_ok" colspan='4'/>
                             <field name="poizvedba_nok" colspan='4'/>
@@ -138,13 +131,9 @@
                 <page name='najemnik' string="Najemnik" attrs="{'invisible': [('tip_stranke','!=','najemnik')]}">
                     <group string='Iskalni podatki'>
                         <group col='4' colspan='2'>
-                            <field name="poizvedba_cena" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
-                            <field name="custom_currency_id" invisible="1"/>
+                            <field name="poizvedba_cena" widget='monetary'/>
                             <field name="poizvedba_kontakt_dan"/>
                             <field name="poizvedba_kontaktiran"/>
-                            <field name="poizvedba_nepremicnina" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
-                            <field name="poizvedba_kraj" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
-                            <field name="poizvedba_namen" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}" colspan='4'/>
                             <field name="poizvedba_zgodovina" colspan='4'/>
                             <field name="poizvedba_ok" colspan='4'/>
                             <field name="poizvedba_nok" colspan='4'/>
@@ -187,24 +176,12 @@
                         </group>
                     </group>
                     <group string='Tretja Oseba'>
-                        <group col='4' colspan='2'>
-                            <field name="create_uid" string='Osebo vnesla'/>
-                            <field name="custom_currency_id" invisible="1"/>
-                            
+                        <group>
+                            <field name="create_uid" string='Osebo vnesla'/>                            
                             <field name="spol"/>
                             <field name="tretja_oseba_osebnost" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
-          
-                            <field name="prodajalec_koliko" widget='monetary' options="{'currency_field': 'custom_currency_id'}"/>
-                            <field name="prodajalec_ponudbe" widget="boolean_toggle"/>
-                            
-                            <label for='prodajalec_procent'/>
-                            <div class="o_row" name="procent">
-                                <field name="prodajalec_procent"/>
-                                    <span>%</span>
-                            </div>                        
-                            
+                            <field name="prodajalec_ponudbe" widget="boolean_toggle"/>                
                             <field name="prodajalec_ponudbe_info" attrs ="{'readonly':[('prodajalec_ponudbe','=', False)]}"/>
-                            <field name="prodajalec_datum_pogodbe"/>
                             <field name="prodajalec_komunikacija"/>
                         </group>
 
@@ -216,7 +193,31 @@
                         </group>
                     </group>
                 </page>
-            </xpath>           
+            </xpath>   
+            
+            <xpath expr="//page[@name='nepremicnine']" position='after'>
+                <page name="podatkiIskanja" string="Podatki o iskanju" attrs="{'invisible': ['|','|','|',('tip_stranke','=','prodajalec'),('tip_stranke','=','najemodajalec'),('tip_stranke','=',False),('tretja_oseba','=',True)]}">
+                    <group>
+                        <group>
+                            <field name="kupec_najemnik_cena_od"/>
+                            <field name="kupec_najemnik_velikost_od"/>
+                            <field name="kupec_najemnik_letnik_od"/>
+                        </group>
+                        <group>
+                            <field name="kupec_najemnik_cena_do"/>
+                            <field name="kupec_najemnik_velikost_do"/>
+                            <field name="kupec_najemnik_letnik_do"/>
+                        </group>
+                    </group>
+                    <group>     
+                        <!-- VRSTA NEPREMIČNINE -->
+                        <field name="kupec_najemnik_vrsta" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                        <field name="kupec_najemnik_tip" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                        <field name="kupec_najemnik_regija" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                        <field name="kupec_najemnik_upravna_enota" widget="many2many_tags" options="{'color_field': 'color', 'no_create_edit': True}"/>
+                    </group>
+                </page>
+            </xpath>
         </field>
     </record>
 </odoo>
