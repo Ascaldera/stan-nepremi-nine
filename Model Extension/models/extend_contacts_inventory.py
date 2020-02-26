@@ -318,7 +318,6 @@ class ExtendInventory(models.Model):
     def _get_default_currency_id_2(self):
         return self.env.user.company_id.currency_id.id
     
-    @api.multi
     def _compute_opportunity_count(self):
         for nep in self:
             nep.opportunity_count=self.env['crm.lead'].search_count([('iskane_nepremicnine','=',nep.id), ('type', '=', 'opportunity')])
@@ -374,7 +373,6 @@ class ExtendInventory(models.Model):
     slike_kanban = fields.One2many(comodel_name='custom.image',  inverse_name="product_tmpl_id", string='Dodaj')
     help_tekst = fields.Char(string='Debugg')
         
-    @api.multi
     def write(self,values):
         values['help_tekst'] = 'test 2'
         if 'slike_attachments' in values:
@@ -1110,16 +1108,13 @@ class ExtendInventory(models.Model):
     lastnistvo_uporabno_dovoljenje = fields.Char(string="Uporabno dovoljenje")
     lastnistvo_investitor = fields.Char(string="Investitor")
     
-    
-    @api.multi
     def word_count(self, opis):
         x=opis.count(' ')
         if x<100:
             return True
         else:
             return False
-    
-    @api.multi
+
     def check_publish_info(self):
         _errorMsg_start='Manjkajoči podatki: \n'
         _errorMsg=''
@@ -1263,8 +1258,7 @@ class ExtendInventory(models.Model):
             self.komunikacija_optika_info=""
         if self.komunikacija_internet==False:
             self.komunikacija_internet_info=""
-            
-    @api.multi
+
     def crm_link(self):
         ctx=dict(self._context)
         return {'view_type': 'kanban',
@@ -1496,8 +1490,7 @@ class ExtendCrm(models.Model):
 
     #XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX
     #ISKALNE FUNKCIJE
-    
-    @api.multi
+
     def search_estates(self):
         self.potencialne_nepremicnine=[]
         self.potencialne_nepremicnine=self.env['product.template'].search([])

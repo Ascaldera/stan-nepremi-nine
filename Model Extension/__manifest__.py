@@ -1,7 +1,7 @@
 {
     'name': 'Extend Model',
     'summary': 'Extend Model - Inventory, Contacts',
-    'version': '12',
+    'version': '13',
     'category': 'Contacts',
     'author': 'Ascaldera',
     'license': 'AGPL-3',
