@@ -12,6 +12,9 @@ from dateutil.relativedelta import *
 class ExtendContacts(models.Model):
     _inherit = ['res.partner']
     
+    #PREMIUM
+    premium=fields.Boolean(String="Premium")
+    
     #OSNOVNI REQUIRED PODATKI
     tip_stranke = fields.Selection(selection=[('prodajalec', 'Prodajalec'),
                                               ('kupec', 'Kupec'),
@@ -310,6 +313,9 @@ class ExtendContacts(models.Model):
 
 class ExtendInventory(models.Model):
     _inherit = 'product.template'
+    
+    #Premium button
+    premium=fields.Boolean(String="Premium")
     
     name=fields.Char(track_visibility=True)
     list_price=fields.Float(track_visibility=True)
