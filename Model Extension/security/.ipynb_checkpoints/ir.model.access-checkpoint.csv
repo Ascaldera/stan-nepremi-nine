@@ -1,0 +1,7 @@
+id,name,model_id:id,group_id:id,perm_read,perm_write,perm_create,perm_unlink
+access_custom_image,access.custom.image,model_custom_image,base.group_user,1,1,1,0
+access_custom_location,access.custom.location,model_custom_location,base.group_user,1,1,1,0
+access_custom_location_regija,access.custom.location_regija,model_custom_location_regija,base.group_user,1,1,1,0
+access_custom_sifrant,access.custom_sifrant,model_custom_sifrant,base.group_user,1,1,1,0
+access_custom_nepremicnina_vrsta,access.custom.vrsta,model_custom_vrsta,base.group_user,1,1,1,0
+access_custom_nepremicnina_tip,access.custom.tip,model_custom_tip,base.group_user,1,1,1,0

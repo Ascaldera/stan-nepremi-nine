@@ -378,19 +378,18 @@ class ExtendInventory(models.Model):
     slike_attachments = fields.Many2many('ir.attachment', string='Dodaj več')
     slike_kanban = fields.One2many(comodel_name='custom.image',  inverse_name="product_tmpl_id", string='Dodaj')
     help_tekst = fields.Char(string='Debugg')
+    
         
     def write(self,values):
-        values['help_tekst'] = 'test 2'
         if 'slike_attachments' in values:
             ids = []
             if values.get('slike_attachments', []):
-                ids = values['slike_attachments'][0]
+                try:
+                    ids = values['slike_attachments'][0][2]
             for id in ids:
                 record = self.env['ir.attachment'].browse(id)
-                print("recorddddddddddddddddddddddd",record, record.mimetype)
                 if record.mimetype and 'image' in record.mimetype:
                     self.env['custom.image'].create({'name':record.name, 'image':record.datas, 'product_tmpl_id':self.id})
-            values['help_tekst'] = ids
             values['slike_attachments'] = [(5,)]
         if 'nepremicnina_opis' in values:
             s2=values['nepremicnina_opis']
@@ -406,7 +405,6 @@ class ExtendInventory(models.Model):
         for record in records:
             if 'image' in record.mimetype:
                 self.env['custom.image'].create({'name':record.name, 'image':record.datas, 'product_tmpl_id':rec.id})
-        rec['help_tekst'] = records
         rec['slike_attachments'] = False
         return rec
         
