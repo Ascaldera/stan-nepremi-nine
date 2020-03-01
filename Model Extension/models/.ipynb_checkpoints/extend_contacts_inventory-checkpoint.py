@@ -379,8 +379,8 @@ class ExtendInventory(models.Model):
     slike_kanban = fields.One2many(comodel_name='custom.image',  inverse_name="product_tmpl_id", string='Dodaj')
     help_tekst = fields.Char(string='Debugg')
     
-        
     def write(self,values):
+        values['help_tekst'] = 'test 2'
         if 'slike_attachments' in values:
             ids = []
             if values.get('slike_attachments', []):
