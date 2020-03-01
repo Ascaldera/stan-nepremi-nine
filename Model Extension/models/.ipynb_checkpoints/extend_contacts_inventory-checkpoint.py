@@ -380,16 +380,17 @@ class ExtendInventory(models.Model):
     help_tekst = fields.Char(string='Debugg')
     
     def write(self,values):
-        values['help_tekst'] = 'test 2'
         if 'slike_attachments' in values:
             ids = []
             if values.get('slike_attachments', []):
                 try:
                     ids = values['slike_attachments'][0][2]
+                except:
+                    ids = []
             for id in ids:
                 record = self.env['ir.attachment'].browse(id)
                 if record.mimetype and 'image' in record.mimetype:
-                    self.env['custom.image'].create({'name':record.name, 'image':record.datas, 'product_tmpl_id':self.id})
+                    self.env['custom.image'].create({'name':record.name,'image':record.datas,'product_tmpl_id':self.id})
             values['slike_attachments'] = [(5,)]
         if 'nepremicnina_opis' in values:
             s2=values['nepremicnina_opis']
