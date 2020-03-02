@@ -19,6 +19,7 @@
         'views/extend_models_inventory.xml',
         'views/extend_models_crm.xml',
         'views/hide_default.xml',
+        'views/extend_res_users.xml',
         'data/default_info.xml',        
     ],
     'installable': True,
