@@ -6,7 +6,6 @@ class ExtendUser(models.Model):
     _inherit = ['res.users']
     
     #ADDONS
-    gender=fields.Selection(String="Spol", selection=[('moski','Moški')('zenski','Ženski')])
     birthdate=fields.Date(String="Datum Rojstva")
     address=fields.Char(String="Trenutni naslov")
     phone_number=fields.Char(String="Telefonka številka")
