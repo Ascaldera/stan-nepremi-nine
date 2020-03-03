@@ -7,12 +7,20 @@
         <field name="inherit_id" ref="base.view_partner_form"/>
         <field name="arch" type="xml"> 
             
-            <xpath expr="/form/sheet/div[2]/div[1]" position="after">
-                <group col='2'>
-                    <field name="premium"/>
-                    <field name="tip_stranke"/>
-                    <field name="tretja_oseba"/>
-                    <field name="zakaj_kupuje"/>
+            <xpath expr="/form/sheet/div[2]" position="after">
+                <group>
+                    <group>
+                        <field name="tip_stranke"/>
+                        <field name="tretja_oseba"/>
+                        <field name="premium"/>
+                        <field name="zakaj_kupuje"/>
+                    </group>
+                    <group>
+                        <field name="spol"/>
+                        <field name="birthdate"/>
+                        <field name="business_email"/>
+                        <field name="school"/>
+                    </group>
                 </group>
             </xpath>
             

@@ -84,15 +84,20 @@
                 <attribute name="invisible">1</attribute>
             </xpath>
             <xpath expr="//field[@name='barcode']" position="after">
-                <field name="nepremicnina_vrsta_posredovanja"/>
-                <field name="nepremicnina_novogradnja"/>
-                <field name="nepremicnina_za_investicijo"/>
-                <field name="nepremicnina_oglasevana"/>
-                <field name="nepremicnina_oglasevana_kje"
-                       attrs="{'invisible':[('nepremicnina_oglasevana','=', False)]}"/>
-                <field name="nepremicnina_oglasevana_kdaj" force_save="1"
-                       attrs="{'invisible':[('nepremicnina_oglasevana','=', False)]}"/>
-                <field name="premium"/>
+                    <field name="nepremicnina_vrsta_posredovanja"/>
+                    <field name="nepremicnina_novogradnja"/>
+                    <field name="nepremicnina_za_investicijo"/>
+                    <field name="nepremicnina_oglasevana"/>
+                    <field name="nepremicnina_oglasevana_kje"
+                            attrs="{'invisible':[('nepremicnina_oglasevana','=', False)]}"/>
+                    <field name="nepremicnina_oglasevana_kdaj" force_save="1"
+                            attrs="{'invisible':[('nepremicnina_oglasevana','=', False)]}"/>
+                    <field name="premium"/>
+
+                    <field name="nepremicnina_prodaja"/>
+                    <field name="nepremicnina_prodaja_podjetje"/>
+                    <field name="nepremicnina_naselje"/>
+                    <field name="nepremicnina_izkusnja"/>
             </xpath>
         </field>
     </record>
