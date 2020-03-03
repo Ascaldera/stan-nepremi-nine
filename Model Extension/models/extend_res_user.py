@@ -6,8 +6,6 @@ class ExtendUser(models.Model):
     _inherit = ['res.users']
     
     #ADDONS
-    birthdate=fields.Date(String="Datum Rojstva")
-    address=fields.Char(String="Trenutni naslov")
-    phone_number=fields.Char(String="Telefonka številka")
-    business_email=fields.Char(String='Službena e-pošta')
-    school=fields.Char(String="Šola")
+    first_name = fields.Char(String='Ime')
+    last_name = fields.Char(String='Priimek')
+    user_role = fields.Selection(selection=[('marketing', 'Marketinški ekspert'),('real_estate', 'Nepremičninski ekspert')])

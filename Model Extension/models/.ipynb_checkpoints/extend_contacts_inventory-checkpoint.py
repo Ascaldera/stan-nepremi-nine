@@ -21,6 +21,9 @@ class ExtendContacts(models.Model):
                                               ('najemodajalec', 'Najemodajalec'),
                                               ('najemnik', 'Najemnik')])
     spol = fields.Selection(selection=[('moski', 'Moški'),('ženski', 'Ženski')])
+    birthdate=fields.Date(String="Datum Rojstva")
+    business_email=fields.Char(String='Službena e-pošta')
+    school=fields.Char(String="Šola")
     tretja_oseba = fields.Boolean(string = 'Tretja Oseba')
     zakaj_kupuje=fields.Char(string='Zakaj kupuje')
     
@@ -361,6 +364,11 @@ class ExtendInventory(models.Model):
                               options="{'color_field': 'color', 'no_create_edit': True}",
                               track_visibility=True)
     nepremicnina_opis=fields.Html(string="Opis",track_visibility=True)
+    
+    nepremicnina_prodaja=fields.Boolean(string="Se prodaja")
+    nepremicnina_prodaja_podjetje=fields.Boolean(string="Se prodaja preko podjetja")
+    nepremicnina_naselje=fields.Char(string="Naselje")
+    nepremicnina_izkusnja=fields.Char(string="Izkušnja")
     #-----------------------------------------------------------------------------------------
     
     #SISTEM

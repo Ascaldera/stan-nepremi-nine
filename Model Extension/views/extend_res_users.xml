@@ -9,7 +9,8 @@
             <xpath expr="//page[2]" position='after'>
                 <page name="custom" string="Custom">
                     <group name="custom" string="Custom">
-                        <field name="school"/>
+                        <field name="first_name"/>
+                        <field name="last_name"/>
                     </group>
                 </page>
             </xpath>
